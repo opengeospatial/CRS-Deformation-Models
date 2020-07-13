@@ -21,3 +21,14 @@ The terms of reference for this project team proposes the following steps for th
 * Develop an encoding structure for the functional model (when grid, refer to GGXF).
 
 The work will be conducted under the auspices of the OGC CRS DWG in close collaboration with the CRS DWG project team developing the "Gridded Geodetic Exchange Format (GGXF)" and with IAG (International Association of Geodesy) WG 1.3.1 on "Time-dependent transformations between reference frames in deforming regions". 
+
+## Collaboration
+
+This is a public repository - everything is visible to anyone coming to this
+website.  If you wish to be an active contributor with write access then you 
+will need [join github](https://github.com/join) if you haven't already.  Once
+you are signed on to github please raise a [new issue](https://github.com/opengeospatial/CRS-Deformation-Models/issues/new) with a request to be added.  If you would like to be included on the 
+[Project Team](https://github.com/opengeospatial/CRS-Deformation-Models/wiki/Project-team) page then include a brief biography and a photo.  This is not 
+required - be aware that everything on the page is visible to the public -  but it is good to have faces for names!  
+
+
