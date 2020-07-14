@@ -31,4 +31,6 @@ you are signed on to github please raise a [new issue](https://github.com/openge
 [Project Team](https://github.com/opengeospatial/CRS-Deformation-Models/wiki/Project-team) page then include a brief biography and a photo.  This is not 
 required - be aware that everything on the page is visible to the public -  but it is good to have faces for names!  
 
+Also once you have a github id you are encouraged to click the "Watch" button at the top of this page so that you will be notified of postings in the issues log.  Ideally we can capture most of the discussion in the issue logs where they will be recorded and easily searchable.  We will create an issue for each major discussion topic.
+
 
