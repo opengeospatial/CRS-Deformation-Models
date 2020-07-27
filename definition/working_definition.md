@@ -22,7 +22,7 @@ __Notes:__
 
 * The definition implies a “reference” coordinate system realised by the coordinates of points when the displacements are zero.  Commonly this is defined as the location of a point in a accessible coordinate system at a specific epoch (eg ITRF2014 at epoch 2020.0).  This is not accessible, except at that epoch.
 
-* To be used confidently the deformation model must be accompanied by metadata that can be used to assess its fitness for use.  
+* The deformation model must be accompanied by sufficient metadata to assess its appropriateness for use in a particular application.  This could include attributes such the authority and history of the model, the spatial and temporal extents it defines and the magnitude and dimension of the predicted displacements.  
 
 
 # Deformation Model Functional Model definition:  
