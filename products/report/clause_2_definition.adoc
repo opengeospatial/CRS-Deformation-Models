@@ -8,13 +8,13 @@ ____
 
 ==== Notes
 
-* This definition characterizes a deformation model in the context of coordinate operations, specifically time dependent coordinate transformations or point motion models.  Time dependent transformations which do not involve deformation are excluded, as these are covered by rotations or 14 parameter Bursa Wolf transformations.
+* (N1) This definition characterizes a deformation model in the context of coordinate operations, specifically time dependent coordinate transformations or point motion models.  Time dependent transformations which do not involve deformation are excluded, as these are covered by rotations or 14 parameter Bursa Wolf transformations. (Concern that this might be interpreted as not including rotational/translation components in the model)
 
-* The name "deformation model" is more precisely "displacement model", as it calculates displacements.  Deformation can be derived from it as the derivative of displacement with respect to position. However the term deformation model is well established and is appropriate as the model is only required in situations where there is ground deformation.
+* (N2) The name "deformation model" is more precisely (trajectory)"displacement model", as it calculates displacements.  Deformation can be derived from it as the derivative of displacement with respect to position. ---However the term deformation model is well established and is appropriate as the model is only required in situations where there is ground deformation---.
  
-* “Accessible coordinate system” means a coordinate system in which locations can be measured directly, typically an ITRF coordinate system.  
+* (N3) “Accessible coordinate system” means a coordinate system in which locations can be measured directly, typically an ITRF coordinate system.  
 
-* The deformation model is only defined at the surface of the earth.  It calculates horizontal and/or vertical displacement as a function of horizontal position and time, but not of vertical position.  (Geophysical models may predict deformation within the crust, but within the context of coordinate operations this has very little practical value.)
+* (N4) The deformation model is only defined at the surface of the earth.  It calculates horizontal and/or vertical displacement as a function of horizontal position and time, but not of vertical position.  (Geophysical models may predict deformation within the crust, but within the context of coordinate operations this has very little practical value.)
 
 * The deformation model should define formal uncertainties of displacements calculated from the model.  It may also define the correlation between displacements calculated for different locations and times. 
 
