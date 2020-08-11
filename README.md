@@ -1,6 +1,10 @@
 CRS-Deformation-Models
 ======================
 
+The next virtual meeting of this project team will be at 4pm EDT (8pm UTC) on 24 August 2020.  Details for joining the meeting will be posted here once they are available.
+
+______
+
 This repository holds the artefacts and workings of the "Deformation model functional model" project team established by the CRS DWG at the Montreal virtual meeting on 15 June 2020. 
 
 The purpose of this team is to define the functional model(s), methods and workflows for computing coordinate offsets resulting from seismic and certain geodynamic and anthropogenic processes.  This work will be used to support developing
