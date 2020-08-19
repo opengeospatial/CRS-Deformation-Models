@@ -1,7 +1,16 @@
 CRS-Deformation-Models
 ======================
 
-The next virtual meeting of this project team will be at 4pm EDT (8pm UTC) on 24 August 2020.  Details for joining the meeting will be posted here once they are available.
+The next virtual meeting of this project team will be at 4pm EDT (8pm UTC) on 7 September 2020.  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
+
+## Active discussions
+
+A survey of deformation models in planned or in use is underway.  The survey questionnaire is at https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0
+
+The currently active discussions are:
+
+* [Refine the working definition](https://github.com/opengeospatial/CRS-Deformation-Models/issues/3) of "deformation model" which sets the scope for this project team
+* [How should deformation model uncertainty be represented](https://github.com/opengeospatial/CRS-Deformation-Models/issues/9) 
 
 ______
 
@@ -26,13 +35,6 @@ The terms of reference for this project team proposes the following steps for th
 
 The work will be conducted under the auspices of the OGC CRS DWG in close collaboration with the CRS DWG project team developing the "Gridded Geodetic Exchange Format (GGXF)" and with IAG (International Association of Geodesy) WG 1.3.1 on "Time-dependent transformations between reference frames in deforming regions". 
 
-## Active discussions
-
-The currently active discussions are:
-
-* [Refine the abstract definition](https://github.com/opengeospatial/CRS-Deformation-Models/issues/2) of "deformation model"
-* [Refine the working definition](https://github.com/opengeospatial/CRS-Deformation-Models/issues/3) of "deformation model" which sets the scope for this project team
-* [Refine the questionnaire](https://github.com/opengeospatial/CRS-Deformation-Models/issues/1) proposed to provide a catalogue planned, current, and historic deformations models which can inform the requirements of the deformation model functional model
 
 ## Collaboration
 
