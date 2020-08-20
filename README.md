@@ -21,6 +21,7 @@ A survey of deformation models in planned or in use is underway.  The survey que
 The currently active discussions are:
 
 * [Refine the working definition](https://github.com/opengeospatial/CRS-Deformation-Models/issues/3) of "deformation model" which sets the scope for this project team
+* [What is a more appropriate name to replace "deformation model](https://github.com/opengeospatial/CRS-Deformation-Models/issues/6)
 * [How should deformation model uncertainty be represented](https://github.com/opengeospatial/CRS-Deformation-Models/issues/9) 
 
 ______
