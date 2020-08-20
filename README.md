@@ -1,7 +1,18 @@
 CRS-Deformation-Models
 ======================
 
-The next virtual meeting of this project team will be at 4pm EDT (8pm UTC) on 7 September 2020.  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
+The next virtual meeting of this project team will be at 4pm EDT (8pm UTC) on 7 September 2020 (https://www4.gotomeeting.com/join/494053021).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
+
+<!--
+2020-09-07  https://www4.gotomeeting.com/join/494053021
+2020-10-05 https://www4.gotomeeting.com/join/516068053
+2020-11-02  https://www4.gotomeeting.com/join/882484381
+2020-11-30  https://www4.gotomeeting.com/join/270784501
+2020-12-28  https://www4.gotomeeting.com/join/437263613
+2021-01-25  https://www4.gotomeeting.com/join/150445909
+2021-02-22  https://www4.gotomeeting.com/join/577891581
+
+-->
 
 ## Active discussions
 
