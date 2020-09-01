@@ -16,7 +16,7 @@ The next virtual meeting of this project team will be at 4pm EDT (8pm UTC) on 7 
 
 ## Active discussions
 
-A survey of deformation models in planned or in use is underway.  The survey questionnaire is at https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0
+A survey of deformation models in planned or in use is underway.  The survey questionnaire is at https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0  Responses can be viewed at https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us
 
 The currently active discussions are:
 
