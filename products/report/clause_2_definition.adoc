@@ -28,10 +28,10 @@ This has been raised as an issue https://github.com/opengeospatial/CRS-Deformati
  
 * (N3) “Accessible coordinate system” means a coordinate system in which locations can be measured directly, typically an ITRF coordinate system.  
 
-* (N4) The deformation model defines horizontal and/or vertical displacement as a function of horizontal position and time.  Although it may define vertical displacment it is not a function of vertical position.  
+* (N4) The deformation model defines horizontal and/or vertical displacement as a function of horizontal position and time.  Although it may define vertical displacement it is not a function of vertical position.  
 
 ////
-From the meeting on 10 August 2020: The proposed comment was...
+From the meeting on 10 August 2020: The previously proposed comment was...
 
 The deformation model is only defined at the surface of the earth.  It calculates horizontal and/or vertical displacement as a function of horizontal position and time, but not of vertical position.  (Geophysical models may predict deformation within the crust, but within the context of coordinate operations this has very little practical value.)
 
