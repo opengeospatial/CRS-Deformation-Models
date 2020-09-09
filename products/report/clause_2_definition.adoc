@@ -73,9 +73,6 @@ Concern with whether "uniquely invertible" is too restrictive.  Or could this be
 
 ///
 
-
-///
-
 * (N9) The definition implies a “reference” coordinate system realised by the coordinates of points when the displacements are zero.  Commonly this is defined as the location of a point in a accessible coordinate system (frame) at a specific epoch (eg ITRF2014 at epoch 2020.0).  This is not accessible, except at that epoch.
 
 accessible = frame or system?
