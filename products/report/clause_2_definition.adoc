@@ -41,7 +41,7 @@ The deformation model is only defined at the surface of the earth.  It calculate
 This created confusion in that it was read as meaning the model would not include vertical displacments.  
 
 This is an important statement on scope of the model, as it avoid the need for a functional model defining point movement within a volume.
-////
+///
 
 * (N5) The deformation model should define formal uncertainties of displacements calculated from the model.  It may also define the correlation between displacements calculated for different locations and/or times. 
 
@@ -53,17 +53,12 @@ OGC project teams .. uncertainty related to measurements,
 
 ///
 
-* (N6) The deformation model may represent deformation from multiple sources such as plate tectonic motion, glacial isostatic adjustment, seismic and co-seismic movement, human activities such as fluid extraction, and others.
+* (N6) The deformation model may represent deformation from multiple sources such as plate tectonic motion, glacial isostatic adjustment, seismic and co-seismic movement, human activities such as fluid extraction, and others.  Components from any or all of these sources may be combined in the deformation model.
+
+* (N7) A coordinate operation implemented using a deformation model should be spatially continuous and uniquely invertible.  This may limit the accuracy with which deformation such as fault rupture or very local movements will be represented by the model.  The deformation model should include metadata identifying whether or not it is invertible.
 
 ///
-
-This does not imply these will be treated independently.
-
-///
-
-* (N7) A coordinate operation implemented using a deformation model should be spatially continuous and uniquely invertible.  This limits the accuracy with which deformation such as fault rupture or very local movements will be represented by the model.
-
-///
+7/9/2020
 
 Need to clearly state deformation model can be used both for point operations and transformations ...
 
@@ -73,7 +68,7 @@ Concern with whether "uniquely invertible" is too restrictive.  Or could this be
 
 ///
 
-* (N9) The definition implies a “reference” coordinate system realised by the coordinates of points when the displacements are zero.  Commonly this is defined as the location of a point in a accessible coordinate system (frame) at a specific epoch (eg ITRF2014 at epoch 2020.0).  This is not accessible, except at that epoch.
+* (N9) The definition implies a “reference” coordinate system realised by the coordinates of points when the displacements are zero.  Commonly this is defined as the location of a point in a accessible coordinate system (frame) at a specific epoch (eg ITRF2014 at epoch 2020.0).  This is not accessible, except at that epoch.  This provoked a lengthy discussion in 7-Sep-2020 meeting - this is continuing in https://github.com/opengeospatial/CRS-Deformation-Models/issues/10
 
 accessible = frame or system?
 
