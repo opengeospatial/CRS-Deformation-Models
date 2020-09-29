@@ -6,6 +6,8 @@ The next virtual meeting of this project team will be at 4pm EDT (8pm UTC) on 5 
 <!--
 2020-09-07  https://www4.gotomeeting.com/join/494053021
 2020-10-05 https://www4.gotomeeting.com/join/516068053
+
+Note: EDT ends Nov 1
 2020-11-02  https://www4.gotomeeting.com/join/882484381
 2020-11-30  https://www4.gotomeeting.com/join/270784501
 2020-12-28  https://www4.gotomeeting.com/join/437263613
