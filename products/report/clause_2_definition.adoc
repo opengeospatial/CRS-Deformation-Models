@@ -66,8 +66,6 @@ Make it clear this provides a value everywhere but uncertainty/error may be larg
 
 Concern with whether "uniquely invertible" is too restrictive.  Or could this be included in metadata (invertible or not)
 
-////
-
 * (N9) The definition implies a “reference” coordinate system realised by the coordinates of points when the displacements are zero.  Commonly this is defined as the location of a point in a accessible coordinate system (frame) at a specific epoch (eg ITRF2014 at epoch 2020.0).  This is not accessible, except at that epoch.  This provoked a lengthy discussion in 7-Sep-2020 meeting - this is continuing in https://github.com/opengeospatial/CRS-Deformation-Models/issues/10
 
 accessible = frame or system?
