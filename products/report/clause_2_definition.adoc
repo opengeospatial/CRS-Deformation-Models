@@ -2,7 +2,7 @@
 
 The definition of a deformation model adopted for this work is:
 ____
-A deformation model is a model of the displacement of the earth’s surface within a defined spatial and temporal extent.  It predicts the location of a point fixed to the surface at an any time within the temporal extent in terms of an accessible coordinate system.  The coordinate of the point is calculated as a displacement from a time independent reference coordinate for that point.
+A deformation model is a model of the displacement of the earth’s surface within a defined spatial and temporal extent.  It predicts the location of a point fixed to the surface at an any time within the temporal extent in terms of an accessible coordinate system.  The position of the point is represented as a displacement from a reference position for that point.
 ____ 
 
 
