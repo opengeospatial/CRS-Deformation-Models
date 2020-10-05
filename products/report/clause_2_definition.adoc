@@ -11,19 +11,23 @@ ____
 * (N1) This definition characterizes a deformation model in the context of coordinate operations, specifically time dependent coordinate transformations or point motion models.  This may include rotation and translation components as well as movements specifically related to deformation events.
 
 ////
+
 From the meeting 10 Auguest 2020.  The following paragraph was removed as it raised the concern that the deformation might not be 
 Time dependent transformations which do not involve deformation are excluded, as these are handled by rotations or 14 parameter Bursa Wolf transformations. (Concern that this might be interpreted as not including rotational/translation components in the model)
+
 ////
 
 * (N2) The name "deformation model" is more precisely "displacement" or "trajectory" model, as it calculates displacements.  Deformation can be derived from it as the derivative of displacement with respect to position.  
 
 ////
+
 The name "deformation model" is more precisely (trajectory)"displacement model", as it calculates displacements.  Deformation can be derived from it as the derivative of displacement with respect to position.  However the term deformation model is well established and is appropriate as the model is only required in situations where there is ground deformation.
 
 This led to extensive discussion in the meeting of 10 August 2020 as to what the correct term for this type of model is.  The consensus appeared to be 
 that it would be appropriate to use a more correct terminology and that it is timely to do that before this is further embedded on standards or standard like documents.
 
 This has been raised as an issue https://github.com/opengeospatial/CRS-Deformation-Models/issues/6
+
 ////
  
 * (N3) “Accessible coordinate system” means a coordinate system in which locations can be measured directly, typically an ITRF coordinate system.  
@@ -41,6 +45,7 @@ The deformation model is only defined at the surface of the earth.  It calculate
 This created confusion in that it was read as meaning the model would not include vertical displacments.  
 
 This is an important statement on scope of the model, as it avoid the need for a functional model defining point movement within a volume.
+
 ////
 
 * (N5) The deformation model should define formal uncertainties of displacements calculated from the model.  It may also define the correlation between displacements calculated for different locations and/or times. 
@@ -58,6 +63,7 @@ OGC project teams .. uncertainty related to measurements,
 * (N7) The deformation model is provided to support coordinate operations - either time dependent transformations between datums or point motion models to transform a loction between epochs within a datum.  Coordinate operations should be spatially continuous and uniquely invertible.  This may limit the accuracy with which deformation such as fault rupture or very local movements will be represented by the model.  The deformation model should include metadata identifying whether or not it is invertible.
 
 ////
+
 7/9/2020
 
 Need to clearly state deformation model can be used both for point operations and transformations ...
