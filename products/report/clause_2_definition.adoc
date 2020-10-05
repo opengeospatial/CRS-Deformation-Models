@@ -78,7 +78,7 @@ accessible = frame or system?
 
 there must be an explicit reference frame within which displacements are defined and calculated. 
 
-coordinate reference system in terms of geospatial vs geodetic...
+coordinate reference system in terms of geospatial vs geodetic?
 
 (Depending on usage the reference coordinate system could be explicitly defined in coordinate registries, or it may never explicitly realised.)
 
