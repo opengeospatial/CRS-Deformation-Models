@@ -83,6 +83,8 @@ coordinate reference system in terms of geospatial vs geodetic...
 
 * (N10) The deformation model must be accompanied by sufficient metadata to assess its appropriateness for use in a particular application.  This could include attributes such the authority and history of the model, the spatial and temporal extents it defines and the magnitude and dimension of the predicted displacements.  
 
+* (N11) Distortion models are out of scope of this definition.  Distortion models are typically used to represent the change between old and new versions of datums.  They are not time dependent models.  Like deformation models they are often represented as nested grids of displacements (eg in an NTv2 format), but they do not include a time behaviour.
+
 
 === Deformation Model Functional Model definition 
 
