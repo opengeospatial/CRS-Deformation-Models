@@ -1,11 +1,13 @@
 CRS-Deformation-Models
 ======================
 
-The next virtual meeting of this project team will be at 4pm EDT (8pm UTC) on 7 September 2020 (https://www4.gotomeeting.com/join/494053021).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
+The next virtual meeting of this project team will be at 4pm EST (9pm UTC) on 5 October 2020 (2020-11-02  https://www4.gotomeeting.com/join/882484381).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
 
 <!--
 2020-09-07  https://www4.gotomeeting.com/join/494053021
 2020-10-05 https://www4.gotomeeting.com/join/516068053
+
+Note: EDT ends Nov 1
 2020-11-02  https://www4.gotomeeting.com/join/882484381
 2020-11-30  https://www4.gotomeeting.com/join/270784501
 2020-12-28  https://www4.gotomeeting.com/join/437263613
@@ -19,9 +21,11 @@ The next virtual meeting of this project team will be at 4pm EDT (8pm UTC) on 7 
 A survey of deformation models in planned or in use is underway.  The survey questionnaire is at https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0  Responses can be viewed at https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us
 
 The currently active discussions are:
-
+<!--
 * [Refine the working definition](https://github.com/opengeospatial/CRS-Deformation-Models/issues/3) of "deformation model" which sets the scope for this project team
+-->
 * [What is a more appropriate name to replace "deformation model](https://github.com/opengeospatial/CRS-Deformation-Models/issues/6)
+
 * [How should deformation model uncertainty be represented](https://github.com/opengeospatial/CRS-Deformation-Models/issues/9) 
 
 ______
