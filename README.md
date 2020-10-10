@@ -24,7 +24,11 @@ The currently active discussions are:
 <!--
 * [Refine the working definition](https://github.com/opengeospatial/CRS-Deformation-Models/issues/3) of "deformation model" which sets the scope for this project team
 -->
+* [Straw man aproposal for a deformation model functional model](https://github.com/opengeospatial/CRS-Deformation-Models/issues/16)
+
+<!--
 * [What is a more appropriate name to replace "deformation model](https://github.com/opengeospatial/CRS-Deformation-Models/issues/6)
+-->
 
 * [How should deformation model uncertainty be represented](https://github.com/opengeospatial/CRS-Deformation-Models/issues/9) 
 
