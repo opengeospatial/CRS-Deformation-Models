@@ -1,0 +1,485 @@
+
+= Deformation Model Functional Model straw man
+
+Chris Crook <mailto:ccrook@linz.govt.nz[ccrook@linz.govt.nz]>
+Land Information New Zealand
+4 December 2019
+
+:imagesdir: images
+:toc: macro
+
+toc::[]
+
+
+
+== Overview	
+
+This is a proposal for a functional model to represent deformation models used in the context of coordinate operations - either time dependent transformations or point motion models.
+
+The definition of "deformation model" adopted here is:
+____
+A deformation model is a model of the displacement of the earth’s surface within a defined spatial and temporal extent.  It predicts the location of a point fixed to the surface at an any time within the temporal extent in terms of an accessible coordinate system.  The coordinate of the point is calculated as a displacement from a time independent reference coordinate for that point.
+____ 
+
+This is a straw man proposal for consideration and refinement by the OGC CRS DWG Deformation Model team. 
+
+Deformation models are typically developed by national geodetic agencies to be used by geospatial and positioning communities to transform between national reference frames and global reference frames.  Currently there is no standard for how such models are described or encoded.  Historically agencies have developed bespoke formats and software to apply coordinate operations.  This work aims to provide a common format which will simplify publishing models to a wider audience.
+
+The potential audience for this proposal are geodetic agencies publishing deformation models, and developers of geospatial and positioning software that consumes them.  
+
+
+Currently there is no common format for such models, and typically agencies develop both the model and software to evaluate it at any given time and location.  The software may not interface well with consumer software where the transformation may be required, such as in GIS (Geographic Information Systems) and positioning software.  The formats are built to serve the needs of the individual agency, generally using custom binary formats with limited metadata. 
+
+This proposal describes a functional model for describing a deformation model.  It does not propose any particular encoding of the model, though it is hoped that it will lead to the development of an encoding standard. 
+
+
+== Functional definition of the deformation model
+
+The functional model proposed for a general deformation model can be characterised as follows.  
+
+1. The total deformation is partitioned into one or more components.  The total deformation at any time and position is calculated by summing the contribution from each component. See <<discuss-components,discussion>> and <<formula-components, formulae>> below.
+
+2. Each component comprises a spatial model and a time function. The spatial model defines displacement as a function of position.  The time function evaluates a scalar multiplier as a function of time.  The deformation contribution for the component at a given position and time is obtained by multipying the displacement components by the time function.
+
+3. The spatial model may be defined over a subset of the total extent of the model.  Where it is not defined it is assumed to be zero.
+
+4. The spatial model may define any or all of the following quantities: 
+* horizontal displacement – the east and north displacement in metres or degrees
+* horizontal uncertainty – the circular 95% confidence limit in metres
+* vertical displacement – the upwards vertical displacement in metres
+* vertical uncertainty – the 95% confidence limit in metres
+
++
+Displacements not defined by the model are assumed to be zero.  Uncertainties no defined by the model take a default value defined in the spatial model or deformation model metadata.
+
+5. The deformation model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial model.  This trajectory is terms of an explicitly defined acessible coordinate system.  
+
+6. The position used to calculate the spatial model is not defined in an currently accessible coordinate system - it may be in terms on an accessible coordinate system at a specific epoch.  Its value is only accessible by an inverse calculation using the deformation model.  See the <<formula-inverse, inverse calculation method>> below.
+
+7. The spatial model may be represented by either:
+* a nested grid structure comprising one or more grids.  To evaluate the spatial model at a specific position the nesting algorithm identifies which grid is applicable at that position and the disclocation is interpolated from this grid alone.  The grids are constrained to be:
+** Grids with rows equally spaced and columns equally spaced.
+** Grid rows and columns are aligned with the axes of the definition CRS
+** Grids are strictly nested.  Each grid is either a root grid (not contained in any other grid) or fully contained in a parent grid (but may share a common edge).   Child grids of a parent grid may adjoin but may not overlap. 
+
++
+See <<formula-grid-interpolation>grid interpolation formulae below.
+* a triangulated network comprising a set of control points at which the model quantities are defined.  The triangulated model explicitly defines the sets of control points that form the triangles of the network.  The spatial model model is evaluated at a position by determining which triangle contains the position and interpolating on that triangle alone (where a point lies on an edge between trianges either may be used and will determine the same value). The triangle constraints are:
+** triangles cannot overlap
+** triangles cannot have zero area
+
++
+See the discussion of <<discuss-spatial-model, spatial model types>> below.
+
+8. The time function is one of:
+ * a piecewise linear function of time. Specialisations of the piecewise linear time function are:
+ * constant value
+ * constant velocity
+ * step function
+ * an exponential function
+
++
+Piecewise linear functions are defined by an ordered set of time/date values and a corresponding set of scale factors defining the value by which the spatial model is multiplied at that time. The functions are not necessarily continuous – for example the model may define step function.  The date/time values should be increasing.  Where there is a step function the series will include two consecutive identical date/time values. 
++
+See the <<discuss-time-function, discussion>> and <<formula-time-function, formulae>> for time functions below.
+
+
+9. Each component includes metadata defining:
+* The type of spatial model (grid, triangulation)
+* The spatial interpolation method to use
+* The quantities it defines (displacements, uncertainties)
+* An optional description of the source of the deformation represented in the model
+* Optional default horizontal and vertical uncertainty
+* A spatial definition of the extent of the spatial model (to determine if it is required at a specific position)
+
+10. The deformation model includes metadata defining:
+* The version of the deformation model specification with which the model complies
+* The name of the model
+* The version of the deformation model
+* The publication date
+* The licence under which the model is published
+* Optional description of the model
+* Contact information for the agency publishing the model
+* Optional links to reference information about the model
+* The source CRS definition (eg EPSG:xxxx)
+* The target CRS definition (if the deformation model is implemented as a point motion model this will be the same as the source CRS).
+* The spatial model definition CRS (the used to define the position at which the model is calculated)
+* The reference epoch (note that each component defines a time function - this is not required to evaluate the model)
+* The uncertainty reference epoch. Described <<discuss-uncertainty-epoch, below>>.
+* The units of horizontal displacements
+* The units of vertical displacements
+* The units and type of horizontal uncertainty (eg metre, circular 95% confidence limit)
+* The units and type of vertical uncertainty
+* The total spatial extent of the model 
+* The time extent of the model
+* The algorithm used to apply add the deformation to the reference position coordinates.
+
+[[formulae]]
+== Calculation formulae
+
+The functional definition specifies the formulae that may be used to evaluate a model.  It is important that these formulae are well defined and consistently used so that publishers of deformation models can be confident they will be used correctly to obtain the expected deformation.
+
+The formulae below are adopted from the JSON GeoTIFF specification.  This does not include formulae for interpolation on a triangle. In this specification the grid can be defined either in terms of a geographic (longitude/latitude) or projection (easting/northing) coordinate system.  Displacements and uncertainties are all in metres except that the horizontal displacement may be in degrees if the coordinate system is geographic.
+
+[[formula-grid-interpolation]]
+=== Grid interpolation
+
+The grid interpolation method to be used is defined in the component metadata.  Initially two formulae are proposed.  One is a conventional bilinear formula, and one is an unconventional "geocentric bilinear" formulae for interpolating on geographic CRS grids in near polar regions. These two methods are proposed to support defining deformation models anywhere on Earth.
+
+==== Bilinear interpolation
+
+Gridded spatial representations are defined as regular grids in terms of latitudes and longitudes.  That is, longitude (x) and latitude (y) of a grid node is defined as  
+
+x~i~ = x~o~ + i.x~s~ +
+y~j~ = y~o~ + j.y~s~ 
+
+
+where  x~o~, y~o~ are the longitude and latitude of the southwest-most corner of the grid,  x~s~ and y~s~ are the longitude and latitude grid spacing, and i and j are the column and row number of the grid cell (where the west-most column and southernmost row are numbered 0).  Note that the longitude and latitude grid spacing need not be equal – it is preferred that  x~s~ is approximately equal to y~s~/cos(y~m~), where y~m~ is the latitude of the middle of the grid, as this makes the grid cells approximately square (except at polar latitudes). 
+
+Displacement vector elements are calculated using bilinear interpolation with respect to latitude and longitude from the nodes at the corners of the grid cell within which the calculation point lies.  Each element of the displacement is calculated independently (though of course the interpolation weighting will be the same for each, as they all refer to the same calculation point). 
+
+
+Bilinear interpolation is defined as follows: 
+
+
+The calculation point (x,y) is located in the grid cell between columns i and i+1, and rows j and j+1. 
+
+[.right]
+image::bilinear_interpolation.png[Alt=bilinear interpolation diagram,width=300,scalewidth=7cm]
+
+The displacement elements (de, dn, du) at the calculation point are weighted means of the corresponding elements at the four nodes. 
+
+
+The weights are calculated as follows: 
+
+
+W~i,j~ = ((x~i+1~-x)/x~s~) * ((y~j+1~-y)/y~s~) +
+W~i+1,j~ = ((x-x~i~)/x~s~) * ((y~j+1~-y)/y~s~) +
+W~i,j+1~ = ((x~i+1~-x)/x~s~) * ((y-y~j~)/y~s~) +
+W~i+1,j+1~ = ((x-x~i~)/x~s~)*((y-y~j~)/y~s~) +
+
+
+So for example the east displacement at the point (x,y) is calculated as  
+
+
+de = W~i,j~*de~i,j~ + W~i+1,j~*de~i+1,j~ + W~i,j+1~*de~i,j+1~ + W~i+1,j+1~*de~i+1,j+1~ 
+
+
+The error elements eh, ev are interpolated using a weighted average of the variances eh^2^, ev^2^, for example 
+
+
+eh = √(W~i,j~*eh~i,j~^2^ + W~i+1,j~*eh~i+1,j~^2^ + W~i,j+1~*eh~i,j+1~^2^ + W~i+1,j+1~*eh~i+1,j+1~^2^)
+
+==== “Geocentric bilinear” interpolation
+
+[.right]
+image::geocentric_bilinear_interpolation.png[Alt=geocentric bilinear interpolation diagram, width=200,scalewidth=7cm]
+
+A latitude/longitude grid may not be appropriate for models including polar regions - it may be simpler to use a grid defined on suitable projected coordinate system.   See the discussion on  <<discuss-geocentric-interpolation, errors of normal bilinear interpolation near poles>> below.
+
+
+However a latitude and longitude grid can still serve if the north and east component of deformation are defined in metres.  The simple bilinear interpolation method above is less reasonable if the east and north vectors at each grid node are not in approximately the same direction.  As shown in the figure this may not be the case near the pole if the longitude grid spacing is large.   
+
+
+The geocentric bilinear interpolation converts the displacement components from east and north components to geocentric X, Y, and Z components.  These are in the same direction can be scaled and summed using the usual bilinear formulae above to calculate the X, Y, Z components of displacement at the calculation point, which are then converted back to components east and north at the calculation point.  
+
+Note that this is only used to determine the horizontal displacement.  The vertical displacement and uncertainties are  computed using the usual bilinear formulae above 
+
+
+At longitude λ and latitude φ the dx, dy, dz values are calculated from the east and north displacements de, dn as: 
+
+
+dx~i,j~ = -de~i,j~.sin(λ~i,j~) - dn~i,j~.cos(λ~i,j~).sin(φ~i,j~) +
+dy~i~~,j~ = de~i,j~.cos(λ~i,j~) - dn~i~~,j~.sin(λ~i,j~).sin(φ~i,j~) +
+
+
+The X, Y, and Z directions are the same at any location, so the dx, dy, and dz displacements can be interpolated independently using bilinear interpolation as described above, eg:  
+
+
+dx = W~i,j~*dx~i,j~ + W~i+1,j~*dx~i+1,j~ + W~i,j+1~*dx~i,j+1~ + W~i+1,j+1~*dx~i+1,j+1~ 
+
+
+The displacement at the calculation point is then calculated as: 
+
+
+de = -dx.sin(λ) + dy * cos (λ) +
+dn = -dx.cos(λ).sin(φ) - dy.sin(λ).sin(φ) + dz.cos(φ) 
+
+
+[[formula-time-function]]
+=== Time functions
+
+The time function for a component defines a scale factor f(__t__) applied to component displacements at time __t__.  
+
+
+Following conventional use in deformation models all date/time values are converted to decimal years for use in the following formulae.  The conversion to decimal years is done by first converting all dates to UTC.   The year number _yyyy_ of the epoch forms the integer part of the decimal year.  The fractional part of the epoch is determined by dividing the number of seconds between  _yyyy_-01-01T00:00:00Z and the epoch by the number of seconds between _yyy1_-01-01T00:00:00Z and _yyyy_-01-01T00:00:00Z, where _yyy1_ is _yyyy_+1. 
+
+
+For the uncertainties eh, ev the scale factor f~e~(__t__) is defined as  √abs(f(__t__)-f(t~0~)) where t~0~ is the uncertainty reference epoch of the model. 
+
+
+For the constant function type f(__t__) = 1. 
+
+
+For function types velocity, step, and reverse step the model is defined by a reference time t~0~.  For these types f(__t__) is defined as:
+
+[options="noheader"]
+|===
+|velocity|f(__t__) = (t – t~0~) all values of t
+
+|step | f(__t__) = 0 when t < t~0~,
+|reverse step |f(__t__) = -1 when t < t~0~,
+|===
+
+For function type “piecewise” the function is defined by a series of times t~i~ and multiplying factors f~i~ for i=1 to n.  The definition also specifies a behaviour before the first time and after tha last time which is one of _zero_, _constant_, or _linear_. The time function is defined as:
+
+[options="noheader"]
+|===
+|piecewise|f(__t__) = (f~i~.(t~i+1~ – __t__) + f~i+1~.(__t__-t~i~))/(t~i+1~-t~i~)
+
+|===
+
+The value before t~1~ and after t~n~ depends on the behaviour specified and is defined as follows:
+
+[options="header"]
+|===
+|behaviour|Before t~1~|After t~n~
+|zero|0|0
+|constant|f~1~|f~n~
+|linear|f(__t__) = (f~1~.(t~2~ – __t__) + f~2~.(__t__-t~1~))/(t~2~-t~1~)|f(__t__) = (f~n-1~.(t~n~ – __t__) + f~n~.(__t__-t~n-1~))/(t~n~-t~n-1~)
+|===
+
+For function type “exponential” the function is defined by a reference epoch t~0~, an optional end epoch t~1~, a relaxation constant θ, and three scale factors, before f~p~, initial f~0~, and final f~∞~.  The scale factor at time __t__ is defined as: 
+
+
+f(__t__) = f~p~     when __t__ < t~0~ 
+
+
+f(__t__) = f~0~ + (f~∞~-f~0~).(1 - exp(-(__t__-t~0~)/θ))     when t~0~ <= __t__ < t~1~ 
+
+
+f(__t__) = f~0~ + (f~∞~-f~0~).(1 - exp(-(t~1~-t~0~)/θ))     when __t__ >= t~1~
+
+[[formula-components]]
+=== Combination of components
+
+To calculate the total deformation at a time and location, the displacement and uncertainties due to each component are calculated independently and then summed together to obtain the total displacement at a location.  This displacement is then applied to the coordinate. 
+
+
+The same input position coordinate is used for each component - the components are not applied sequentially (ie the coordinate is not updated by the first component before being used to calculate the deformation on the second component). See the discussion below on <<discuss-parallel-calculation, using the same position for each component>>.
+
+
+At a given time and location the elements from each component are combined to determine the overall displacement and errors. 
+
+
+The displacement elements de, dn, dh are combined by simply adding their values calculated for each component.  For example, if there are n components for which the spatial representation calculates de as de~1~, de~2~, … to de~n~, and the time function evaluates to f~1~, f~2~, … to  f~n~ then the total model value for de is  
+
+
+de = f~1~.de~1~+ f~2~.de~2~+ … + f~n~.de~n~ 
+
+
+The error values eh, ev are combined by determining the root sum of squares (RSS) of the values determined for each component.  So for example 
+
+
+eh = √(f~1~^2^.eh~1~^2^+ f~2~^2^.eh~2~^2^+ … + f~n~^2^.eh~n~^2^) 
+
+
+One extra subtlety that may occur in calculating errors  is that more than one component may use the same grid file.  In this case the scale factors for the components using the grid are simply added together before being combined with the other components using RSS. 
+
+
+=== Applying the offset to a coordinate
+
+The method used to add the calculated displacement to the coordinates of the reference position is defined in the deformation model metadata.  Two methods are proposed -  _addition_ and _geocentric addition_.  The _addition_ method is relatively simple and simply adds the offset to the coordinates, converting metres to degrees first if necessary.  The _geocentric_ method is an alternative method that may be used near the poles if the grid latitude spacing is relatively large.  It is only applicable if the offsets are defined in metres and the coordinate system is a geographic (latitude/longitude) system.   The _addition_ and _geocentric addition_ methods are detailed below.
+
+==== Addition method
+
+The method of the calculated east/north/up displacement to a coordinate depends on the units of the displacement and the type of the source and target coordinate system.  Also for geographic coordinate systems the method described here does not apply very close to the poles.  See the section below “calculation horizontal deformation near the poles” for details. 
+
+
+If the source and target coordinate systems are projected coordinate systems then the units must be metres and the east and north displacements are simply added to the easting, northing ordinate. 
+
+
+If the source and target coordinate systems are geographic coordinate systems and the east and north displacement units are degrees, then again the displacements are added to the longitude and latitude. 
+
+
+If the source and target coordinate systems are geographic coordinate systems and the east and north displacement units are metres then the displacement components must be converted to degrees before they are added to longitude and latitude.  The conversion from metres to degrees requires the ellipsoid parameters of the geographic coordinate system. 
+
+
+If a is the ellipsoid semi-major axis (eg 6378137.0), f is the flattening  (eg 1.0/298.25722210), λ is the latitude, and φ is the longitude then corrections to longitude and latitude (in radians) are given by: 
+
+
+b = a.(1-f)
+dλ = de.√(b^2^sin^2^(φ)+a^2^cos^2^(φ))/a^2^cos(φ)
+dφ = dn.(b^2^sin^2^(φ)+a^2^cos^2^(φ))^3/2^/a^2^b^2^ 
+
+
+The vertical offset is always in metres and is simply added to the height coordinate. 
+
+==== Geocentric addition method
+
+The geocentric method can be applied  if the model is using a geographic coordinate system  and offsets measured in metres.  In this case the horizontal offset is converted to a geocentric (XYZ) offset, added to the geocentric coordinate, and then converted back to geographic coordinates.  The vertical coordinate is always calculated by simple addition of the height displacement to the reference coordinate height. 
+
+This method may be applicable for coordinates near the pole, where simple addition of offsets to the longitude/latitude may not give the desired result.  This is shown in the figure where the grey vector shows adding an offset to the longitude, and the black vector shows applying the offset as a vector offset to the coordinate.  Close to the pole the eastward vector is different to changing the longitude coordinate..  In this case the maximum potential error from the approximate method is the size of the east displacement. 
+
+[.right]
+image::near_pole_east_offset.png[Alt=near pole east offset,width=200,scalewidth=7cm]
+
+Moving away from the pole this issue rapidly becomes insignificant.  For a point at distance R from the pole with a displacement d, the difference is approximately d*(1-cos(d/R)), or approximately d^3^/2R^2^.  So for example a 1m eastward displacement 10km from the pole would have an error of 10^-8^m.  This is only an issue very close to the pole! 
+
+Standard formulae are used for the conversion of geographic coordinates to and from geocentric coordinates.   The initial ellipsoidal height is set to zero before converting, and the resultant ellipsoidal height is discarded. 
+
+The horizontal components of displacement are converted to X,Y,Z components using the same formulae as described for the “geocentric_bilinear” method. 
+
+While this method can be used at any location it is not recommended other than close to the poles. It is computationally very expensive compared to simply adding the offsets to longitude and latitude.   In particular the conversion from geocentric to geographic coordinates does not have a closed formula, so this calculation must be iterated to obtain the required accuracy for the conversion.
+
+
+
+[[formula-inverse]]
+=== Calculation of the inverse deformation model
+
+Calculating the inverse of the deformation model requires an iterative solution as the coordinate in the defintion coordinate reference system is required to evaluate the deformation model, but it is not known until the deformation has been calculated and applied to the input coordinate in the target coordinate reference system.   
+
+
+The iteration is done by
+
+* using the input coordinate as an initial estimate for the output coordinate
+* at each iteration:
+** apply the deformation model to the current estimate of the output coordinate
+** calculate the difference between the calculated coordinate and the input coordinate
+** subtract this difference from the current estimate solution to obtain the estimated solution for the next iteration
+** if this  difference is less than the precision required for the inverse operation then finish
+
+The calculation of the difference and the subtraction of the difference from the current estimate is done by the “addition” or “geocentric” method, as defined in the deformation model metadata. (Formulae are defined above.) 
+
+See the discussion below on the <<discuss-inverse-iteration, iterating the inverse calculation>>. 
+
+
+=== Calculation of deformation between two epochs
+
+Calculating the deformation between two times is straightforward for the displacement elements de, dn, and du as it is simply the difference between the values calculated at each time.   
+
+
+This approach is not appropriate for the error components eh, ev.  Uncorrelated errors are combined as a root sum of squares, but the errors of displacements calculated for one component calculated at different times are clearly correlated.   
+
+
+While there is no mathematically correct way to define the errors without a much more complex error model, the following approach is recommended if these errors are required. 
+
+
+The time function error factor of the difference between t~0~ and t~1~ is calculated for each component separately as f~e,t1-t0~ = √abs(f(t~1~)-f(t~0~)).  
+
+
+The eh and ev values from the spatial representation of each component are multiplied by these time function error factor values and then combined as the root sum of squares to give the total error of the deformation between the two epochs. 
+
+
+
+## Discussion points
+
+[[discuss-components]]
+### Decomposition into components
+
+This specification assumes that the deformation can be decomposed into a set of spatial functions each multiplied by a time function.  This is suitable for many geophysical phenomena such as secular motion (velocity models) and coseismic ground deformation. 
+
+It may be less suitable to deformation with a complex time evolution such as slow slip events propogating along a fault system, or post-seismic deformation.  Currently deformation models for coordinate operations have not included this level of detail.  It may be that this is a requirement in the future however.  This could be represented using this functional model by modelling the deformation at sequential time epochs (for example every month) as a series of components. 
+
+[[discuss-spatial-model]]
+### Spatial model types
+
+In practice nearly all current deformation models use grid representations.  There is a small usage of triangulated models which is included in this functional model specification.  This is a departure from the JSON-GeoTIFF format that this specification was originally writtent for.  
+
+New Zealand triangulated models were considered for modelling the deformation due to the 2011/12 Christchurch earthquakes but didn’t offer much advantage in the size of the model, and also are much less efficient to evaluate since it is necessary to search the triangulation to determine which triangle applies at a location.  (See https://www.linz.govt.nz/system/files_force/media/file-attachments/winefield-crook-beavan-application-localised-deformation-model-after-earthquake.pdf?download=1). 
+
+In the future there may be value in using some other representation than nested grids for the deformation model.  For example structures such as Discrete Global Grid Systems provide a global grid of varying level of detail.  As these acquire more support in software and if there is a drive to develop a global deformation model then this may be worth developing. 
+
+[[discuss-time-function]]
+### Time functions
+
+Geophysical deformation may be approximated by other functions, such as logarithmic functions and cyclic functions.  They are also used in point deformation models, for example reference station coordinates in the International Terrestrial Reference Frame.  However it is not clear that these are a much better model for deformation over the extent of a spatial model.  That is to say that the actual time evolution at each point within the spatial model may have different attributes and parameterisation.  The deformation model component is necessarily an approximation attempting to best fit the actual deformation over its spatial and temporal extent, and these more complex parameterisations of time functions may not offer much improvement on the simple functions already proposed. Currently deformation models defined for coordinate operations do not use these functions. 
+
+In the near future it is likely that we may generate far more complex and accurate models using technology such as CORS and InSAR.  For example each year there could be an updated gridded model.  The deformation at any epoch could be interpolated or extrapolated from the nearest to models (or as in Japan modelled with a step function for each year). This is in effect a three dimensional grid with dimensions latitude, longitude, and time.  This can be encoded using this functional model by a series of gridded spatial models with time functions as illustrated below to interpolate between them.
+
+[.center]
+image::annual_grid_time_func.png[Alt=Example annual displacement grid time function,width=500, scalewidth=10cm]
+
+[[discuss-geoentric-interpolation]]
+### Geocentric interpolation near poles
+
+To estimate the error that could be incurred by not accounting for this difference in direction we can consider a case where the deformation is 1m northwards at A, and zero at B.  Let the longitude grid spacing be λ~s~ radians.  If the calculation point P is λ radians past A, then the magnitude of the interpolated vector will be (λ~s~-λ)/λ~s~.  The error of orientation will be λ radians (the difference between north at A and north at the calculation point).  So the vector error will be sin(λ).(λ~s~-λ)/λ~s~.  Approximating sin(λ) as λ, this has a maximum absolute value in the range (0,λ~s~) of λ~s~/2.  So for example with a grid longitude spacing of 1° this could result in a 2cm error in the 1m of deformation vector. 
+
+Using the geocentric interpolation method to calculate the horizontal component does cause some “leakage” of the horizontal deformation into the vertical component, that is: 
+
+du = dx.cos(λ).cos(φ) + dy.sin(λ).cos(φ) + dz.sin(φ) 
+
+For the interpolation of du this method is using the same formulae as the bilinear interpolation method, that is simple bilinear interpolation of the du component.  However this leakage does result in a small loss of magnitude in the horizontal component.   The reduction is approximately scaling by the cosine of the angle between the vertical at the calculation point and the vertical at each grid node.  For a grid cell of 1 degree extent this would result in a scale error of 0.2mm for a 1m deformation vector.  (Note that this is a 1 degree extent measured on the globe - not a 1 degree extent of longitude which may be much smaller near the poles).  This can be ignored without significant loss of accuracy.
+
+[[discuss-parallel-calculation]]
+### Sequential or "parallel" evaluation of components
+
+The same input position coordinate is used to calculate the deformation for each component . 
+
+An alternative approach that could be used is to apply components sequentially.  That is the first component is calculated and applied to the coordinate, and then the modified coordinate is used to calculate the second component, and so on.  This may result in a different final coordinate to the proposed method, as the second and subsequent components are evaluated at a different location. 
+
+
+Neither method is more correct from a theoretical point of view.  The main reason for specifying one approach is to ensure that there is an “authoritative” correct value, particularly where the deformation model is used in the definition of a datum (as in New Zealand for example). 
+
+
+If the components are an ordered sequence of discrete events then the sequential approach might seem more intuitive.  However this is not necessarily the case.  For example consider a model in which the first component is a velocity function and the second is a step at 2003-01-01. If the deformation is calculated at 2004-01-01, the velocity function is applied as at 2004, and then that coordinate is used for the step function. If the deformation is calculated at 2014-01-01, then the velocity function is applied as at 2014, and that different coordinate is used to interpolate the step function model.  This means that the contribution from the step function could be different even though nothing else has changed other than the evaluation epoch. 
+
+
+In practice the choice of independent or sequential evaluation of components is very unlikely to make a significant difference to the coordinates - at worst it is very similar to that described below for the inverse method in relation to iterating the inverse calculation or not.  The choice of independent evaluation has some small advantages in calculation in that:
+
+* using the same input coordinates is slightly more efficient as the calculated displacement only needs to be applied to the coordinate once.  This could be a significant difference if the horizontal displacement is applied using the “geocentric” method as described below.  It is insignificant if the displacement is applied by simple addition.
+* using the same input coordinates for all components provides an opportunity for parallelising calculation of components.
+* using the same input coordinates for each component allows optimising transformations between two versions of the deformation model as common components can be ignored.
+
+[[discuss-inverse-iteration]]
+### Significance of iteration for the inverse deformation model evaluation
+
+The error of not iterating the inverse transformation can be tested for the New Zealand NZGD2000 deformation model.  The least smooth area of deformation in New Zealand is that affected by the 2016 Kaikoura earthquake.  As this has been updated by “reverse patching” the inhomogeneity of the deformation field primarily affects pre-earthquake transformations.  Testing across the fault zone finds that the maximum error from not iterating an inverse transformation of epoch 2000.0 coordinates is about 0.015 metres.  However this is in an area where the deformation model is very inaccurate - it is smoothed across the fault zone and will have errors of many decimetres. For transforming epoch 2019.0 coordinates the maximum error is about 0.000014 metres.   In the North Island in an area largely unaffected by episodic events the maximum error is about 0.00015 metres. 
+
+Based on this result it is recommended that the inverse transformation is iterated.  It is likely that this will double computation time (it would be unusual to require more than two iterations). 
+
+Note that this is not about creating a more accurate transformation - the differences are much less than the uncertainty in the deformation model.  The reason for iterating is to satisfy a user expectation that applying a transformation followed by the inverse transformation will result in coordinates that are materially unchanged. 
+
+[[discuss-uncertainty-epoch]]
+### Uncertainty reference epoch
+
+This is the epoch relative to which uncertainties are calculated and is referenced in the formulae below.  This may be different to the model reference epoch.  As hypothetical example, in New Zealand the deformation model includes a velocity with reference epoch 2000.0, so in principle error at epoch 2019 would be 19 times the uncertainty of the velocity (which is expressed in metres per year).  However in practice the New Zealand geodetic control network was adjusted in 2018, when the order 0 (highest accuracy) control stations were accurately located by CORS observations, and the rest of the network was adjusted to bring it into alignment with these stations.  The CORS stations NZGD2000 coordinates were calculated from the ITRF coordinates using the deformation model.  So in effect the deformation model and geodetic control were recalibrated at 2018.  So the error in 2019 due to the velocity component is only 1 times the uncertainty of the velocity. 
+
+The use of the uncertainty reference epoch presents a difficulty from the point of view of maintaining the deformation model.  The appropriate reference epoch for the uncertainty could change far more frequently than any other attribute of the model.   For example in New Zealand the national geodetic is periodically recalculated using the most current ITRF coordinates of the reference stations.  This will change the uncertainty reference epoch for the deformation model, but otherwise leave it unchanged.  It is debatable whether this should constitute a new version of the deformation model, or of the datum it relates to.   Since most users will not ever calculate or use the uncertainties it makes no practical difference. 
+
+Perhaps the most sensible approach for software that used the uncertainty information is that it should be able to override the uncertainty reference epoch. 
+
+Another alternative is to remove the uncertainty epoch from the model definition, in which case it would be a requirement of software calculating uncertainty to provide a reference epoch.
+
+=== Conversion of coordinates between versions of the deformation model
+
+A common source of confusion is coordinate transformations between different versions of a datum. 
+
+
+For example in New Zealand the deformation model was recently updated from version 20171201 to 20180701. Technically this is equivalent to a new version of the datum. 
+
+
+Users with a GIS datasetin terms of the 20171201 version of the datum might want to update the dataset to version 20180701. The user expectation is that this will generate correct version 20180701 coordinates of the features in the database. 
+
+
+The critical thing in this transformation is that the coordinate epoch for the transformation is before the event(s) implemented in the update.  This is somewhat counter-intuitive. 
+
+
+Generally the update should not change the coordinates. The reason for the update is typically a deformation event such as an earthquake. The earthquake coseismic deformation is added to the deformation model as a step function that applies for transforming coordinates for epochs after the event. This means that the NZGD2000 coordinate system tracks the movement of features fixed to the ground and therefore the NZGD2000 coordinates of these features are not changed by the earthquake. In this case the deformation model is unchanged before the earthquake. Transforming at an epoch before the earthquake will leave the coordinates unchanged which is what is required.. 
+
+
+Close to faulting the distortion due to the earthquake can be too intense to be included in the coordinates. In that case the deformation model will be smoothed across the fault zone. However the deformation is still measured and is used to update the coordinates. It is also added to the deformation model using a reverse step function that applies a negative deformation that applies when transforming  coordinates for epochs before the earthquake. In this case transforming coordinates at an epoch before the earthquake will result in subtracting the reverse patch from the coordinates.  This adds the deformation to the coordinates, which again is the correct update to coordinates to transform them to the new version of the datum.
+
+
+== Related work
+
+This functional model is based on that developed by Land Information New Zealand in 2013 to encode and publish the NZGD2000 deformation model (https://www.linz.govt.nz/data/geodetic-system/datums-projections-and-heights/geodetic-datums/new-zealand-geodetic-datum-2000-nzgd2000/nzgd2000-deformation-model[https://www.linz.govt.nz/data/geodetic-system/datums-projections-and-heights/geodetic-datums/new-zealand-geodetic-datum-2000-nzgd2000/nzgd2000-deformation-model].  
+
+This is also similar to a previous enhancement request PROJ project in 2018 to develop a deformation model format (https://github.com/OSGeo/PROJ/issues/1001[https://github.com/OSGeo/PROJ/issues/1001]).  After much very informed discussion in that github issue the enhancement ultimately stalled as there were no clear candidate formats for implementation.
+
+This document is largely copied from the document proposing the implementation of deformation in the PROJ software using a JSON+GeoTIFF format in a https://docs.google.com/document/d/1wiyrAmzqh8MZlzHSp3wf594Ob_M1LeFtDA5swuzvLZY/edit[shared goodle document].
+
+== Acknowledgements
+
+I am very grateful to suggestions from numerous reviewers who contributed to development of the JSON+GeoTIFF proposal on which this document is based.  In particular Kristian Evers in relation to algorithms for deformation the current PROJ +deformation method, and Even Rouault for many recommendations on metadata and practicalities of encoding.  
+
