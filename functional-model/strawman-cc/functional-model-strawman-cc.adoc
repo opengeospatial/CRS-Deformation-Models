@@ -1,14 +1,11 @@
 
 = Deformation Model Functional Model straw man
 
-Chris Crook <mailto:ccrook@linz.govt.nz[ccrook@linz.govt.nz]>
-Land Information New Zealand
-11 October 2020
+:author: Chris Crook
+:email: ccrook@linz.govt.nz
 
 :imagesdir: images
-:toc: macro
-
-toc::[]
+:toc:
 
 
 
@@ -412,7 +409,7 @@ du = dx.cos(λ).cos(φ) + dy.sin(λ).cos(φ) + dz.sin(φ)
 For the interpolation of du this method is using the same formulae as the bilinear interpolation method, that is simple bilinear interpolation of the du component.  However this leakage does result in a small loss of magnitude in the horizontal component.   The reduction is approximately scaling by the cosine of the angle between the vertical at the calculation point and the vertical at each grid node.  For a grid cell of 1 degree extent this would result in a scale error of 0.2mm for a 1m deformation vector.  (Note that this is a 1 degree extent measured on the globe - not a 1 degree extent of longitude which may be much smaller near the poles).  This can be ignored without significant loss of accuracy.
 
 [[discuss-parallel-calculation]]
-### Sequential or "parallel" evaluation of components
+### Sequential or parallel evaluation of components
 
 The same input position coordinate is used to calculate the deformation for each component . 
 
