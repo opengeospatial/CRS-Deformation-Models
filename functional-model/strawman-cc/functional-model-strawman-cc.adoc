@@ -32,7 +32,7 @@ This proposal describes a functional model for describing a deformation model.  
 
 The functional model proposed for a general deformation model can be characterised as follows.  
 
-[#funcmod-decomposition#]#1. The total deformation is partitioned into one or more components.  The total deformation at any time and position is calculated by summing the contribution from each component. See <<discuss-components,discussion>> and <<formula-components, formulae>> below.#
+[[funcmod-decomposition]]1. The total deformation is partitioned into one or more components.  The total deformation at any time and position is calculated by summing the contribution from each component. See <<discuss-components,discussion>> and <<formula-components, formulae>> below.
 
 [#funcmod-component#]#2. Each component comprises a spatial model and a time function. The spatial model defines displacement as a function of position.  The time function evaluates a scalar multiplier as a function of time.  The deformation contribution for the component at a given position and time is obtained by multipying the displacement components by the time function.#
 
