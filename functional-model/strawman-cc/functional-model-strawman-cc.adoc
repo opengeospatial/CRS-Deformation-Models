@@ -32,13 +32,13 @@ This proposal describes a functional model for describing a deformation model.  
 
 The functional model proposed for a general deformation model can be characterised as follows.  
 
-[#funcmod-decomposition#]#1. The total deformation is partitioned into one or more components.  The total deformation at any time and position is calculated by summing the contribution from each component. See <<discuss-components,discussion>> and <<formula-components, formulae>> below.#
+1. [[funcmod-decomposition]]The total deformation is partitioned into one or more components.  The total deformation at any time and position is calculated by summing the contribution from each component. See <<discuss-components,discussion>> and <<formula-components, formulae>> below.
 
-[#funcmod-component#]#2. Each component comprises a spatial model and a time function. The spatial model defines displacement as a function of position.  The time function evaluates a scalar multiplier as a function of time.  The deformation contribution for the component at a given position and time is obtained by multipying the displacement components by the time function.#
+2. [[funcmod-component]]Each component comprises a spatial model and a time function. The spatial model defines displacement as a function of position.  The time function evaluates a scalar multiplier as a function of time.  The deformation contribution for the component at a given position and time is obtained by multipying the displacement components by the time function.
 
-[#funcmod-spatial-extent#]#3. The spatial model may be defined over a subset of the total extent of the model.  Where it is not defined it is assumed to be zero.#
+3. [[funcmod-spatial-extent]]The spatial model may be defined over a subset of the total extent of the model.  Where it is not defined it is assumed to be zero.
 
-#funcmod-spatial-params#]#4. The spatial model may define any or all of the following quantities:# 
+4. [[funcmod-spatial-params]]The spatial model may define any or all of the following quantities: 
 * horizontal displacement – the east and north displacement in metres or degrees
 * horizontal uncertainty – the circular 95% confidence limit in metres
 * vertical displacement – the upwards vertical displacement in metres
@@ -47,11 +47,11 @@ The functional model proposed for a general deformation model can be characteris
 +
 Displacements not defined by the model are assumed to be zero.  Uncertainties no defined by the model take a default value defined in the spatial model or deformation model metadata.
 
-#funcmod-trajectory#]#5. The deformation model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial model.  This trajectory is terms of an explicitly defined acessible coordinate system. # 
+5. [[funcmod-trajectory]]The deformation model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial model.  This trajectory is terms of an explicitly defined acessible coordinate system. 
 
-#funcmod-ref-crs#]#6. The position used to calculate the spatial model is not defined in an currently accessible coordinate system - it may be in terms on an accessible coordinate system at a specific epoch.  Its value is only accessible by an inverse calculation using the deformation model.  See the <<formula-inverse, inverse calculation method>> below.#
+6. [[funcmod-ref-crs]]The position used to calculate the spatial model is not defined in an currently accessible coordinate system - it may be in terms on an accessible coordinate system at a specific epoch.  Its value is only accessible by an inverse calculation using the deformation model.  See the <<formula-inverse, inverse calculation method>> below.
 
-#funcmod-spatial-type#]#7. The spatial model may be represented by either:#
+7. [[funcmod-spatial-type]]The spatial model may be represented by either:
 * a nested grid structure comprising one or more grids.  To evaluate the spatial model at a specific position the nesting algorithm identifies which grid is applicable at that position and the disclocation is interpolated from this grid alone.  The grids are constrained to be:
 ** Grids with rows equally spaced and columns equally spaced.
 ** Grid rows and columns are aligned with the axes of the definition CRS
@@ -66,7 +66,7 @@ See <<formula-grid-interpolation>grid interpolation formulae below.
 +
 See the discussion of <<discuss-spatial-model, spatial model types>> below.
 
-#funcmod-time-type#]#8. The time function is one of:#
+8. [[funcmod-time-type]]The time function is one of:
  * a piecewise linear function of time. Specialisations of the piecewise linear time function are:
  * constant value
  * constant velocity
@@ -79,7 +79,7 @@ Piecewise linear functions are defined by an ordered set of time/date values and
 See the <<discuss-time-function, discussion>> and <<formula-time-function, formulae>> for time functions below.
 
 
-#funcmod-component-metadata#]#9. Each component includes metadata defining:#
+9. [[funcmod-component-metadata]]Each component includes metadata defining:
 * The type of spatial model (grid, triangulation)
 * The spatial interpolation method to use
 * The quantities it defines (displacements, uncertainties)
@@ -87,7 +87,7 @@ See the <<discuss-time-function, discussion>> and <<formula-time-function, formu
 * Optional default horizontal and vertical uncertainty
 * A spatial definition of the extent of the spatial model (to determine if it is required at a specific position)
 
-#funcmod-model-metadata#]#10. The deformation model includes metadata defining:#
+10. [[funcmod-model-metadata]]The deformation model includes metadata defining:
 * The version of the deformation model specification with which the model complies
 * The name of the model
 * The version of the deformation model
