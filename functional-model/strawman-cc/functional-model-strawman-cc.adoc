@@ -36,7 +36,7 @@ The functional model proposed for a general deformation model can be characteris
 
 2. [[funcmod-component]]Each component comprises a spatial model and a time function. The spatial model defines displacement as a function of position.  The time function evaluates a scalar multiplier as a function of time.  The deformation contribution for the component at a given position and time is obtained by multipying the displacement components by the time function.
 
-[#funcmod-spatial-extent#]#3. The spatial model may be defined over a subset of the total extent of the model.  Where it is not defined it is assumed to be zero.#
+3. [[funcmod-spatial-extent]]The spatial model may be defined over a subset of the total extent of the model.  Where it is not defined it is assumed to be zero.
 
 4. [[funcmod-spatial-params]]The spatial model may define any or all of the following quantities: 
 * horizontal displacement – the east and north displacement in metres or degrees
