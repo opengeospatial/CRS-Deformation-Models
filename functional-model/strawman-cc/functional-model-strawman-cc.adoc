@@ -204,7 +204,7 @@ dn = -dx.cos(λ).sin(φ) - dy.sin(λ).sin(φ) + dz.cos(φ)
 [[formula-time-function]]
 === Time functions
 
-The time function for a component defines a scale factor f(__t__) applied to component displacements at time __t__.  
+The time function for a component defines a scale factor f(__t__) applied to component displacements at time __t__.  The deformation model metadata defines a temporal extent of the model from t~min~ to t~max~.  Time functions are considered undefined and the model cannot be evaluated for times before t~min~ or after t~max~.
 
 
 Following conventional use in deformation models all date/time values are converted to decimal years for use in the following formulae.  The conversion to decimal years is done by first converting all dates to UTC.   The year number _yyyy_ of the epoch forms the integer part of the decimal year.  The fractional part of the epoch is determined by dividing the number of seconds between  _yyyy_-01-01T00:00:00Z and the epoch by the number of seconds between _yyy1_-01-01T00:00:00Z and _yyyy_-01-01T00:00:00Z, where _yyy1_ is _yyyy_+1. 
@@ -258,7 +258,7 @@ f(__t__) = f~0~ + (f~∞~-f~0~).(1 - exp(-(t~1~-t~0~)/θ))     when __t__ >= t~1
 [[formula-components]]
 === Combination of components
 
-To calculate the total deformation at a time and location, the displacement and uncertainties due to each component are calculated independently and then summed together to obtain the total displacement at a location.  This displacement is then applied to the coordinate. 
+To calculate the total deformation at a time and location, the displacement and uncertainties due to each component are calculated independently and then combined using the formulate below to obtain the total displacement and uncertainty at a location.  The total displacement is then applied to the coordinate. 
 
 
 The same input position coordinate is used for each component - the components are not applied sequentially (ie the coordinate is not updated by the first component before being used to calculate the deformation on the second component). See the discussion below on <<discuss-parallel-calculation, using the same position for each component>>.
