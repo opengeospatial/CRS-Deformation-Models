@@ -129,7 +129,7 @@ x~i~ = x~o~ + i.x~s~ +
 y~j~ = y~o~ + j.y~s~ 
 
 
-where  x~o~, y~o~ are the longitude and latitude of the southwest-most corner of the grid,  x~s~ and y~s~ are the longitude and latitude grid spacing, and i and j are the column and row number of the grid cell (where the west-most column and southernmost row are numbered 0).  Note that the longitude and latitude grid spacing need not be equal – it is preferred that  x~s~ is approximately equal to y~s~/cos(y~m~), where y~m~ is the latitude of the middle of the grid, as this makes the grid cells approximately square (except at polar latitudes). 
+where  x~o~, y~o~ are the longitude and latitude of the southwest-most corner of the grid,  x~s~ and y~s~ are the longitude and latitude grid spacing, and i and j are the column and row number of the grid cell (where the west-most column and southernmost row are numbered 0).  Note that the longitude grid spacing need not be equal to the latitude grid spacing  – it is preferred that  x~s~ is approximately equal to y~s~/cos(y~m~), where y~m~ is the latitude of the middle of the grid, as this makes the grid cells approximately square (except at polar latitudes). 
 
 Displacement vector elements are calculated using bilinear interpolation with respect to latitude and longitude from the nodes at the corners of the grid cell within which the calculation point lies.  Each element of the displacement is calculated independently (though of course the interpolation weighting will be the same for each, as they all refer to the same calculation point). 
 
