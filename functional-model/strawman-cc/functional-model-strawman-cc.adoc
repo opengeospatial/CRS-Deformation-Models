@@ -213,25 +213,28 @@ For the uncertainties eh, ev the magnitude of the uncertainty is determined rela
 
 The time function is defined as the sum of one or more of the following functions:
 
-==== Constant functoin
-
-For the constant function type f(__t__) = 1. 
-
-
-For function types velocity, step, and reverse step the model is defined by a reference time t~0~.  For these types f(__t__) is defined as:
-==== Velocity function
-
-[cols="2,5a"]
+[cols="2,5a,5a"]
 [options="header"]
 |===
-|Function type| Formula
-|constant|f(__t__)=1
-|velocity|f(__t__) = (t – t~0~) all values of t
+|Function type|Parameters|Formula (t~min~ <= __t__ <= t~max~)
+|constant|None|f(__t__)=1
+|velocity|Reference epoch t~0~|f(__t__) = (t – t~0~) all values of t
+|step | Reference epoch t~0~ |f(__t__) = 0 when t < t~0~,
+|reverse step | Reference epoch t~0~ |f(__t__) = -1 when t < t~0~,
+|piecewise|Time/factors corner points +
+t~i~,f~i~ for i=0..n|
+f(__t__) = 0 for __t__ < t~0
 
-|step | f(__t__) = 0 when t < t~0~,
-|reverse step |f(__t__) = -1 when t < t~0~,
-|piecewise|f(__t__) = (f~i~.(t~i+1~ – __t__) + f~i+1~.(__t__-t~i~))/(t~i+1~-t~i~)
-|exponential|f(__t__) = f~p~     when __t__ < t~0~ 
+f(__t__) = (f~i~.(t~i+1~ – __t__) + f~i+1~.(__t__-t~i~))/(t~i+1~-t~i~) +
+for t~i~ < __t__ < t~i+1~
+
+f(__t__) = 0 for __t__ > t~n~
+
+|exponential|Start epoch t~0~
+
+End epoch t~1~
+
+Decay constant θ| f(__t__) = f~p~     when __t__ < t~0~ 
 
 f(__t__) = f~0~ + (f~∞~-f~0~).(1 - exp(-(__t__-t~0~)/θ))     when t~0~ <= __t__ < t~1~ 
 
@@ -239,20 +242,8 @@ f(__t__) = f~0~ + (f~∞~-f~0~).(1 - exp(-(__t__-t~0~)/θ))     when t~0~ <= __t
 f(__t__) = f~0~ + (f~∞~-f~0~).(1 - exp(-(t~1~-t~0~)/θ))     when __t__ >= t~1~
 |===
 
-For function type “piecewise” the function is defined by a series of times t~i~ and multiplying factors f~i~ for i=1 to n.  The definition also specifies a behaviour before the first time and after tha last time which is one of _zero_, _constant_, or _linear_. The time function is defined as:
-
-The value before t~1~ and after t~n~ depends on the behaviour specified and is defined as follows:
-
-[options="header"]
-|===
-|behaviour|Before t~1~|After t~n~
-|zero|0|0
-|constant|f~1~|f~n~
-|linear|f(__t__) = (f~1~.(t~2~ – __t__) + f~2~.(__t__-t~1~))/(t~2~-t~1~)|f(__t__) = (f~n-1~.(t~n~ – __t__) + f~n~.(__t__-t~n-1~))/(t~n~-t~n-1~)
-|===
-
-
-For function type “exponential” the function is defined by a reference epoch t~0~, an optional end epoch t~1~, a relaxation constant θ, and three scale factors, before f~p~, initial f~0~, and final f~∞~.  
+Note that the constant, velocity, step, and reverse step functions are all special cases of the piecewise linear function.  The piecewise linear function can 
+include two consecutive time points at the same epoch (i.e. t~i~ = t ~i+1~) which creates a step.  
 
 
 [[formula-components]]
