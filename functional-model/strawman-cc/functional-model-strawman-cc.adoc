@@ -209,8 +209,7 @@ The time function for a component defines a scale factor f(__t__) applied to com
 Following conventional use in deformation models the time functions are defined as a functions of decimal years (eg velocities are metres/year).  All date/time values such as calculation epoch, velcoty reference epoch) are converted to decimal years for use in the following formulae.  The conversion to decimal years is done by first converting the epoch to UTC.   The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year.  The fractional part of the decimal year is determined by dividing the number of seconds between  _yyyy_-01-01T00:00:00Z and the epoch by the number of seconds between _yyy1_-01-01T00:00:00Z and _yyyy_-01-01T00:00:00Z, where _yyy1_ is _yyyy_+1 (ie dividing the number of seconds since the start of the epoch UTC year by the total number of seconds in the epoch UTC year). 
 
 
-For the uncertainties eh, ev the magnitude of the uncertainty is determined relative to the <<discuss-uncertainty-epoch, below>>. The scale factor to apply to undertainties is f~e~(__t__) is defined as  √abs(f(__t__)-f(t~0~)) where t~0~ is the uncertainty reference epoch of the model. 
-
+For the uncertainties eh, ev the magnitude of the uncertainty is determined relative to the <<discuss-uncertainty-epoch, uncertainty reference epch>>. The scale factor to apply to undertainties is f~e~(__t__) is defined as  √abs(f(__t__)-f(t~0~)) where t~0~ is the uncertainty reference epoch of the model. 
 
 For the constant function type f(__t__) = 1. 
 
