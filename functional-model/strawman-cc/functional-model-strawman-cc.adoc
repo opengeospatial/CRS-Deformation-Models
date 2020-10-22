@@ -370,7 +370,7 @@ It may be less suitable to deformation with a complex time evolution such as slo
 
 In practice nearly all current deformation models use grid representations.  There is a small usage of triangulated models which is included in this functional model specification.  This is a departure from the JSON-GeoTIFF format that this specification was originally writtent for.  
 
-New Zealand triangulated models were considered for modelling the deformation due to the 2011/12 Christchurch earthquakes but didn’t offer much advantage in the size of the model, and also are much less efficient to evaluate since it is necessary to search the triangulation to determine which triangle applies at a location.  (See https://www.linz.govt.nz/system/files_force/media/file-attachments/winefield-crook-beavan-application-localised-deformation-model-after-earthquake.pdf?download=1). 
+In New Zealand triangulated models were considered for modelling the deformation due to the 2011/12 Christchurch earthquakes but did not offer much advantage in the size of the model, and also are much less efficient to evaluate since it is necessary to search the triangulation to determine which triangle applies at a location.  (See https://www.linz.govt.nz/system/files_force/media/file-attachments/winefield-crook-beavan-application-localised-deformation-model-after-earthquake.pdf?download=1). 
 
 In the future there may be value in using some other representation than nested grids for the deformation model.  For example structures such as Discrete Global Grid Systems provide a global grid of varying level of detail.  As these acquire more support in software and if there is a drive to develop a global deformation model then this may be worth developing. 
 
