@@ -292,8 +292,8 @@ If the source and target coordinate systems are geographic coordinate systems an
 If a is the ellipsoid semi-major axis (eg 6378137.0), f is the flattening  (eg 1.0/298.25722210), λ is the latitude, and φ is the longitude then corrections to longitude and latitude (in radians) are given by: 
 
 
-b = a.(1-f)
-dλ = de.√(b^2^sin^2^(φ)+a^2^cos^2^(φ))/a^2^cos(φ)
+b = a.(1-f) +
+dλ = de.√(b^2^sin^2^(φ)+a^2^cos^2^(φ))/a^2^cos(φ) +
 dφ = dn.(b^2^sin^2^(φ)+a^2^cos^2^(φ))^3/2^/a^2^b^2^ 
 
 
