@@ -360,9 +360,11 @@ The eh and ev values from the spatial representation of each component are multi
 [[discuss-components]]
 ### Decomposition into components
 
-This specification assumes that the deformation can be decomposed into a set of spatial functions each multiplied by a time function.  This is suitable for many geophysical phenomena such as secular motion (velocity models) and coseismic ground deformation. 
+This specification assumes that the deformation can be decomposed into a set of spatial functions each multiplied by a scalar time function.  This is suitable for many geophysical phenomena such as secular motion (velocity models) and coseismic ground deformation. 
 
-It may be less suitable to deformation with a complex time evolution such as slow slip events propogating along a fault system, or post-seismic deformation.  Currently deformation models for coordinate operations have not included this level of detail.  It may be that this is a requirement in the future however.  This could be represented using this functional model by modelling the deformation at sequential time epochs (for example every month) as a series of components. 
+It may be less suitable to deformation with a complex time evolution such as slow slip events propogating along a fault system, or post-seismic deformation.  However currently deformation models for coordinate operations are all represented in this way.  Decomposing in this way can represent any deformation to an arbitrary level of detail, but it may not be the most efficient way to do so.
+
+Other approaches could be used to representing deformation in the future, such as triangular interpolation between points with individually defined trajectories. 
 
 [[discuss-spatial-model]]
 ### Spatial model types
