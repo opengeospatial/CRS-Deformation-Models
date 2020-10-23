@@ -385,11 +385,13 @@ Geophysical deformation may be approximated by other functions, such as logarith
 
 In the near future it is likely that we may generate far more complex and accurate models using technology such as CORS and InSAR.  For example each year there could be an updated gridded model.  The deformation at any epoch could be interpolated or extrapolated from the nearest to models (or as in Japan modelled with a step function for each year). This is in effect a three dimensional grid with dimensions latitude, longitude, and time.  It can be easily encoded into this functional model by constructing time functions for each grid that define the interpolation between one grid and the next.
 
-<!-- This can be encoded using this functional model by a series of gridded spatial models with time functions as illustrated below to interpolate between them.
+////
+
+This can be encoded using this functional model by a series of gridded spatial models with time functions as illustrated below to interpolate between them.
 
 [.center]
 image::annual_grid_time_func.png[Alt=Example annual displacement grid time function,width=500, scalewidth=10cm]
--->
+////
 
 [[discuss-geoentric-interpolation]]
 ### Geocentric interpolation near poles
@@ -402,13 +404,15 @@ image::geocentric_bilinear_interpolation.png[Alt=geocentric bilinear interpolati
 
 To estimate the error that could be incurred using simple bilinear interpolation and not accounting for this difference we can consider a case where the deformation is 1m northwards at point A, and zero at point B in the diagram above.  Let the longitude grid spacing be λ~s~ radians.  If the calculation point P is λ radians past A, then the magnitude of the interpolated vector will be (λ~s~-λ)/λ~s~.  The error of orientation will be λ radians (the difference between north at A and north at the calculation point).  So the vector error will be sin(λ).(λ~s~-λ)/λ~s~.  Approximating sin(λ) as λ, this has a maximum absolute value in the range (0,λ~s~) of λ~s~/2.  So for example with a grid longitude spacing of 1° this could result in a 2cm error in the 1m of deformation vector. 
 
-<!-- 
+////
+
 Using the geocentric interpolation method to calculate the horizontal component does cause some “leakage” of the horizontal deformation into the vertical component, that is: 
 
 du = dx.cos(λ).cos(φ) + dy.sin(λ).cos(φ) + dz.sin(φ) 
 
 For the interpolation of vertical displacement du this method proposes using the same formulae as the bilinear interpolation method - that is simple bilinear interpolation of the du component.  However this leakage does result in a small loss of magnitude in the horizontal component. The reduction is approximately scaling by the cosine of the angle between the vertical at the calculation point and the vertical at each grid node.  For a grid cell of 1 degree extent this would result in a scale error of 0.2mm for a 1m deformation vector.  (Note that this is a 1 degree extent measured on the globe - not a 1 degree extent of longitude which may be much smaller near the poles).  This can be ignored without significant loss of accuracy.
--->
+
+////
 
 [[discuss-parallel-calculation]]
 ### Sequential or parallel evaluation of components
