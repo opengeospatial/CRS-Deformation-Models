@@ -303,7 +303,7 @@ The vertical displacement is always in metres and is simply added to the height 
 
 The geocentric method can be applied  if the model is using a geographic coordinate system  and offsets measured in metres.  In this case the horizontal offset is converted to a geocentric (XYZ) offset, added to the geocentric coordinate, and then converted back to geographic coordinates.  The vertical coordinate is always calculated by simple addition of the vertical displacement to the reference coordinate height. 
 
-This method may be applicable for coordinates near the pole, where simple addition of offsets to the longitude/latitude may not give the desired result.  This is shown in the figure below in which the grey vector shows the result of adding an east displacement to the longitude coordinate, and the black vector shows the rsult applying the same east displacement in the direction of the eastwards vector at the reference coordinate. Close to the pole the eastward vector is different to changing the longitude coordinate.. . 
+This method may be applicable for coordinates near the pole, where simple addition of offsets to the longitude/latitude may not give the desired result.  This is shown in the figure below in which the grey vector shows the result of adding an east displacement to the longitude coordinate, and the black vector shows the result applying the same east displacement in the direction of the eastwards vector at the reference coordinate. Close to the pole the eastward vector is different to changing the longitude coordinate.. . 
 
 [.right]
 image::near_pole_east_offset.png[Alt=near pole east offset,width=200,scalewidth=7cm]
