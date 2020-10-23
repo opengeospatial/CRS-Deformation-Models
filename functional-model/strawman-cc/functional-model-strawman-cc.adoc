@@ -121,6 +121,7 @@ The formulae below are adopted from the JSON GeoTIFF specification.  This does n
 
 The grid interpolation method to be used is defined in the component metadata.  Initially two formulae are proposed.  One is a conventional bilinear formula, and one is an unconventional "geocentric bilinear" formulae for interpolating on geographic CRS grids in near polar regions. These two methods are proposed to support defining deformation models anywhere on Earth.
 
+[[formula-bilinear-interpolation]]
 ==== Bilinear interpolation
 
 Gridded spatial representations are defined as regular grids in terms of latitudes and longitudes.  That is, longitude (x) and latitude (y) of a grid node is defined as  
@@ -165,15 +166,15 @@ The error elements eh, ev are interpolated using a weighted average of the varia
 
 eh = √(W~i,j~*eh~i,j~^2^ + W~i+1,j~*eh~i+1,j~^2^ + W~i,j+1~*eh~i,j+1~^2^ + W~i+1,j+1~*eh~i+1,j+1~^2^)
 
+[[formula-geocentric-bilinear-interpolation]]
 ==== “Geocentric bilinear” interpolation
-
-[.right]
-image::geocentric_bilinear_interpolation.png[Alt=geocentric bilinear interpolation diagram, width=200,scalewidth=7cm]
 
 A latitude/longitude grid may not be appropriate for models including polar regions - it may be simpler to use a grid defined on suitable projected coordinate system.   See the discussion on  <<discuss-geocentric-interpolation, errors of normal bilinear interpolation near poles>> below.
 
+However a latitude and longitude grid can still serve if the north and east component of deformation are defined in metres.  The simple bilinear interpolation method above may not be appropriate if the east and north vectors at each grid node are not in approximately the same direction.  As shown in the figure below this may not be the case near the pole if the longitude grid spacing is large.   
 
-However a latitude and longitude grid can still serve if the north and east component of deformation are defined in metres.  The simple bilinear interpolation method above is less reasonable if the east and north vectors at each grid node are not in approximately the same direction.  As shown in the figure this may not be the case near the pole if the longitude grid spacing is large.   
+[.right]
+image::geocentric_bilinear_interpolation.png[Alt=geocentric bilinear interpolation diagram, width=200,scalewidth=7cm]
 
 
 The geocentric bilinear interpolation converts the displacement components from east and north components to geocentric X, Y, and Z components.  These are in the same direction can be scaled and summed using the usual bilinear formulae above to calculate the X, Y, Z components of displacement at the calculation point, which are then converted back to components east and north at the calculation point.  
@@ -364,6 +365,8 @@ This specification assumes that the deformation can be decomposed into a set of 
 
 It may be less suitable to deformation with a complex time evolution such as slow slip events propogating along a fault system, or post-seismic deformation.  However currently deformation models for coordinate operations are all represented in this way.  Decomposing in this way can represent any deformation to an arbitrary level of detail, but it may not be the most efficient way to do so.
 
+On a global scale plate motion models are used in some applications, in which the surface is split into a number of regions on each of which a rigid body rotation around the centre of the earth is defined.  Typically these are used in GNSS analysis to predict the movement of survey marks.  They are discontinuous at the boundaries between plates.  While these are a form of deformation model they are considered out of scope for this work.
+
 Other approaches could be used to representing deformation in the future, such as triangular interpolation between points with individually defined trajectories. 
 
 [[discuss-spatial-model]]
@@ -380,21 +383,32 @@ In the future there may be value in using some other representation than nested 
 
 Geophysical deformation may be approximated by other functions, such as logarithmic functions and cyclic functions.  They are also used in point deformation models, for example reference station coordinates in the International Terrestrial Reference Frame.  However it is not clear that these are a much better model for deformation over the extent of a spatial model.  That is to say that the actual time evolution at each point within the spatial model may have different attributes and parameterisation.  The deformation model component is necessarily an approximation attempting to best fit the actual deformation over its spatial and temporal extent, and these more complex parameterisations of time functions may not offer much improvement on the simple functions already proposed. Currently deformation models defined for coordinate operations do not use these functions. 
 
-In the near future it is likely that we may generate far more complex and accurate models using technology such as CORS and InSAR.  For example each year there could be an updated gridded model.  The deformation at any epoch could be interpolated or extrapolated from the nearest to models (or as in Japan modelled with a step function for each year). This is in effect a three dimensional grid with dimensions latitude, longitude, and time.  This can be encoded using this functional model by a series of gridded spatial models with time functions as illustrated below to interpolate between them.
+In the near future it is likely that we may generate far more complex and accurate models using technology such as CORS and InSAR.  For example each year there could be an updated gridded model.  The deformation at any epoch could be interpolated or extrapolated from the nearest to models (or as in Japan modelled with a step function for each year). This is in effect a three dimensional grid with dimensions latitude, longitude, and time.  It can be easily encoded into this functional model by constructing time functions for each grid that define the interpolation between one grid and the next.
+
+<!-- This can be encoded using this functional model by a series of gridded spatial models with time functions as illustrated below to interpolate between them.
 
 [.center]
 image::annual_grid_time_func.png[Alt=Example annual displacement grid time function,width=500, scalewidth=10cm]
+-->
 
 [[discuss-geoentric-interpolation]]
 ### Geocentric interpolation near poles
 
-To estimate the error that could be incurred by not accounting for this difference in direction we can consider a case where the deformation is 1m northwards at A, and zero at B.  Let the longitude grid spacing be λ~s~ radians.  If the calculation point P is λ radians past A, then the magnitude of the interpolated vector will be (λ~s~-λ)/λ~s~.  The error of orientation will be λ radians (the difference between north at A and north at the calculation point).  So the vector error will be sin(λ).(λ~s~-λ)/λ~s~.  Approximating sin(λ) as λ, this has a maximum absolute value in the range (0,λ~s~) of λ~s~/2.  So for example with a grid longitude spacing of 1° this could result in a 2cm error in the 1m of deformation vector. 
+The geocentric interpolation method proposed <<formula-geocentric-bilinear-interpolation, above>> is proposed for use in near polar regions where east and north topocentric vectors at adjacent grid nodes are in significantly different directions.
 
+
+[.right]
+image::geocentric_bilinear_interpolation.png[Alt=geocentric bilinear interpolation diagram, width=200,scalewidth=7cm]
+
+To estimate the error that could be incurred using simple bilinear interpolation and not accounting for this difference we can consider a case where the deformation is 1m northwards at point A, and zero at point B in the diagram above.  Let the longitude grid spacing be λ~s~ radians.  If the calculation point P is λ radians past A, then the magnitude of the interpolated vector will be (λ~s~-λ)/λ~s~.  The error of orientation will be λ radians (the difference between north at A and north at the calculation point).  So the vector error will be sin(λ).(λ~s~-λ)/λ~s~.  Approximating sin(λ) as λ, this has a maximum absolute value in the range (0,λ~s~) of λ~s~/2.  So for example with a grid longitude spacing of 1° this could result in a 2cm error in the 1m of deformation vector. 
+
+<!-- 
 Using the geocentric interpolation method to calculate the horizontal component does cause some “leakage” of the horizontal deformation into the vertical component, that is: 
 
 du = dx.cos(λ).cos(φ) + dy.sin(λ).cos(φ) + dz.sin(φ) 
 
-For the interpolation of du this method is using the same formulae as the bilinear interpolation method, that is simple bilinear interpolation of the du component.  However this leakage does result in a small loss of magnitude in the horizontal component.   The reduction is approximately scaling by the cosine of the angle between the vertical at the calculation point and the vertical at each grid node.  For a grid cell of 1 degree extent this would result in a scale error of 0.2mm for a 1m deformation vector.  (Note that this is a 1 degree extent measured on the globe - not a 1 degree extent of longitude which may be much smaller near the poles).  This can be ignored without significant loss of accuracy.
+For the interpolation of vertical displacement du this method proposes using the same formulae as the bilinear interpolation method - that is simple bilinear interpolation of the du component.  However this leakage does result in a small loss of magnitude in the horizontal component. The reduction is approximately scaling by the cosine of the angle between the vertical at the calculation point and the vertical at each grid node.  For a grid cell of 1 degree extent this would result in a scale error of 0.2mm for a 1m deformation vector.  (Note that this is a 1 degree extent measured on the globe - not a 1 degree extent of longitude which may be much smaller near the poles).  This can be ignored without significant loss of accuracy.
+-->
 
 [[discuss-parallel-calculation]]
 ### Sequential or parallel evaluation of components
