@@ -1,7 +1,7 @@
 CRS-Deformation-Models
 ======================
 
-The next virtual meeting of this project team will be at 4pm EST (10pm UTC) on 2 November 2020 (2020-11-02  https://www4.gotomeeting.com/join/882484381).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
+The next virtual meeting of this project team will be at 4pm EST (10pm UTC) on 2 November 2020 (https://www4.gotomeeting.com/join/882484381).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
 
 <!--
 2020-09-07  https://www4.gotomeeting.com/join/494053021
@@ -24,7 +24,7 @@ The currently active discussions are:
 <!--
 * [Refine the working definition](https://github.com/opengeospatial/CRS-Deformation-Models/issues/3) of "deformation model" which sets the scope for this project team
 -->
-* [Straw man aproposal for a deformation model functional model](https://github.com/opengeospatial/CRS-Deformation-Models/issues/16)
+* [Straw man proposal for a deformation model functional model](https://github.com/opengeospatial/CRS-Deformation-Models/issues/16)
 
 <!--
 * [What is a more appropriate name to replace "deformation model](https://github.com/opengeospatial/CRS-Deformation-Models/issues/6)
