@@ -22,21 +22,36 @@ Deformation models are typically developed by national geodetic agencies to be u
 
 The potential audience for this proposal are geodetic agencies publishing deformation models, and developers of geospatial and positioning software that consumes them.  
 
-
 Currently there is no common format for such models, and typically agencies develop both the model and software to evaluate it at any given time and location.  The software may not interface well with consumer software where the transformation may be required, such as in GIS (Geographic Information Systems) and positioning software.  The formats are built to serve the needs of the individual agency, generally using custom binary formats with limited metadata. 
 
 This proposal describes a functional model for describing a deformation model.  It does not propose any particular encoding of the model, though it is hoped that it will lead to the development of an encoding standard. 
 
+== Scope
+
+_This section is here mainly to provide for exclusions.  The wording of this section is not 
+intended to be final._
+
+The scope of the deformation model functional model embraces deformation models used to define time dependent coordinate transformations or point motion models that describe the trajectories of points on a deforming surface or body relative to an external reference frame.
+
+=== Exclusions
+
+This scope of this functional model definition does not include
+
+* Rigid body transformation between reference frames such as time dependent helmert or Bursa-Wolf transformations
+* Trajectory models for individual points, such as ITRF reference station coordinate models
+* Distortion models used to represent the deformation between two datums (typically between older datums based on local terrestrial observations and modern datums based on global satellite systems)
 
 == Functional definition of the deformation model
 
 The functional model proposed for a general deformation model can be characterised as follows.  
 
+0. [[funcmod-extents]] The deformation model is defined within a specified spatial and temporal extent.  Beyond these extents the model is undefined and cannot be evaluated.
+
 1. [[funcmod-decomposition]]The total deformation is partitioned into one or more components.  The total deformation at any time and position is calculated by summing the contribution from each component. See <<discuss-components,discussion>> and <<formula-components, formulae>> below.
 
 2. [[funcmod-component]]Each component comprises a spatial model and a time function. The spatial model defines displacement as a function of position.  The time function evaluates a scalar multiplier as a function of time.  The deformation contribution for the component at a given position and time is obtained by multipying the displacement components by the time function.
 
-3. [[funcmod-spatial-extent]]The spatial model may be defined over a subset of the total extent of the model.  Where it is not defined it is assumed to be zero.
+3. [[funcmod-spatial-extent]]The spatial model may be defined over a subset of the total extent of the model.  Where it is not defined it is assumed to be zero (see the <<discuss-no-data, discussion>> below).
 
 4. [[funcmod-spatial-params]]The spatial model may define any or all of the following quantities: 
 * horizontal displacement – the east and north displacement in metres or degrees
@@ -45,7 +60,9 @@ The functional model proposed for a general deformation model can be characteris
 * vertical uncertainty – the 95% confidence limit in metres
 
 +
-Displacements not defined by the model are assumed to be zero.  Uncertainties no defined by the model take a default value defined in the spatial model or deformation model metadata.
+Displacements not defined by the model are assumed to be zero.  Uncertainties not defined by the model take a default value defined in the spatial model or deformation model metadata.
+
+4. [[funcmod-nodata]] The displacements and uncertainties of a spatial model may evaluate to a _no data_ value at some locations, meaning that the deformation cannot be evaluated at that location.  At such locations the total deformation is undefined and cannot be calculated. See the <<discuss-no-data, discussion>> below.
 
 5. [[funcmod-trajectory]]The deformation model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial model.  This trajectory is terms of an explicitly defined acessible coordinate system. 
 
@@ -377,6 +394,23 @@ In practice nearly all current deformation models use grid representations.  The
 In New Zealand triangulated models were considered for modelling the deformation due to the 2011/12 Christchurch earthquakes but did not offer much advantage in the size of the model, and also are much less efficient to evaluate since it is necessary to search the triangulation to determine which triangle applies at a location.  (See https://www.linz.govt.nz/system/files_force/media/file-attachments/winefield-crook-beavan-application-localised-deformation-model-after-earthquake.pdf?download=1). 
 
 In the future there may be value in using some other representation than nested grids for the deformation model.  For example structures such as Discrete Global Grid Systems provide a global grid of varying level of detail.  As these acquire more support in software and if there is a drive to develop a global deformation model then this may be worth developing. 
+
+[[discuss-no-data]]
+### No data and zero values
+
+The deformation model must support a "no data" value which is different from a zero displacement.  A value of zero is used where there is no significant displacement. A "no-data" value is used where the deformation is unknown, and might be significant.  
+
+If evaluating the deformation model at a given location and time requires using a "no data" value then the displacment (or uncertainty) calculated at that location is undefined.  This would typically results in an error message to users to this effect.  The diagram below shows how this might look in a deformation model.  In this diagram the square marks the total extent of the deformation model.  Outside this area the deformation model cannot be evaluated.  In the deformation model is a gridded spatial model.  Within there are a number of nodes at which the displacement is not defined (that is it has a "no-data" value).  Where these nodes are required to calculate the displacement, which is any grid cell they are on the boundary of, the deformation model cannot be calculated.  The grey area in this diagram shows the region in which the displacement is not defined by the model and cannot be calculated.  
+
+image::no_data.png[Alt=no data value diagram, width=400,scalewidth=9cm]
+
+This may occur where the area in which deformation is defined is an irregular shape.  It might include coastal 
+regions where the deformation of the seabed is not measured, or it may be that it crosses a jurisdictional boundary.  As the gridded model is by definition a rectangular area it will include these regions in which the deformation is not known, which are correctly represented by a "no data" value.
+
+Where a component only covers a subset of the total area of a deformation model it is assumed to have zero displacement beyond its extent.  An example of this is a deformation model component representing deformation due to an earthquake.  In the vicinity of the epicentre there may be extensive deformation.  However there may also be large regions that lie within the extent of the deformation model but at which the deformation is zero or insignificant.  The deformation component created to represent this only needs to include the area where there is significant deformation.  This is shown in the figure below.  In this diagram the outer square represents the total extent of the deformation model.  Beyond this extent the deformation is undefined.  The nested grid inside the total extents is used to represent the deformation due to an earthquake.  In the region outside the nested grid component the deformation due to this component is zero. 
+
+image::patch_extents.png[Alt=patch extent diagram, width=400,scalewidth=9cm]
+
 
 [[discuss-time-function]]
 ### Time functions
