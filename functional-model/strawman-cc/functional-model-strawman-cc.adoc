@@ -64,9 +64,13 @@ Displacements not defined by the model are assumed to be zero.  Uncertainties no
 
 4. [[funcmod-nodata]] The displacements and uncertainties of a spatial model may evaluate to a _no data_ value at some locations, meaning that the deformation cannot be evaluated at that location.  At such locations the total deformation is undefined and cannot be calculated. See the <<discuss-no-data, discussion>> below.
 
-5. [[funcmod-trajectory]]The deformation model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial model.  This trajectory is terms of an explicitly defined acessible coordinate system. 
+5. [[funcmod-trajectory]]The deformation model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial model.  This trajectory is terms of an explicitly defined accessible coordinate system. 
 
 6. [[funcmod-ref-crs]]The position used to calculate the spatial model is not defined in an currently accessible coordinate system - it may be in terms on an accessible coordinate system at a specific epoch.  Its value is only accessible by an inverse calculation using the deformation model.  See the <<formula-inverse, inverse calculation method>> below.
+
+10. [[funcmod-continuous-invertible]]
+The displacement defined by the deformation model is required to be continuous and invertible within the spatial and temporal extent of the model except where it evaluates to _no data_.  
+This is not enforced by the mathematical formulation of the deformation model.  It is a compliance requirement on producers of deformation models and can be assumed by implementors of software using the deformation model. See the <<discuss-continuous-invertible, discussion>> below.
 
 7. [[funcmod-spatial-type]]The spatial model may be represented by either:
 * a nested grid structure comprising one or more grids.  To evaluate the spatial model at a specific position the nesting algorithm identifies which grid is applicable at that position and the disclocation is interpolated from this grid alone.  The grids are constrained to be:
@@ -95,8 +99,13 @@ Piecewise linear functions are defined by an ordered set of time/date values and
 +
 See the <<discuss-time-function, discussion>> and <<formula-time-function, formulae>> for time functions below.
 
+9. [[funcmod-14prm-transformation]]The deformation model specification may also include a 14 parameter
+Bursa-Wolf transformation definition.  This is applied before the deformation components in a forward transformation or after them in an inverse transformation as described in the <<formula-14prm-transformation, formula>>.  
++
+The 14 parameter transformation can be used to represent the bulk of the transformation between the source and target coordinate systems or epochs. This allows the more complex deformation components to efficiently represent perturbations from this movement which may be smaller and localised.  Note that jurisdictions may choose to implement this using an intermediate coordinate system rather including it than deformation model.
 
-9. [[funcmod-component-metadata]]Each component includes metadata defining:
+
+11. [[funcmod-component-metadata]]Each component includes metadata defining:
 * The type of spatial model (grid, triangulation)
 * The spatial interpolation method to use
 * The quantities it defines (displacements, uncertainties)
@@ -104,7 +113,7 @@ See the <<discuss-time-function, discussion>> and <<formula-time-function, formu
 * Optional default horizontal and vertical uncertainty
 * A spatial definition of the extent of the spatial model (to determine if it is required at a specific position)
 
-10. [[funcmod-model-metadata]]The deformation model includes metadata defining:
+12. [[funcmod-model-metadata]]The deformation model includes metadata defining:
 * The version of the deformation model specification with which the model complies
 * The name of the model
 * The version of the deformation model
@@ -133,13 +142,18 @@ The functional definition specifies the formulae that may be used to evaluate a 
 
 The formulae below are adopted from the JSON GeoTIFF specification.  This does not include formulae for interpolation on a triangle. In this specification the grid can be defined either in terms of a geographic (longitude/latitude) or projection (easting/northing) coordinate system.  Displacements and uncertainties are all in metres except that the horizontal displacement may be in degrees if the coordinate system is geographic.
 
-[[formula-grid-interpolation]]
-=== Grid interpolation
+[[formula-spatial-interpolation]]
+=== Spatial interpolation
 
-The grid interpolation method to be used is defined in the component metadata.  Initially two formulae are proposed.  One is a conventional bilinear formula, and one is an unconventional "geocentric bilinear" formulae for interpolating on geographic CRS grids in near polar regions. These two methods are proposed to support defining deformation models anywhere on Earth.
+This proposal includes two suggested spatial model types - grid and triangulated models.  For each of these the value of a dimension (eg east displacement) at a specific evaluation point is evaluated by forming a weighted average of the values at a set of nodes P~1~, P~2~, .. with weights w~1~, w~2~.  For bilinear interpolation on a grid this is a set of four nodes on the corners of the grid cell within which the evaluation point lies.  Similarly for linear interpolation on a triangulated network this 
+is a set of 3 nodes on the corners of the triangle within which 
+the evaluation point lies.
 
-[[formula-bilinear-interpolation]]
-==== Bilinear interpolation
+The values at the nodes are combined using these weights as <<formula-weighted-node-combination, described below>>.  For the 
+horizontal components (east and north displacement) two combination methods are defined - a simple weighted average and a geocentric combination which is applicable near the geographic poles where the east and north directions at the nodes may be markedly different.
+
+[[formula-bilinear-grid-interpolation]]
+==== Bilinear grid interpolation
 
 Gridded spatial representations are defined as regular grids in terms of latitudes and longitudes.  That is, longitude (x) and latitude (y) of a grid node is defined as  
 
@@ -162,7 +176,6 @@ image::bilinear_interpolation.png[Alt=bilinear interpolation diagram,width=300,s
 
 The displacement elements (de, dn, du) at the calculation point are weighted means of the corresponding elements at the four nodes. 
 
-
 The weights are calculated as follows: 
 
 
@@ -171,45 +184,62 @@ W~i+1,j~ = ((x-x~i~)/x~s~) * ((y~j+1~-y)/y~s~) +
 W~i,j+1~ = ((x~i+1~-x)/x~s~) * ((y-y~j~)/y~s~) +
 W~i+1,j+1~ = ((x-x~i~)/x~s~)*((y-y~j~)/y~s~) +
 
+[[formula-linear-triangular-interpolation]]
+==== Linear triangular interpolation
+
+The area covered by the spatial component is divided into triangles.  The spatial component is evaluated by first determining which triangle the evaluation point lies in.  The weights associated with each node of the triangle are defined by the following formulae:
+
+TBC: _Need to add to formulae_
+
+[[formula-weighted-node-combination]]
+==== Calculation of weighted average of node values
+
+Each interpolation method identifies a set of nodes P~i~ and weights W~i~.  At each node the spatial model may define any of the displacements de~i~, dn~i~, du~i~, and uncertainties eh~i~ and ev~i~.  For the horizontal displacement components de and dn two formulae are supported.  This simple formula is a weighted avereage.  This is also used for the vertical component du
 
 So for example the east displacement at the point (x,y) is calculated as  
 
+// ... if we don't have latexmath then need alterative formulation representation
 
-de = W~i,j~*de~i,j~ + W~i+1,j~*de~i+1,j~ + W~i,j+1~*de~i,j+1~ + W~i+1,j+1~*de~i+1,j+1~ 
+latexmath:[de = \sum_{i} W_i de_i]
+
+// de = W~i,j~*de~i,j~ + W~i+1,j~*de~i+1,j~ + W~i,j+1~*de~i,j+1~ + W~i+1,j+1~*de~i+1,j+1~ 
 
 
-The error elements eh, ev are interpolated using a weighted average of the variances eh^2^, ev^2^, for example 
+The uncertainties eh, ev are interpolated using a weighted average of the variances eh~i~^2^, ev~i~^2^, for example 
 
+latexmath:[eh = \sqrt{\sum_{i} W_i e_i^2}]
 
-eh = √(W~i,j~*eh~i,j~^2^ + W~i+1,j~*eh~i+1,j~^2^ + W~i,j+1~*eh~i,j+1~^2^ + W~i+1,j+1~*eh~i+1,j+1~^2^)
+// eh = √(W~i,j~*eh~i,j~^2^ + W~i+1,j~*eh~i+1,j~^2^ + W~i,j+1~*eh~i,j+1~^2^ + W~i+1,j+1~*eh~i+1,j+1~^2^)
 
-[[formula-geocentric-bilinear-interpolation]]
-==== “Geocentric bilinear” interpolation
+[[formula-geocentric-weighted-average]]
+==== Geocentric weighted average
 
-A latitude/longitude grid may not be appropriate for models including polar regions - it may be simpler to use a grid defined on suitable projected coordinate system.   See the discussion on  <<discuss-geocentric-interpolation, errors of normal bilinear interpolation near poles>> below.
-
-However a latitude and longitude grid can still serve if the north and east component of deformation are defined in metres.  The simple bilinear interpolation method above may not be appropriate if the east and north vectors at each grid node are not in approximately the same direction.  As shown in the figure below this may not be the case near the pole if the longitude grid spacing is large.   
+A simple average of the east and north displacements may not be appropriate very close to the poles where the directions of the east and north vectors may be quite different at the set of nodes being averaged, as shown in the figure where the directions at nodes A and B and the evaluation point P are all quite different.  
+A latitude/longitude grid may not be appropriate for models including polar regions - for example it may be simpler to use a grid defined on suitable projected coordinate system.   See the discussion on  <<discuss-geocentric-interpolation, errors of normal bilinear interpolation near poles>> below.
 
 [.right]
 image::geocentric_bilinear_interpolation.png[Alt=geocentric bilinear interpolation diagram, width=200,scalewidth=7cm]
 
+However a weighted average still services if the directions of the north and east vectors are accounted for in averaging the node values..  
 
-The geocentric bilinear interpolation converts the displacement components from east and north components to geocentric X, Y, and Z components.  These are in the same direction can be scaled and summed using the usual bilinear formulae above to calculate the X, Y, Z components of displacement at the calculation point, which are then converted back to components east and north at the calculation point.  
 
-Note that this is only used to determine the horizontal displacement.  The vertical displacement and uncertainties are  computed using the usual bilinear formulae above 
+The geocentric interpolation method converts the displacement components from east and north components to geocentric X, Y, and Z components.  These are in the same direction and can be scaled and summed using the simple weighted avarage formulae above to calculate the X, Y, Z components of displacement at the calculation point, which are then converted back to components east and north at the calculation point.  
+
+Note that this is only used to determine the horizontal displacement.  The vertical displacement and uncertainties are  computed using the simple weighted average formulae above. 
 
 
 At longitude λ and latitude φ the dx, dy, dz values are calculated from the east and north displacements de, dn as: 
 
 
-dx~i,j~ = -de~i,j~.sin(λ~i,j~) - dn~i,j~.cos(λ~i,j~).sin(φ~i,j~) +
-dy~i~~,j~ = de~i,j~.cos(λ~i,j~) - dn~i~~,j~.sin(λ~i,j~).sin(φ~i,j~) +
+dx~i~ = -de~i~.sin(λ~i~) - dn~i~.cos(λ~i~).sin(φ~i~) +
+dy~i~ = de~i~.cos(λ~i~) - dn~i~.sin(λ~i~).sin(φ~i~) +
+dz~i~ = dn~i~.cos(φ~i~)
 
 
 The X, Y, and Z directions are the same at any location, so the dx, dy, and dz displacements can be interpolated independently using bilinear interpolation as described above, eg:  
 
 
-dx = W~i,j~*dx~i,j~ + W~i+1,j~*dx~i+1,j~ + W~i,j+1~*dx~i,j+1~ + W~i+1,j+1~*dx~i+1,j+1~ 
+latexmath:[dx = \sum_{i} W_i dx_i]
 
 
 The displacement at the calculation point is then calculated as: 
@@ -328,6 +358,8 @@ image::near_pole_east_offset.png[Alt=near pole east offset,width=200,scalewidth=
 
 Moving away from the pole this issue rapidly becomes insignificant.  For a point at distance R from the pole with a displacement d, the difference is approximately d*(1-cos(d/R)), or approximately d^3^/2R^2^.  So for example a 1m eastward displacement 10km from the pole would have an error of 10^-8^m.  This is only an issue very close to the pole! 
 
+TBC _Add formulae for conversion lat/lon to XYZ and vice versa_
+
 Standard formulae are used for the conversion of geographic coordinates to and from geocentric coordinates.   The initial ellipsoidal height is set to zero before converting, and the resultant ellipsoidal height is discarded. 
 
 The horizontal components of displacement are converted to X,Y,Z components using the same formulae as described for the “geocentric_bilinear” method. 
@@ -372,6 +404,15 @@ The time function error factor of the difference between t~0~ and t~1~ is calcul
 The eh and ev values from the spatial representation of each component are multiplied by these time function error factor values and then combined as the root sum of squares to give the total error of the deformation between the two epochs. 
 
 
+[[formula-14prm-transformation]]
+=== Calculation of the 14 parameter transformation
+
+If the model includes a <<funcmod-14prm-transformation, 14 parameter transforamtion>> then this is applied to the coordinates before the 
+deformation model is calculated or applied in a forward transformation.  In an inverse transformation it is applied (in reverse) after the deformation model components have been applied to the coordinate.
+
+
+TBC _The 14 parameter transformation formulae need to be included here_ 
+
 
 ## Discussion points
 
@@ -395,10 +436,18 @@ In New Zealand triangulated models were considered for modelling the deformation
 
 In the future there may be value in using some other representation than nested grids for the deformation model.  For example structures such as Discrete Global Grid Systems provide a global grid of varying level of detail.  As these acquire more support in software and if there is a drive to develop a global deformation model then this may be worth developing. 
 
+
 [[discuss-no-data]]
 ### No data and zero values
 
-The deformation model must support a "no data" value which is different from a zero displacement.  A value of zero is used where there is no significant displacement. A "no-data" value is used where the deformation is unknown, and might be significant.  
+Most deformation models only cover a limited part of the globe.  They are limited by jurisdictions area of authority or by lack of data - for example areas of sea where there is no measure of deformation.  Also in areas affected by recent large deformation we may not have good data before the event.  There are several approaches to both identifying and handling these areas where there of no or poor information.  
+
+The areas where displacement is not defined could be defined by a complex geographical extent.  However grids must be defined for rectangular regions in their coordinate system, which are unlikely to match the extent of the model.  From an implementor's point of view it is preferable that complex extents are identified by special grid values that identify points beyond the extent rather than a complex bounding shape.  
+
+This specification supports the notion of a "no data" value. Note that an alternative approach is to specify an unreal value with a large uncertainty.  This is considered below in the  <<discuss-continuous-invertible, discussion on continuity of the model>>.  These "no-data" values could be identified in a number of ways, for example by a flag value on the grid nodes, by special values of displacement (eg 99999), or NaN (not a number) floating point values.  
+
+
+The "no data" value is different from a zero displacement.  A value of zero is used where there is no significant displacement. A "no-data" value is used where the deformation is unknown, and might be significant.  
 
 If evaluating the deformation model at a given location and time requires using a "no data" value then the displacment (or uncertainty) calculated at that location is undefined.  This would typically results in an error message to users to this effect.  The diagram below shows how this might look in a deformation model.  In this diagram the square marks the total extent of the deformation model.  Outside this area the deformation model cannot be evaluated.  In the deformation model is a gridded spatial model.  Within there are a number of nodes at which the displacement is not defined (that is it has a "no-data" value).  Where these nodes are required to calculate the displacement, which is any grid cell they are on the boundary of, the deformation model cannot be calculated.  The grey area in this diagram shows the region in which the displacement is not defined by the model and cannot be calculated.  
 
@@ -411,6 +460,38 @@ Where a component only covers a subset of the total area of a deformation model 
 
 image::patch_extents.png[Alt=patch extent diagram, width=400,scalewidth=9cm]
 
+[[discuss-continuous-invertible]]
+### Requirement for model to be continuous and invertible
+
+The deformation model is required to be continuous and invertible within the spatial and temporal extent of the model except where it is not defined (ie "no data" value).  This is a practical requirement on deformation models within the context of coordinate transformations.  
+
+This means that the deformation model cannot exactly model deformation.  For example where deformation is due to surface faulting the actual deformation may not be continuous across a fault line.  
+
+The actual deformation also may not be invertible (at least as a function of horizontal position only) in an area of thrust faulting where points originally on opposite sides of the fault may be moved to the same horizontal position (though at different heights).
+
+However the purpose of the deformation model in this context is not to exactly represent deformation, but to represent it to the extent that is useful within the context of coordinate transformations.  
+
+At least for the initial release of a functional model specification it is proposed to require a compliant model is continuous and invertible within the extent of the model.  This simplifies implementations and avoids the need to specify the behaviour where the model is not continuous and invertible.
+
+The requirement for continuity does have implications for how models are defined.  For example it means that in nested grids child grids must be aligned with the parent grid as shown below to ensure continuity at the edge of the child grid.  Also it may limit the interpolation methods that could be used in nested grids - for example bicubic interpolation cannot ensure continuity at the edge of the child grid. (These constraints could be overcome if the child grid deformation is used by adding it to the parent grid deformation rather than replacing it - in effect the child grid becomes a separate deformation component).
+
+
+image::nested_grid_alignment.png[Alt=Nested grid alignemnt, width=600,scalewidth=12cm]
+
+A question for implementers is how to transform data that extends beyond the deformation model.  If, as is likely, the deformation is not zero at the edge of the model then there is discontinuity across the boundary.  There are a number of possible approaches to handling this in the deformation model functional model.
+
+* Require that valid models should have zero deformation at the boundary.  Producers may have to create an artificial buffer around their area of interest and calculate an unreal deformation field that reduces to zero at the outer edge of the buffer.  The model could also include uncertainties which are larger in the buffer to indicate that this data is not reliable.
+* Specify (or recommend) algorithms for transforming data beyond the edge of the model that smooth out the discontinuity.  Model metadata could include parameters to support the implementation, for example a width of the smoothed region.  The algorithms could also specify how uncertainty is calculated to reflect this.
+* Specify that transformation of data beyond the extents of the deformation model is not permitted, and will result in an exception (or equivalently a no data value).
+* Not specify a behaviour - implementors can choose if and how to transform data outside the extents of the model.  Transformations beyond the extent of the model would be considered out of scope of this functional model specification.
+
+From a producer's perspective the third of these - fail if data beyond the model is transformed - is most correct.  Also producers may not be concerned about transformations beyond their jurisdication, so that any of the last three options could be acceptable.  In any case it is beyond their control.  The first option - building a model with information that is known to be incorrect - is not desirable.  While this might be mitigated to an extent by increasing the uncertainty of the model in these regions, in practice most current software does not consume or report uncertainty, so the user may be misled to thinking that the transformation is accurate.
+
+From a user's point of view having a transformation fail beyond the extent of the model could be undesirable.  For example they may have features or observations that include points both inside and outside the extent of the model which are observed at different times and which they want to compare accurately within the extent of the model.  Trimming the features to the extent before doing this would be inconvenient.  However they need to be aware of potential inaccuracy in the comparison beyond the model extent.  This could be further complicated if the features span more than one deformation model.  Until we have a global model there may be no good solution for this.  
+
+Also from a user's point of view it is desirable that different implementations give the same result - implementation specific behaviour is not desirable.  
+
+Currently this specification takes the producers perspective - a transformation beyond the extents of the model should fail. However this is open for debate.
 
 [[discuss-time-function]]
 ### Time functions
@@ -430,7 +511,7 @@ image::annual_grid_time_func.png[Alt=Example annual displacement grid time funct
 [[discuss-geoentric-interpolation]]
 ### Geocentric interpolation near poles
 
-The geocentric interpolation method proposed <<formula-geocentric-bilinear-interpolation, above>> is proposed for use in near polar regions where east and north topocentric vectors at adjacent grid nodes are in significantly different directions.
+The geocentric weighted average method proposed <<formula-geocentric-weighted-average, above>> is proposed for use in near polar regions where east and north topocentric vectors at adjacent grid nodes are in significantly different directions.
 
 
 [.right]
