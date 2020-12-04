@@ -70,7 +70,7 @@ Displacements not defined by the model are assumed to be zero.  Uncertainties no
 
 10. [[funcmod-continuous-invertible]]
 The displacement defined by the deformation model is required to be continuous and invertible within the spatial and temporal extent of the model except where it evaluates to _no data_.  
-This is not enforced by the mathematical formulation of the deformation model.  It is a compliance requirement on producers of deformation models and can be assumed by implementors of software using the deformation model.
+This is not enforced by the mathematical formulation of the deformation model.  It is a compliance requirement on producers of deformation models and can be assumed by implementors of software using the deformation model. See the <<discuss-continuous-invertible, discussion>> below.
 
 7. [[funcmod-spatial-type]]The spatial model may be represented by either:
 * a nested grid structure comprising one or more grids.  To evaluate the spatial model at a specific position the nesting algorithm identifies which grid is applicable at that position and the disclocation is interpolated from this grid alone.  The grids are constrained to be:
@@ -436,10 +436,18 @@ In New Zealand triangulated models were considered for modelling the deformation
 
 In the future there may be value in using some other representation than nested grids for the deformation model.  For example structures such as Discrete Global Grid Systems provide a global grid of varying level of detail.  As these acquire more support in software and if there is a drive to develop a global deformation model then this may be worth developing. 
 
+
 [[discuss-no-data]]
 ### No data and zero values
 
-The deformation model must support a "no data" value which is different from a zero displacement.  A value of zero is used where there is no significant displacement. A "no-data" value is used where the deformation is unknown, and might be significant.  
+Most deformation models only cover a limited part of the globe.  They are limited by jurisdictions area of authority or by lack of data - for example areas of sea where there is no measure of deformation.  Also in areas affected by recent large deformation we may not have good data before the event.  There are several approaches to both identifying and handling these areas where there of no or poor information.  
+
+The areas where displacement is not defined could be defined by a complex geographical extent.  However grids must be defined for rectangular regions in their coordinate system, which are unlikely to match the extent of the model.  From an implementor's point of view it is preferable that complex extents are identified by special grid values that identify points beyond the extent rather than a complex bounding shape.  
+
+This specification supports the notion of a "no data" value. Note that an alternative approach is to specify an unreal value with a large uncertainty.  This is considered below in the  <<discuss-continuous-invertible, discussion on continuity of the model>>.  These "no-data" values could be identified in a number of ways, for example by a flag value on the grid nodes, by special values of displacement (eg 99999), or NaN (not a number) floating point values.  
+
+
+The "no data" value is different from a zero displacement.  A value of zero is used where there is no significant displacement. A "no-data" value is used where the deformation is unknown, and might be significant.  
 
 If evaluating the deformation model at a given location and time requires using a "no data" value then the displacment (or uncertainty) calculated at that location is undefined.  This would typically results in an error message to users to this effect.  The diagram below shows how this might look in a deformation model.  In this diagram the square marks the total extent of the deformation model.  Outside this area the deformation model cannot be evaluated.  In the deformation model is a gridded spatial model.  Within there are a number of nodes at which the displacement is not defined (that is it has a "no-data" value).  Where these nodes are required to calculate the displacement, which is any grid cell they are on the boundary of, the deformation model cannot be calculated.  The grey area in this diagram shows the region in which the displacement is not defined by the model and cannot be calculated.  
 
@@ -452,6 +460,38 @@ Where a component only covers a subset of the total area of a deformation model 
 
 image::patch_extents.png[Alt=patch extent diagram, width=400,scalewidth=9cm]
 
+[[discuss-continuous-invertible]]
+### Requirement for model to be continuous and invertible
+
+The deformation model is required to be continuous and invertible within the spatial and temporal extent of the model except where it is not defined (ie "no data" value).  This is a practical requirement on deformation models within the context of coordinate transformations.  
+
+This means that the deformation model cannot exactly model deformation.  For example where deformation is due to surface faulting the actual deformation may not be continuous across a fault line.  
+
+The actual deformation also may not be invertible (at least as a function of horizontal position only) in an area of thrust faulting where points originally on opposite sides of the fault may be moved to the same horizontal position (though at different heights).
+
+However the purpose of the deformation model in this context is not to exactly represent deformation, but to represent it to the extent that is useful within the context of coordinate transformations.  
+
+At least for the initial release of a functional model specification it is proposed to require a compliant model is continuous and invertible within the extent of the model.  This simplifies implementations and avoids the need to specify the behaviour where the model is not continuous and invertible.
+
+The requirement for continuity does have implications for how models are defined.  For example it means that in nested grids child grids must be aligned with the parent grid as shown below to ensure continuity at the edge of the child grid.  Also it may limit the interpolation methods that could be used in nested grids - for example bicubic interpolation cannot ensure continuity at the edge of the child grid. (These constraints could be overcome if the child grid deformation is used by adding it to the parent grid deformation rather than replacing it - in effect the child grid becomes a separate deformation component).
+
+
+image::nested_grid_alignment.png[Alt=Nested grid alignemnt, width=600,scalewidth=12cm]
+
+A question for implementers is how to transform data that extends beyond the deformation model.  If, as is likely, the deformation is not zero at the edge of the model then there is discontinuity across the boundary.  There are a number of possible approaches to handling this in the deformation model functional model.
+
+* Require that valid models should have zero deformation at the boundary.  Producers may have to create an artificial buffer around their area of interest and calculate an unreal deformation field that reduces to zero at the outer edge of the buffer.  The model could also include uncertainties which are larger in the buffer to indicate that this data is not reliable.
+* Specify (or recommend) algorithms for transforming data beyond the edge of the model that smooth out the discontinuity.  Model metadata could include parameters to support the implementation, for example a width of the smoothed region.  The algorithms could also specify how uncertainty is calculated to reflect this.
+* Specify that transformation of data beyond the extents of the deformation model is not permitted, and will result in an exception (or equivalently a no data value).
+* Not specify a behaviour - implementors can choose if and how to transform data outside the extents of the model.  Transformations beyond the extent of the model would be considered out of scope of this functional model specification.
+
+From a producer's perspective the third of these - fail if data beyond the model is transformed - is most correct.  Also producers may not be concerned about transformations beyond their jurisdication, so that any of the last three options could be acceptable.  In any case it is beyond their control.  The first option - building a model with information that is known to be incorrect - is not desirable.  While this might be mitigated to an extent by increasing the uncertainty of the model in these regions, in practice most current software does not consume or report uncertainty, so the user may be misled to thinking that the transformation is accurate.
+
+From a user's point of view having a transformation fail beyond the extent of the model could be undesirable.  For example they may have features or observations that include points both inside and outside the extent of the model which are observed at different times and which they want to compare accurately within the extent of the model.  Trimming the features to the extent before doing this would be inconvenient.  However they need to be aware of potential inaccuracy in the comparison beyond the model extent.  This could be further complicated if the features span more than one deformation model.  Until we have a global model there may be no good solution for this.  
+
+Also from a user's point of view it is desirable that different implementations give the same result - implementation specific behaviour is not desirable.  
+
+Currently this specification takes the producers perspective - a transformation beyond the extents of the model should fail. However this is open for debate.
 
 [[discuss-time-function]]
 ### Time functions
