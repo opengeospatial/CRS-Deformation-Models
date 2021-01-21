@@ -39,7 +39,7 @@ This scope of this functional model definition does not include
 
 * Rigid body transformation between reference frames such as time dependent helmert or Bursa-Wolf transformations
 * Trajectory models for individual points, such as ITRF reference station coordinate models
-* Distortion models used to represent the deformation between two datums (typically between older datums based on local terrestrial observations and modern datums based on global satellite systems)
+* Static distortion models used to represent the deformation between two datums (typically between older datums based on local terrestrial observations and modern datums based on global satellite systems)
 
 == Functional definition of the deformation model
 
@@ -76,13 +76,16 @@ This is not enforced by the mathematical formulation of the deformation model.  
 * a nested grid structure comprising one or more grids.  To evaluate the spatial model at a specific position the nesting algorithm identifies which grid is applicable at that position and the disclocation is interpolated from this grid alone.  The grids are constrained to be:
 ** Grids with rows equally spaced and columns equally spaced.
 ** Grid rows and columns are aligned with the axes of the definition CRS
-** Grids are strictly nested.  Each grid is either a root grid (not contained in any other grid) or fully contained in a parent grid (but may share a common edge).   Child grids of a parent grid may adjoin but may not overlap. 
+** Grids are strictly nested.  Grids may share a common edge but otherise may not intersect unless one is a child grid fully contained by the other grid. The model may have more than one root grid (not contained in any other grid). 
 
 +
-See <<formula-grid-interpolation>grid interpolation formulae below.
-* a triangulated network comprising a set of control points at which the model quantities are defined.  The triangulated model explicitly defines the sets of control points that form the triangles of the network.  The spatial model model is evaluated at a position by determining which triangle contains the position and interpolating on that triangle alone (where a point lies on an edge between trianges either may be used and will determine the same value). The triangle constraints are:
+See <<formula-bilinear-grid-interpolation, grid interpolation formulae>> below.
+* a triangulated network comprising a set of control points at which the model quantities are defined and a list of triangles each defined by identifying the three nodes it uses.  The spatial model model is evaluated at a position by determining which triangle contains the position and interpolating on that triangle alone (where a point lies on an edge between trianges either may be used and will determine the same value). The triangle constraints are:
 ** triangles cannot overlap
 ** triangles cannot have zero area
+
++
+See <<formula-linear-triangular-interpolation, triangle interpolation formulae>> below.
 
 +
 See the discussion of <<discuss-spatial-model, spatial model types>> below.
@@ -102,7 +105,7 @@ See the <<discuss-time-function, discussion>> and <<formula-time-function, formu
 9. [[funcmod-14prm-transformation]]The deformation model specification may also include a 14 parameter
 Bursa-Wolf transformation definition.  This is applied before the deformation components in a forward transformation or after them in an inverse transformation as described in the <<formula-14prm-transformation, formula>>.  
 +
-The 14 parameter transformation can be used to represent the bulk of the transformation between the source and target coordinate systems or epochs. This allows the more complex deformation components to efficiently represent perturbations from this movement which may be smaller and localised.  Note that jurisdictions may choose to implement this using an intermediate coordinate system rather including it than deformation model.
+The 14 parameter transformation can be used to represent the bulk of the transformation between the source and target coordinate systems or epochs. This allows the more complex deformation components to efficiently represent perturbations from this movement which may be smaller and localised.  Note that jurisdictions may choose to implement this using an intermediate coordinate system rather including it than deformation model.  A deformation model should not be used to define a transformation which is fully described by a 14 parameter transformation.
 
 
 11. [[funcmod-component-metadata]]Each component includes metadata defining:
@@ -194,7 +197,7 @@ TBC: _Need to add to formulae_
 [[formula-weighted-node-combination]]
 ==== Calculation of weighted average of node values
 
-Each interpolation method identifies a set of nodes P~i~ and weights W~i~.  At each node the spatial model may define any of the displacements de~i~, dn~i~, du~i~, and uncertainties eh~i~ and ev~i~.  For the horizontal displacement components de and dn two formulae are supported.  This simple formula is a weighted avereage.  This is also used for the vertical component du
+Each interpolation method identifies a set of nodes P~i~ and weights W~i~.  At each node the spatial model may define any of the displacements de~i~, dn~i~, du~i~, and uncertainties eh~i~ and ev~i~.  For the horizontal displacement components de and dn two formulae are supported.  Generally a simple weighted average will suffice, but near the poles a more complex "geocentric weighted average" formulae describe below may be preferable.  This is also used for the vertical component du.
 
 So for example the east displacement at the point (x,y) is calculated as  
 
@@ -319,7 +322,7 @@ eh = √(f~1~^2^.eh~1~^2^+ f~2~^2^.eh~2~^2^+ … + f~n~^2^.eh~n~^2^)
 
 === Applying the offset to a coordinate
 
-For each physical point on the surface for which the deformation model is defined the model defines the trajectory of that point in the target coordinate system.  The trajectory is defined for any valid epoch by adding the displacement calculated from the model to a reference coordinate for the point - a time invariant  coordinate for the point at which displacement is zero. The reference coordinate is not directly measurable - it is accessed by measuring a position in the target coordinate system and then subtracting the displacement from the deformation model at the epoch of measurement using the <<formula-inverse, inverse formula below>>.
+For each physical point on the surface for which the deformation model is defined the model defines the trajectory of that point in the target coordinate system.  The trajectory is defined for any valid epoch by adding the displacement calculated from the model to a reference coordinate for the point - a time invariant  coordinate for the point at which displacement is zero. The reference coordinate is not directly measurable - it is accessed by measuring a position in the target coordinate system and then subtracting the displacement from the deformation model at the epoch of measurement using the <<formula-inverse, inverse formula>> below.
 
 The method used to add the calculated displacement to the reference coordinate is defined in the deformation model metadata.  Two methods are proposed -  _addition_ and _geocentric addition_.  The _addition_ method is relatively simple and adds the offset to the coordinates, converting metres to degrees first if necessary.  The _geocentric_ method is an alternative method that may be used near the poles if the grid latitude spacing is relatively large and accounts for the potentially significant differences in the north and east directions at each grid node.  It is only applicable if the offsets are defined in metres and the coordinate system is a geographic (latitude/longitude) system.   The _addition_ and _geocentric addition_ methods are detailed below.
 
@@ -430,11 +433,13 @@ Other approaches could be used to representing deformation in the future, such a
 [[discuss-spatial-model]]
 ### Spatial model types
 
-In practice nearly all current deformation models use grid representations.  There is a small usage of triangulated models which is included in this functional model specification.  This is a departure from the JSON-GeoTIFF format that this specification was originally writtent for.  
+In practice nearly all current deformation models use grid representations.  There is a small usage of triangulated models which is included in this functional model specification.  This is a departure from the JSON-GeoTIFF format that this specification was originally written for.  
 
 In New Zealand triangulated models were considered for modelling the deformation due to the 2011/12 Christchurch earthquakes but did not offer much advantage in the size of the model, and also are much less efficient to evaluate since it is necessary to search the triangulation to determine which triangle applies at a location.  (See https://www.linz.govt.nz/system/files_force/media/file-attachments/winefield-crook-beavan-application-localised-deformation-model-after-earthquake.pdf?download=1). 
 
-In the future there may be value in using some other representation than nested grids for the deformation model.  For example structures such as Discrete Global Grid Systems provide a global grid of varying level of detail.  As these acquire more support in software and if there is a drive to develop a global deformation model then this may be worth developing. 
+However there are deformation models in use which are based on triangulated networks.
+
+In the future there may be value in using some other representations for the spatial model.  For example structures such as Discrete Global Grid Systems provide a global grid of varying level of detail.  As these acquire more support in software and if there is a drive to develop a global deformation model then this may be worth developing. 
 
 
 [[discuss-no-data]]
@@ -465,15 +470,15 @@ image::patch_extents.png[Alt=patch extent diagram, width=400,scalewidth=9cm]
 
 The deformation model is required to be continuous and invertible within the spatial and temporal extent of the model except where it is not defined (ie "no data" value).  This is a practical requirement on deformation models within the context of coordinate transformations.  
 
-This means that the deformation model cannot exactly model deformation.  For example where deformation is due to surface faulting the actual deformation may not be continuous across a fault line.  
+This means that the deformation model cannot exactly represent the true deformation.  For example where deformation is due to surface faulting the actual deformation may not be continuous across a fault line.  
 
 The actual deformation also may not be invertible (at least as a function of horizontal position only) in an area of thrust faulting where points originally on opposite sides of the fault may be moved to the same horizontal position (though at different heights).
 
-However the purpose of the deformation model in this context is not to exactly represent deformation, but to represent it to the extent that is useful within the context of coordinate transformations.  
+However the purpose of this deformation model specification is not to exactly represent deformation, but to represent it to the extent that is useful within the context of coordinate transformations.  
 
 At least for the initial release of a functional model specification it is proposed to require a compliant model is continuous and invertible within the extent of the model.  This simplifies implementations and avoids the need to specify the behaviour where the model is not continuous and invertible.
 
-The requirement for continuity does have implications for how models are defined.  For example it means that in nested grids child grids must be aligned with the parent grid as shown below to ensure continuity at the edge of the child grid.  Also it may limit the interpolation methods that could be used in nested grids - for example bicubic interpolation cannot ensure continuity at the edge of the child grid. (These constraints could be overcome if the child grid deformation is used by adding it to the parent grid deformation rather than replacing it - in effect the child grid becomes a separate deformation component).
+The requirement for continuity does have implications for how models are defined.  For example it means that in nested grids child grids must be aligned with the parent grid as shown below to ensure continuity at the edge of the child grid. (Note that an alternative approach would be to define child grids as independent deformation components with the same time function which would model a perturbation from the simple parent grid - in this case there would be no requirement for the models to be aligned).
 
 
 image::nested_grid_alignment.png[Alt=Nested grid alignemnt, width=600,scalewidth=12cm]
@@ -485,13 +490,13 @@ A question for implementers is how to transform data that extends beyond the def
 * Specify that transformation of data beyond the extents of the deformation model is not permitted, and will result in an exception (or equivalently a no data value).
 * Not specify a behaviour - implementors can choose if and how to transform data outside the extents of the model.  Transformations beyond the extent of the model would be considered out of scope of this functional model specification.
 
-From a producer's perspective the third of these - fail if data beyond the model is transformed - is most correct.  Also producers may not be concerned about transformations beyond their jurisdication, so that any of the last three options could be acceptable.  In any case it is beyond their control.  The first option - building a model with information that is known to be incorrect - is not desirable.  While this might be mitigated to an extent by increasing the uncertainty of the model in these regions, in practice most current software does not consume or report uncertainty, so the user may be misled to thinking that the transformation is accurate.
+From a producer's perspective the third of these - fail if data beyond the model is transformed - is most correct.  Also producers may not be concerned about transformations beyond their jurisdication, so that any of the last three options could be acceptable.  In any case it is beyond their control.  The first option - building a model with information that is known to be incorrect - is not desirable.  While this might be mitigated to an extent by increasing the uncertainty of the model in these regions, in practice most current software does not consume or report uncertainty information, so the user may be misled to thinking that the transformation is accurate.
 
 From a user's point of view having a transformation fail beyond the extent of the model could be undesirable.  For example they may have features or observations that include points both inside and outside the extent of the model which are observed at different times and which they want to compare accurately within the extent of the model.  Trimming the features to the extent before doing this would be inconvenient.  However they need to be aware of potential inaccuracy in the comparison beyond the model extent.  This could be further complicated if the features span more than one deformation model.  Until we have a global model there may be no good solution for this.  
 
 Also from a user's point of view it is desirable that different implementations give the same result - implementation specific behaviour is not desirable.  
 
-Currently this specification takes the producers perspective - a transformation beyond the extents of the model should fail. However this is open for debate.
+Currently this specification takes the producer's perspective - a transformation beyond the extents of the model should fail. However this is open to debate!
 
 [[discuss-time-function]]
 ### Time functions
@@ -532,7 +537,7 @@ For the interpolation of vertical displacement du this method proposes using the
 [[discuss-parallel-calculation]]
 ### Sequential or parallel evaluation of components
 
-The same input position coordinate is used to calculate the deformation for each component . 
+These formulae use the same input coordinate to calculate the deformation for each component. 
 
 An alternative approach that could be used is to apply components sequentially.  That is the first component is calculated and applied to the coordinate, and then the modified coordinate is used to calculate the second component, and so on.  This may result in a different final coordinate to the proposed method, as the second and subsequent components are evaluated at a different location. 
 
