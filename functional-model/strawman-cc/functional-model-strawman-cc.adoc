@@ -588,6 +588,12 @@ Generally the update should not change the coordinates. The reason for the updat
 
 Close to faulting the distortion due to the earthquake can be too intense to be included in the coordinates. In that case the deformation model will be smoothed across the fault zone. However the deformation is still measured and is used to update the coordinates. It is also added to the deformation model using a reverse step function that applies a negative deformation that applies when transforming  coordinates for epochs before the earthquake. In this case transforming coordinates at an epoch before the earthquake will result in subtracting the reverse patch from the coordinates.  This adds the deformation to the coordinates, which again is the correct update to coordinates to transform them to the new version of the datum.
 
+== Additional information
+
+__ The following additional information may be included __
+
+* __ example calculations __
+* __ glossary __
 
 == Related work
 
