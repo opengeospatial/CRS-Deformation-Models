@@ -90,15 +90,19 @@ See <<formula-linear-triangular-interpolation, triangle interpolation formulae>>
 +
 See the discussion of <<discuss-spatial-model, spatial model types>> below.
 
-8. [[funcmod-time-type]]The time function is the sum of one or more one of:
- * a piecewise linear function of time. Specialisations of the piecewise linear time function are:
- * constant value
- * constant velocity
- * step function
+8. [[funcmod-time-type]]The time function is a scalar function of time calculated as the sum of one or more base functions.  Each base function may have a specified start and end epoch.  It evaluates to zero at times before the start epoch and at times equal to or after the end epoch.  Each base function can be:
+ * a piecewise linear function of time defined by function values at ordered set of times.  The function is interpolated linearly between the specified values. Specialisations of the piecewise linear time function are:
+ ** constant value
+ ** constant velocity
+ ** step function
+ * a second order polynomial function of time (constant acceleration)
  * an exponential function
+ * a logarithmic function
+ * a sine or cosine function
 
 +
-Piecewise linear functions are defined by an ordered set of time/date values and a corresponding set of scale factors defining the value by which the spatial model is multiplied at that time. The functions are not necessarily continuous – for example the model may define step function.  The date/time values should be increasing.  Where there is a step function the series will include two consecutive identical date/time values. 
+Piecewise linear functions are defined by an ordered set of time/date values and a corresponding set of scale factors defining the value by which the spatial model is multiplied at that time. The functions are not necessarily continuous – for example the model may define step function.  The date/time values should be increasing.  Where there is a step function the series will include two consecutive identical date/time values.
+
 +
 See the <<discuss-time-function, discussion>> and <<formula-time-function, formulae>> for time functions below.
 
@@ -255,46 +259,55 @@ dn = -dx.cos(λ).sin(φ) - dy.sin(λ).sin(φ) + dz.cos(φ)
 [[formula-time-function]]
 === Time functions
 
-The time function for a component defines a scale factor f(__t__) applied to component displacements at time __t__.  The deformation model metadata defines a temporal extent of the model from t~min~ to t~max~.  Time functions are considered undefined and the model cannot be evaluated for times before t~min~ or after t~max~.
+The time function for a component defines a scale factor f(__t__) applied to component displacements at time __t__.  The deformation model metadata defines a temporal extent of the model from T~min~ to T~max~.  Time functions are considered undefined and the model cannot be evaluated for times before T~min~ and for times at or after T~max~.
 
-Following conventional use in deformation models the time functions are defined as a functions of decimal years (eg velocities are metres/year).  All date/time values such as calculation epoch, velcoty reference epoch) are converted to decimal years for use in the following formulae.  The conversion to decimal years is done by first converting the epoch to UTC.   The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year.  The fractional part of the decimal year is determined by dividing the number of seconds between  _yyyy_-01-01T00:00:00Z and the epoch by the number of seconds between _yyy1_-01-01T00:00:00Z and _yyyy_-01-01T00:00:00Z, where _yyy1_ is _yyyy_+1 (ie dividing the number of seconds since the start of the epoch UTC year by the total number of seconds in the epoch UTC year). 
+The time function is evaluated as a sum of one or more base functions f~i~(t), each of which is defined for a range of times t~i,min~ &#8804; t < t~i,max~.  The base function evaluates to zero for times T~min~ &#8804; < t~i,min~ and for times t~i,max~ &#8804; < t < T~max~.
 
+Following conventional use in deformation models the time functions are defined as a functions of decimal years (eg velocities are metres/year).  All date/time values such as calculation epoch, velocity reference epoch) are converted to decimal years for use in the following formulae.  The conversion to decimal years is done by first converting the epoch to UTC.   The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year.  The fractional part of the decimal year is determined by dividing the number of seconds between  _yyyy_-01-01T00:00:00Z and the epoch by the number of seconds between _yyy1_-01-01T00:00:00Z and _yyyy_-01-01T00:00:00Z, where _yyy1_ is _yyyy_+1 (ie dividing the number of seconds since the start of the epoch UTC year by the total number of seconds in the epoch UTC year). 
 
-For the uncertainties eh, ev the magnitude of the uncertainty is determined relative to the <<discuss-uncertainty-epoch, uncertainty reference epch>>. The scale factor to apply to undertainties is f~e~(__t__) is defined as  √abs(f(__t__)-f(t~0~)) where t~0~ is the uncertainty reference epoch of the model. 
+For the uncertainties eh, ev the magnitude of the uncertainty is determined relative to the <<discuss-uncertainty-epoch, uncertainty reference epch>>. The scale factor to apply to uncertainties is f~e~(__t__) is defined as  √abs(f(__t__)-f(t~0~)) where t~0~ is the uncertainty reference epoch of the model. 
 
 The time function is defined as the sum of one or more of the following functions:
 
 [cols="2,5a,5a"]
 [options="header"]
 |===
-|Function type|Parameters|Formula (t~min~ &#8804; __t__ &#8804; t~max~)
+|Function type|Parameters|Formula (t~i,min~ &#8804; __t__ < t~i,max~)
 |constant|None|f(__t__)=1
-|velocity|Reference epoch t~0~|f(__t__) = (t – t~0~) all values of t
+|velocity|Reference epoch t~0~|f(__t__) = (t - t~0~) all values of t
+|acceleration|Reference epoch t~0~ +
+Acceleration __a__|f(__t__) = (t - t~0~) + __a__.(t - t~0~)^2^ all values of t
 |step | Reference epoch t~0~ |f(__t__) = 0 when t < t~0~,
 |reverse step | Reference epoch t~0~ |f(__t__) = -1 when t < t~0~,
 |piecewise|Time/factors corner points +
 t~i~,f~i~ for i=0..n|
-f(__t__) = 0 for __t__ < t~0
+f(__t__) = 0 for __t__ < t~0~
 
 f(__t__) = (f~i~.(t~i+1~ – __t__) + f~i+1~.(__t__-t~i~))/(t~i+1~-t~i~) +
 for t~i~ < __t__ < t~i+1~
 
 f(__t__) = 0 for __t__ > t~n~
 
-|exponential|Start epoch t~0~
-
-End epoch t~1~
-
+|exponential|Start epoch t~0~ +
+End epoch t~1~ +
 Decay constant θ| f(__t__) = f~p~     when __t__ < t~0~ 
 
 f(__t__) = f~0~ + (f~∞~-f~0~).(1 - exp(-(__t__-t~0~)/θ))     when t~0~ <= __t__ < t~1~ 
 
 
 f(__t__) = f~0~ + (f~∞~-f~0~).(1 - exp(-(t~1~-t~0~)/θ))     when __t__ >= t~1~
+|logarithmic|Reference epoch t~0~ +
+Amplitude &#945; +
+Decay rate &#964; | 0 for __t__ < t~0~ +
+f(__t__) = &#945;.ln(1 + t/&#964;) for t~0~ &#8804; __t__ 
+|cyclic|Frequency f (cycles per year) +
+Reference epoch t~0~ +
+Amplitude &#945; | f(__t__) = &#945;cos(f(__t__ - t~0~)/2&#120587;)
 |===
 
-Note that the constant, velocity, step, and reverse step functions are all special cases of the piecewise linear function.  The piecewise linear function can 
-include two consecutive time points at the same epoch (i.e. t~i~ = t ~i+1~) which creates a step.  
+Note that step, reverse step, and piecewise functions are redundant in that they can all be compiled from constant and velocity base functions.  They are provided to more clearly represent the intent of these functions.  
+
+Future versions of the specification may add new base functions as required (for example to support slow slip events).
 
 
 [[formula-components]]
@@ -501,9 +514,9 @@ Currently this specification takes the producer's perspective - a transformation
 [[discuss-time-function]]
 ### Time functions
 
-Geophysical deformation may be approximated by other functions, such as logarithmic functions and cyclic functions.  They are also used in point deformation models, for example reference station coordinates in the International Terrestrial Reference Frame.  However it is not clear that these are a much better model for deformation over the extent of a spatial model.  That is to say that the actual time evolution at each point within the spatial model may have different attributes and parameterisation.  The deformation model component is necessarily an approximation attempting to best fit the actual deformation over its spatial and temporal extent, and these more complex parameterisations of time functions may not offer much improvement on the simple functions already proposed. Currently deformation models defined for coordinate operations do not use these functions. 
+The proposed set of base time functions includes those commonly used in geophysical models, for example reference station coordinates in the International Terrestrial Reference Frame.  However in practice there may be little benefit in complex time models, as it is unlikely that the same time function will apply at all points in the area affected by, for example, post-seismic deformation.  That is to say that the actual time evolution at each point within the spatial model may have different attributes and parameterisation.  The deformation model component is necessarily an simplification attempting to best fit the actual deformation over its spatial and temporal extent. 
 
-In the near future it is likely that we may generate far more complex and accurate models using technology such as CORS and InSAR.  For example each year there could be an updated gridded model.  The deformation at any epoch could be interpolated or extrapolated from the nearest to models (or as in Japan modelled with a step function for each year). This is in effect a three dimensional grid with dimensions latitude, longitude, and time.  It can be easily encoded into this functional model by constructing time functions for each grid that define the interpolation between one grid and the next.
+In the near future it is likely that we may generate far more complex and accurate models using technology such as CORS and InSAR.  The deformation model representing this would most likely have multiple components, each with its own spatial model and time function, rather than a complex time function applying to a single spatial model.  For example each year there could be an updated gridded spatial model.  The deformation at any epoch could be interpolated or extrapolated from the nearest to models (or as in Japan modelled with a step function for each year). This is in effect a three dimensional grid with dimensions latitude, longitude, and time.  It can be easily encoded into this functional model by constructing time functions for each grid that define the interpolation between one grid and the next.
 
 ////
 
