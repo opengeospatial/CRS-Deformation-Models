@@ -55,12 +55,35 @@ The functional model proposed for a general deformation model can be characteris
 
 4. [[funcmod-spatial-params]]The spatial model may define any or all of the following quantities: 
 * horizontal displacement – the east and north displacement in metres or degrees
-* horizontal uncertainty – the circular 95% confidence limit in metres
-* vertical displacement – the upwards vertical displacement in metres
-* vertical uncertainty – the 95% confidence limit in metres
+* vertical displacement – the upwards vertical displacement in metres.
 
 +
 Displacements not defined by the model are assumed to be zero.  Uncertainties not defined by the model take a default value defined in the spatial model or deformation model metadata.
+
+4. [[funcmod-spatial-params-uncertainty]]The spatial model may define the uncertainty of the displacement in metres at each node.
+
++
+Horizontal uncertainty can be represented by: 
+* horizontal circular uncertainty e~h~
+* east and north uncertainty e~e~, e~n~
+* covariance matrix components [c~ee~ , c~en~, c~nn~].
+
++
+Vertical uncertainty is represented by a single value e~v~.
+
++
+Alternatively the uncertainty can be represented by a full covariance matrix at the node [c~ee~ , c~en~, c~nn~, c~eu~, c~nu~, c~uu~]
+
++
+The parameters used to represent uncertainty will be the same for all spatial models in the deformation model and will be defined in the deformation model header.
+
++
+The header will also define probability level for the uncertainty, examples would be "1 standard error", "95% confidence"
+
+4. [[funcmod-spatial-params-quality]] Each node may have a quality parameter used to identify potential issues in the quality of the deformation model in the vicinity of the node.
+For example it could indicate that there is surface faulting affecting cells adjacent to the node.  See the <<discuss-params-quality, discussion>> below.
+
+4. [[funcmod-spatial-params-other]] A producer may include additional parameters at each node that will be ignored by compliant software.  The set of parameters must be the same for each node of a spatial model.
 
 4. [[funcmod-nodata]] The displacements and uncertainties of a spatial model may evaluate to a _no data_ value at some locations, meaning that the deformation cannot be evaluated at that location.  At such locations the total deformation is undefined and cannot be calculated. See the <<discuss-no-data, discussion>> below.
 
@@ -116,9 +139,10 @@ The 14 parameter transformation can be used to represent the bulk of the transfo
 * The type of spatial model (grid, triangulation)
 * The spatial interpolation method to use
 * The quantities it defines (displacements, uncertainties)
-* An optional description of the source of the deformation represented in the model
-* Optional default horizontal and vertical uncertainty
 * A spatial definition of the extent of the spatial model (to determine if it is required at a specific position)
+* (optional) default horizontal and vertical uncertainty which applies if the spatial model does not explicitly define uncertainty.
+* (optional) text description of the source of the deformation represented in the model
+* (optional) definition of areas where quality is impacted, for example where there is surface faulting.  The areas each include a description, multipolygon defining the extent of the affected area, and a start and end epoch for the event causing the unmodelled deformation. See the <<discuss-params-quality, discussion>> below.  
 
 12. [[funcmod-model-metadata]]The deformation model includes metadata defining:
 * The version of the deformation model specification with which the model complies
@@ -136,8 +160,7 @@ The 14 parameter transformation can be used to represent the bulk of the transfo
 * The uncertainty reference epoch. Described <<discuss-uncertainty-epoch, below>>.
 * The units of horizontal displacements
 * The units of vertical displacements
-* The units and type of horizontal uncertainty (eg metre, circular 95% confidence limit)
-* The units and type of vertical uncertainty
+* The format for representing uncertainty - which parameters are used at each node, and whet level of confidence.  For example horizontal covariance, vertical uncertainty, and 95% confidence level)
 * The total spatial extent of the model 
 * The time extent of the model
 * The algorithm used to apply add the deformation to the reference position coordinates.
@@ -145,9 +168,9 @@ The 14 parameter transformation can be used to represent the bulk of the transfo
 [[formulae]]
 == Calculation formulae
 
-The functional definition specifies the formulae that may be used to evaluate a model.  It is important that these formulae are well defined and consistently used so that publishers of deformation models can be confident they will be used correctly to obtain the expected deformation.
+This functional definition specifies the formulae that may be used to evaluate a model.  It is important that these formulae are well defined and consistently used so that publishers of deformation models can be confident they will be used correctly to obtain the expected deformation.
 
-The formulae below are adopted from the JSON GeoTIFF specification.  This does not include formulae for interpolation on a triangle. In this specification the grid can be defined either in terms of a geographic (longitude/latitude) or projection (easting/northing) coordinate system.  Displacements and uncertainties are all in metres except that the horizontal displacement may be in degrees if the coordinate system is geographic.
+The formulae below are adopted from the JSON GeoTIFF specification.  This does not include formulae for interpolation on a triangle. Also it does not describe interpolating uncertainty other than represented by horizontal and vertical uncertainties e~h~, e~v~. In this specification the grid can be defined either in terms of a geographic (longitude/latitude) or projection (easting/northing) coordinate system.  Displacements and uncertainties are all in metres except that the horizontal displacement may be in degrees if the coordinate system is geographic.
 
 [[formula-spatial-interpolation]]
 === Spatial interpolation
@@ -265,7 +288,7 @@ The time function is evaluated as a sum of one or more base functions f~i~(t), e
 
 Following conventional use in deformation models the time functions are defined as a functions of decimal years (eg velocities are metres/year).  All date/time values such as calculation epoch, velocity reference epoch) are converted to decimal years for use in the following formulae.  The conversion to decimal years is done by first converting the epoch to UTC.   The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year.  The fractional part of the decimal year is determined by dividing the number of seconds between  _yyyy_-01-01T00:00:00Z and the epoch by the number of seconds between _yyy1_-01-01T00:00:00Z and _yyyy_-01-01T00:00:00Z, where _yyy1_ is _yyyy_+1 (ie dividing the number of seconds since the start of the epoch UTC year by the total number of seconds in the epoch UTC year). 
 
-For the uncertainties eh, ev the magnitude of the uncertainty is determined relative to the <<discuss-uncertainty-epoch, uncertainty reference epch>>. The scale factor to apply to uncertainties is f~e~(__t__) is defined as  √abs(f(__t__)-f(t~0~)) where t~0~ is the uncertainty reference epoch of the model. 
+For the uncertainties eh, ev the magnitude of the uncertainty is determined relative to the <<discuss-uncertainty-epoch, uncertainty reference epoch>>. The scale factor to apply to uncertainties is f~e~(__t__) is defined as  √abs(f(__t__)-f(t~0~)) where t~0~ is the uncertainty reference epoch of the model. 
 
 The time function is defined as the sum of one or more of the following functions:
 
@@ -423,7 +446,7 @@ The eh and ev values from the spatial representation of each component are multi
 [[formula-14prm-transformation]]
 === Calculation of the 14 parameter transformation
 
-If the model includes a <<funcmod-14prm-transformation, 14 parameter transforamtion>> then this is applied to the coordinates before the 
+If the model includes a <<funcmod-14prm-transformation, 14 parameter transformation>> then this is applied to the coordinates before the 
 deformation model is calculated or applied in a forward transformation.  In an inverse transformation it is applied (in reverse) after the deformation model components have been applied to the coordinate.
 
 
@@ -477,6 +500,23 @@ regions where the deformation of the seabed is not measured, or it may be that i
 Where a component only covers a subset of the total area of a deformation model it is assumed to have zero displacement beyond its extent.  An example of this is a deformation model component representing deformation due to an earthquake.  In the vicinity of the epicentre there may be extensive deformation.  However there may also be large regions that lie within the extent of the deformation model but at which the deformation is zero or insignificant.  The deformation component created to represent this only needs to include the area where there is significant deformation.  This is shown in the figure below.  In this diagram the outer square represents the total extent of the deformation model.  Beyond this extent the deformation is undefined.  The nested grid inside the total extents is used to represent the deformation due to an earthquake.  In the region outside the nested grid component the deformation due to this component is zero. 
 
 image::patch_extents.png[Alt=patch extent diagram, width=400,scalewidth=9cm]
+
+[[discuss-params-quality]]
+### Quality parameters at spatial model nodes
+
+The project team identified an interest in having a quality parameter defined at nodes.  The main driver is to identify where there is surface faulting which where the deformation includes significant distortion or discontinuities that are not well represented by the deformation model.  
+
+The intention is that software could warn users when the coordinate conversion quality is compromised by such distortion.
+
+This could be represented by a quality parameter the corner nodes of affected grid cells.  Software could then assess the impact on an interpolated coordinate conversion by compiling the quality information from each of the nodes used in the interpolation.
+
+There are some unresolved issues in using the quality parameter, including:
+* how should it be represented 
+* how should the measure be interpolated to provide a quality measure at an interpolated point
+* how should the quality measure relate to the time (or times) of a conversion.  If time function evaluates to zero it should clearly be ignored, but how large can the time function be before the quality parameter is considered significant.
+* how does the quality parameter relate to uncertainty
+
+It may also be worth considering alternative methods of defining affected areas. For example in the component header could include one or more areas of concern, each with a spatial definition as a multipolygon and an event time.
 
 [[discuss-continuous-invertible]]
 ### Requirement for model to be continuous and invertible
