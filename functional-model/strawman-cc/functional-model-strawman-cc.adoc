@@ -47,6 +47,10 @@ The functional model proposed for a general deformation model can be characteris
 
 0. [[funcmod-extents]] The deformation model is defined within a specified spatial and temporal extent.  Beyond these extents the model is undefined and cannot be evaluated.
 
+5. [[funcmod-trajectory]]The deformation model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial model.  This trajectory is terms of an explicitly defined accessible coordinate system. 
+
+6. [[funcmod-ref-crs]]The position used to calculate the spatial model is not defined in an currently accessible coordinate system - it may be in terms on an accessible coordinate system at a specific epoch.  Its value is only accessible by an inverse calculation using the deformation model.  See the <<formula-inverse, inverse calculation method>> below.
+
 1. [[funcmod-decomposition]]The total deformation is partitioned into one or more components.  The total deformation at any time and position is calculated by summing the contribution from each component. See <<discuss-components,discussion>> and <<formula-components, formulae>> below.
 
 2. [[funcmod-component]]Each component comprises a spatial model and a time function. The spatial model defines displacement as a function of position.  The time function evaluates a scalar multiplier as a function of time.  The deformation contribution for the component at a given position and time is obtained by multipying the displacement components by the time function.
@@ -86,10 +90,6 @@ For example it could indicate that there is surface faulting affecting cells adj
 4. [[funcmod-spatial-params-other]] A producer may include additional parameters at each node that will be ignored by compliant software.  The set of parameters must be the same for each node of a spatial model.
 
 4. [[funcmod-nodata]] The displacements and uncertainties of a spatial model may evaluate to a _no data_ value at some locations, meaning that the deformation cannot be evaluated at that location.  At such locations the total deformation is undefined and cannot be calculated. See the <<discuss-no-data, discussion>> below.
-
-5. [[funcmod-trajectory]]The deformation model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial model.  This trajectory is terms of an explicitly defined accessible coordinate system. 
-
-6. [[funcmod-ref-crs]]The position used to calculate the spatial model is not defined in an currently accessible coordinate system - it may be in terms on an accessible coordinate system at a specific epoch.  Its value is only accessible by an inverse calculation using the deformation model.  See the <<formula-inverse, inverse calculation method>> below.
 
 10. [[funcmod-continuous-invertible]]
 The displacement defined by the deformation model is required to be continuous and invertible within the spatial and temporal extent of the model except where it evaluates to _no data_.  
