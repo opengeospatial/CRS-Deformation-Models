@@ -3,7 +3,7 @@ CRS-Deformation-Models
 
 This repository holds the artefacts and workings of the "Deformation model functional model" project team established by the CRS DWG at the Montreal virtual meeting on 15 June 2020. 
 
-The next virtual meeting of this project team will be at 4pm EDT (20:00 UTC) on 12 April 2021 (https://www4.gotomeeting.com/join/694181949).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
+The next virtual meeting of this project team will be at 4pm EDT (20:00 UTC) on 10 May 2021 (https://www4.gotomeeting.com/join/409642085).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
 
 <!--
 2020-09-07  https://www4.gotomeeting.com/join/494053021
@@ -25,16 +25,10 @@ Note: EDT ends Nov 1
 
 
 The currently active discussions can be seen in the [github issues](https://github.com/opengeospatial/CRS-Deformation-Models/issues).  Current "hot topics" are:
-<!--
-* [Refine the working definition](https://github.com/opengeospatial/CRS-Deformation-Models/issues/3) of "deformation model" which sets the scope for this project team
--->
-* [Straw man proposal for a deformation model functional model](https://github.com/opengeospatial/CRS-Deformation-Models/issues/16)
 
-<!--
-* [What is a more appropriate name to replace "deformation model](https://github.com/opengeospatial/CRS-Deformation-Models/issues/6)
--->
+* [Review deformation model formulae](https://github.com/opengeospatial/CRS-Deformation-Models/issues/33)
 
-* [How should deformation model uncertainty be represented](https://github.com/opengeospatial/CRS-Deformation-Models/issues/9) 
+* [Review deformation model feature matrix](https://github.com/opengeospatial/CRS-Deformation-Models/issues/32) 
 
 
 This team has undertaken a survey of deformation models either planned or in use. Responses can be viewed at https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us.  While the survey is formally closed,  questionnaire is still at https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0.  New information or updates are always welcome. 
