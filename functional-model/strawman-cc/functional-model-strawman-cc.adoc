@@ -244,14 +244,14 @@ latexmath:[eh = \sqrt{\sum_{i} W_i e_i^2}]
 [[formula-geocentric-weighted-average]]
 ==== Geocentric weighted average
 
-A simple average of the east and north displacements may not be appropriate very close to the poles where the directions of the east and north vectors may be quite different at the set of nodes being averaged, as shown in the figure where the directions at nodes A and B and the evaluation point P are all quite different.  
-A latitude/longitude grid may not be appropriate for models including polar regions - for example it may be simpler to use a grid defined on suitable projected coordinate system.   See the discussion on  <<discuss-geocentric-interpolation, errors of normal bilinear interpolation near poles>> below.
+A simple average of the east and north displacements may not be appropriate where a grid cell spans a wide longitude range, typically for grids in polar regions.  In this situation the directions of the east and north vectors may be quite different at the set of nodes being averaged, as shown in the figure where the directions at nodes A and B and the evaluation point P are all quite different.  The impact of this is discussed below under <<discuss-geocentric-interpolation, errors of normal bilinear interpolation near poles>>.
 
 [.right]
 image::geocentric_bilinear_interpolation.png[Alt=geocentric bilinear interpolation diagram, width=200,scalewidth=7cm]
 
-However a weighted average still services if the directions of the north and east vectors are accounted for in averaging the node values..  
+In such areas it may be more appropriate to base the grid on a local projected coordinate system. Also there is no issue even in polar regions if the grid has very narrow grid cells spanning a small longitude range. 
 
+If grid cells spanning a large longitude range are used then a weighted average of the grid node displacements can be adapted by transforming the east and north vectors to a common direction before averaging them.
 
 The geocentric interpolation method converts the displacement components from east and north components to geocentric X, Y, and Z components.  These are in the same direction and can be scaled and summed using the simple weighted avarage formulae above to calculate the X, Y, Z components of displacement at the calculation point, which are then converted back to components east and north at the calculation point.  
 
@@ -446,12 +446,10 @@ The eh and ev values from the spatial representation of each component are multi
 [[formula-14prm-transformation]]
 === Calculation of the 14 parameter transformation
 
-If the model includes a <<funcmod-14prm-transformation, 14 parameter transformation>> then this is applied to the coordinates before the 
-deformation model is calculated or applied in a forward transformation.  In an inverse transformation it is applied (in reverse) after the deformation model components have been applied to the coordinate.
-
+If the model includes a <<funcmod-14prm-transformation, 14 parameter transformation>> then this is applied to the coordinates after the 
+deformation model is calculated and applied in a forward transformation.  In an inverse transformation it is applied (in reverse) before the deformation model components area been applied to the coordinate.
 
 TBC _The 14 parameter transformation formulae need to be included here_ 
-
 
 ## Discussion points
 
