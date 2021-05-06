@@ -282,7 +282,9 @@ dn = -dx.cos(λ).sin(φ) - dy.sin(λ).sin(φ) + dz.cos(φ)
 [[formula-time-function]]
 === Time functions
 
-The time function for a component defines a scale factor f(__t__) applied to component displacements at time __t__.  The deformation model metadata defines a temporal extent of the model from T~min~ to T~max~.  Time functions are considered undefined and the model cannot be evaluated for times before T~min~ and for times at or after T~max~.
+The time function f(__t__) for a component evaluates a scalar value by which the spatial model displacement is multiplied to determine the actual displacement at time __t__.  For example in a velocity model the spatial mode represents the displacement that happens in one year, and the time function evaluates as the number of years since a reference epoch (__t__ - t~0~) a scale factor f(t) applied to component displacements at time t. 
+
+The deformation model metadata defines a temporal extent of the model from T~min~ to T~max~.  Time functions are considered undefined and the model cannot be evaluated for times before T~min~ and for times at or after T~max~.
 
 The time function is evaluated as a sum of one or more base functions f~i~(t), each of which is defined for a range of times t~i,min~ &#8804; t < t~i,max~.  The base function evaluates to zero for times T~min~ &#8804; < t~i,min~ and for times t~i,max~ &#8804; < t < T~max~.
 
