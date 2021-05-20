@@ -157,7 +157,6 @@ The 14 parameter transformation can be used to represent the bulk of the transfo
 * The target CRS definition (if the deformation model is implemented as a point motion model this will be the same as the source CRS).
 * The spatial model definition CRS (the used to define the position at which the model is calculated)
 * The reference epoch (note that each component defines a time function - this is not required to evaluate the model)
-* The uncertainty reference epoch. Described <<discuss-uncertainty-epoch, below>>.
 * The units of horizontal displacements
 * The units of vertical displacements
 * The format for representing uncertainty - which parameters are used at each node, and whet level of confidence.  For example horizontal covariance, vertical uncertainty, and 95% confidence level)
@@ -289,8 +288,6 @@ The deformation model metadata defines a temporal extent of the model from T~min
 The time function is evaluated as a sum of one or more base functions f~i~(t), each of which is defined for a range of times t~i,min~ &#8804; t < t~i,max~.  The base function evaluates to zero for times T~min~ &#8804; < t~i,min~ and for times t~i,max~ &#8804; < t < T~max~.
 
 Following conventional use in deformation models the time functions are defined as a functions of decimal years (eg velocities are metres/year).  All date/time values such as calculation epoch, velocity reference epoch) are converted to decimal years for use in the following formulae.  The conversion to decimal years is done by first converting the epoch to UTC.   The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year.  The fractional part of the decimal year is determined by dividing the number of seconds between  _yyyy_-01-01T00:00:00Z and the epoch by the number of seconds between _yyy1_-01-01T00:00:00Z and _yyyy_-01-01T00:00:00Z, where _yyy1_ is _yyyy_+1 (ie dividing the number of seconds since the start of the epoch UTC year by the total number of seconds in the epoch UTC year). 
-
-For the uncertainties eh, ev the magnitude of the uncertainty is determined relative to the <<discuss-uncertainty-epoch, uncertainty reference epoch>>. The scale factor to apply to uncertainties is f~e~(__t__) is defined as  √abs(f(__t__)-f(t~0~)) where t~0~ is the uncertainty reference epoch of the model. 
 
 The time function is defined as the sum of one or more of the following functions:
 
@@ -490,7 +487,7 @@ This specification supports the notion of a "no data" value. Note that an altern
 
 The "no data" value is different from a zero displacement.  A value of zero is used where there is no significant displacement. A "no-data" value is used where the deformation is unknown, and might be significant.  
 
-If evaluating the deformation model at a given location and time requires using a "no data" value then the displacment (or uncertainty) calculated at that location is undefined.  This would typically results in an error message to users to this effect.  The diagram below shows how this might look in a deformation model.  In this diagram the square marks the total extent of the deformation model.  Outside this area the deformation model cannot be evaluated.  In the deformation model is a gridded spatial model.  Within there are a number of nodes at which the displacement is not defined (that is it has a "no-data" value).  Where these nodes are required to calculate the displacement, which is any grid cell they are on the boundary of, the deformation model cannot be calculated.  The grey area in this diagram shows the region in which the displacement is not defined by the model and cannot be calculated.  
+If evaluating the deformation model at a given location and time requires using a "no data" value then the displacement (or uncertainty) calculated at that location is undefined.  This would typically results in an error message to users to this effect.  The diagram below shows how this might look in a deformation model.  In this diagram the square marks the total extent of the deformation model.  Outside this area the deformation model cannot be evaluated.  In the deformation model is a gridded spatial model.  Within there are a number of nodes at which the displacement is not defined (that is it has a "no-data" value).  Where these nodes are required to calculate the displacement, which is any grid cell they are on the boundary of, the deformation model cannot be calculated.  The grey area in this diagram shows the region in which the displacement is not defined by the model and cannot be calculated.  
 
 image::no_data.png[Alt=no data value diagram, width=400,scalewidth=9cm]
 
@@ -615,17 +612,6 @@ The error of not iterating the inverse transformation can be tested for the New 
 Based on this result it is recommended that the inverse transformation is iterated.  It is likely that this will double computation time (it would be unusual to require more than two iterations). 
 
 Note that this is not about creating a more accurate transformation - the differences are much less than the uncertainty in the deformation model.  The reason for iterating is to satisfy a user expectation that applying a transformation followed by the inverse transformation will result in coordinates that are materially unchanged. 
-
-[[discuss-uncertainty-epoch]]
-### Uncertainty reference epoch
-
-This is the epoch relative to which uncertainties are calculated and is referenced in the formulae below.  This may be different to the model reference epoch.  As hypothetical example, in New Zealand the deformation model includes a velocity with reference epoch 2000.0, so in principle error at epoch 2019 would be 19 times the uncertainty of the velocity (which is expressed in metres per year).  However in practice the New Zealand geodetic control network was adjusted in 2018, when the order 0 (highest accuracy) control stations were accurately located by CORS observations, and the rest of the network was adjusted to bring it into alignment with these stations.  The CORS stations NZGD2000 coordinates were calculated from the ITRF coordinates using the deformation model.  So in effect the deformation model and geodetic control were recalibrated at 2018.  So the error in 2019 due to the velocity component is only 1 times the uncertainty of the velocity. 
-
-The use of the uncertainty reference epoch presents a difficulty from the point of view of maintaining the deformation model.  The appropriate reference epoch for the uncertainty could change far more frequently than any other attribute of the model.   For example in New Zealand the national geodetic is periodically recalculated using the most current ITRF coordinates of the reference stations.  This will change the uncertainty reference epoch for the deformation model, but otherwise leave it unchanged.  It is debatable whether this should constitute a new version of the deformation model, or of the datum it relates to.   Since most users will not ever calculate or use the uncertainties it makes no practical difference. 
-
-Perhaps the most sensible approach for software that used the uncertainty information is that it should be able to override the uncertainty reference epoch. 
-
-Another alternative is to remove the uncertainty epoch from the model definition, in which case it would be a requirement of software calculating uncertainty to provide a reference epoch.
 
 === Conversion of coordinates between versions of the deformation model
 
