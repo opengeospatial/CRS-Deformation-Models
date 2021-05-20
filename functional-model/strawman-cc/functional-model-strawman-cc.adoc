@@ -236,7 +236,7 @@ latexmath:[de = \sum_{i} W_i de_i]
 
 The uncertainties eh, ev are interpolated using a weighted average of the variances eh~i~^2^, ev~i~^2^, for example 
 
-latexmath:[eh = \sqrt{\sum_{i} W_i e_i^2}]
+latexmath:[eh = \sqrt{\sum_{i} W_i eh_i^2}]
 
 // eh = √(W~i,j~*eh~i,j~^2^ + W~i+1,j~*eh~i+1,j~^2^ + W~i,j+1~*eh~i,j+1~^2^ + W~i+1,j+1~*eh~i+1,j+1~^2^)
 
