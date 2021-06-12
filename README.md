@@ -3,7 +3,7 @@ CRS-Deformation-Models
 
 This repository holds the artefacts and workings of the "Deformation model functional model" project team established by the CRS DWG at the Montreal virtual meeting on 15 June 2020. 
 
-The next virtual meeting of this project team will be at 4pm EDT (20:00 UTC) on 7 June 2021 (https://www4.gotomeeting.com/join/792144133).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
+The next virtual meeting of this project team will be at 4pm EDT (20:00 UTC) on 5 July 2021 (https://www4.gotomeeting.com/join/517573469).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
 
 <!--
 2020-09-07  https://www4.gotomeeting.com/join/494053021
