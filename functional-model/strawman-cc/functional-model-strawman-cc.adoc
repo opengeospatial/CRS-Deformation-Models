@@ -296,11 +296,14 @@ The time function is defined as the sum of one or more of the following function
 |===
 |Function type|Parameters|Formula (t~i,min~ &#8804; __t__ < t~i,max~)
 |constant|None|f(__t__)=1
-|velocity|Reference epoch t~0~|f(__t__) = (t - t~0~) all values of t
+|velocity|Reference epoch t~0~ +
+Velocity __v__|f(__t__) = __v__.(t - t~0~) all values of t
 |acceleration|Reference epoch t~0~ +
-Acceleration __a__|f(__t__) = (t - t~0~) + __a__.(t - t~0~)^2^ all values of t
-|step | Reference epoch t~0~ |f(__t__) = 0 when t < t~0~,
-|reverse step | Reference epoch t~0~ |f(__t__) = -1 when t < t~0~,
+Acceleration __a__|f(__t__) = __a__.(t - t~0~)^2^ all values of t
+|step | Reference epoch t~0~ |f(__t__) = 0 when t < t~0~, +
+f(__t__) = 1 when t &#8805; t~0~
+|reverse step | Reference epoch t~0~ |f(__t__) = -1 when t < t~0~, +
+f(__t__) = 0 when t &#8805; t~0~
 |piecewise|Time/factors corner points +
 t~i~,f~i~ for i=0..n|
 f(__t__) = 0 for __t__ < t~0~
