@@ -130,7 +130,7 @@ Piecewise linear functions are defined by an ordered set of time/date values and
 See the <<discuss-time-function, discussion>> and <<formula-time-function, formulae>> for time functions below.
 
 9. [[funcmod-14prm-transformation]]The deformation model specification may also include a 14 parameter
-Bursa-Wolf transformation definition.  This is applied before the deformation components in a forward transformation or after them in an inverse transformation as described in the <<formula-14prm-transformation, formula>>.  
+Bursa-Wolf transformation definition.  This is applied after the deformation components in a forward transformation or before them in an inverse transformation as described in the <<formula-14prm-transformation, formula>>.  
 +
 The 14 parameter transformation can be used to represent the bulk of the transformation between the source and target coordinate systems or epochs. This allows the more complex deformation components to efficiently represent perturbations from this movement which may be smaller and localised.  Note that jurisdictions may choose to implement this using an intermediate coordinate system rather including it than deformation model.  A deformation model should not be used to define a transformation which is fully described by a 14 parameter transformation.
 
