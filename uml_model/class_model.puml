@@ -1,0 +1,175 @@
+@startuml
+
+class DeformationModel 
+{
+    sourceCrs: CrsDefinition
+    targetCrs: CrsDefinition
+    interpolationCrs: CrsDefinition
+
+}
+DeformationModel "1" o-- "many" DeformationComponent
+DeformationModel o-- DiscoveryMetadata
+DeformationModel "1" o-- "3" CrsDefinition
+
+class DiscoveryMetadata
+{
+
+}
+
+class CrsDefinition
+{
+    name: characterString
+    uri: characterString
+    wkt: characterString
+}
+
+
+class DeformationComponent
+{
+    spatialModel: SpatialModel
+    timeFunction: TimeFunction
+}
+DeformationComponent o-- SpatialModel
+DeformationComponent o-- TimeFunction
+
+class SpatialModel
+{
+    spatialModelType: characterString
+    spatialModelExtent: SpatialExtent
+    parameters: characterString[]
+    defaultHorizontalUncertainty: real
+    defaultVerticalUncertainty: real
+}
+
+class GriddedSpatialModel
+{
+    interpolationMethod: characterString
+
+}
+SpatialModel <|-- GriddedSpatialModel
+
+class Grid
+{
+    parentGrid: Grid
+    iNodeMaximum: integer
+    jNodeMaximum: integer
+    gridTransformation: AffineTransformation
+    noDataValue: ?
+    gridData: real[][][]
+}
+GriddedSpatialModel "1" *-- "many" Grid
+Grid *-- Grid : parent
+
+class AffineTransformation
+{
+    affineCoeffs: real[]
+}
+Grid o-- AffineTransformation
+
+SpatialModel o-- SpatialExtent
+
+class SpatialExtent
+{
+    extentType: characterString
+}
+SpatialExtent <|-- BoundingBoxExtent
+
+class BoundingBoxExtent
+{
+    southBoundLatitude: real
+    westBoundLongitude: real
+    northBoundLatitude: real
+    eastBoundLongitude: real
+}
+
+class TimeFunction
+{
+    startEpoch: date
+    endEpoch: date
+    baseFunctions: BaseTimeFunction[]
+    
+}
+
+abstract class BaseTimeFunction
+{
+    
+}
+TimeFunction "1" o-- "many" BaseTimeFunction
+
+/'
+class ConstantTimeFunction
+{
+
+}
+BaseTimeFunction <|-- ConstantTimeFunction
+'/
+
+class VelocityTimeFunction
+{
+    referenceEpoch: real
+    velocity: real
+}
+BaseTimeFunction <|-- VelocityTimeFunction
+
+
+/'
+class AccelerationTimeModel
+{
+    referenceEpoch: real
+    acceleration: real
+}
+BaseTimeFunction <|-- AccelerationTimeModel
+'/
+
+class StepTimeFunction
+{
+    referenceEpoch: date
+
+}
+BaseTimeFunction <|-- StepTimeFunction
+
+class ReverseStepTimeFunction
+{
+    referenceEpoch: date
+}
+BaseTimeFunction <|-- ReverseStepTimeFunction
+
+class PiecewiseLinearTimeFunction
+{
+
+}
+BaseTimeFunction <|-- PiecewiseLinearTimeFunction
+
+class SpatialModelMultiplier
+{
+    epoch: date
+    value: real
+}
+PiecewiseLinearTimeFunction "1" *-- "many" SpatialModelMultiplier
+
+class ExponentialTimeFunction
+{
+    referenceEpoch: date
+    amplitude: real
+    decayRate: real
+}
+BaseTimeFunction <|-- ExponentialTimeFunction
+
+class LogarithmicTimeFunction
+{
+    referenceEpoch: date
+    amplitude: real
+    decayRate: real
+}
+BaseTimeFunction <|-- LogarithmicTimeFunction
+
+class CyclicTimeFunction
+{
+    referenceEpoch: date
+    amplitude: real
+    frequency: integer?
+}
+BaseTimeFunction <|-- CyclicTimeFunction
+
+
+@enduml 
