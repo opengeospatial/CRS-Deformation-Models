@@ -10,3 +10,7 @@ Models:
 ## Format
 
 These models can be compiled using [PlantUML](https://plantuml.com).  
+
+```
+plantuml deformation_model.puml
+```
