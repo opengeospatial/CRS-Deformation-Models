@@ -300,17 +300,16 @@ for t~i~ < __t__ < t~i+1~
 f(__t__) = 0 for __t__ > t~n~
 
 |exponential|Start epoch t~0~ +
-End epoch t~1~ +
-Decay constant θ| f(__t__) = f~p~     when __t__ < t~0~ 
+Start amplitude &#945;~0~ +
+Final amplitude &#945;~∞~ +
+Decay constant θ| f(__t__) = 0     when __t__ < t~0~ 
 
-f(__t__) = f~0~ + (f~∞~-f~0~).(1 - exp(-(__t__-t~0~)/θ))     when t~0~ <= __t__ < t~1~ 
+f(__t__) = &#945;~0~ + (&#945;~∞~-&#945;~0~).(1 - exp(-(__t__-t~0~)/θ))     when t~0~ <= __t__ 
 
-
-f(__t__) = f~0~ + (f~∞~-f~0~).(1 - exp(-(t~1~-t~0~)/θ))     when __t__ >= t~1~
 |logarithmic|Reference epoch t~0~ +
 Amplitude &#945; +
 Decay rate &#964; | 0 for __t__ < t~0~ +
-f(__t__) = &#945;.ln(1 + t/&#964;) for t~0~ &#8804; __t__ 
+f(__t__) = &#945;.ln(1 + (__t__-t~0~)/&#964;) for t~0~ &#8804; __t__ 
 |cyclic|Frequency f (cycles per year) +
 Reference epoch t~0~ +
 Amplitude &#945; | f(__t__) = &#945;cos(f(__t__ - t~0~)/2&#120587;)
