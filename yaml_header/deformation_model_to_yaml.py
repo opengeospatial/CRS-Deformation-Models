@@ -46,6 +46,9 @@ def main():
     parser=argparse.ArgumentParser('Convert JSON/GeoTIFF model to draft GGXF YAML header')
     parser.add_argument('deformation_json_file',help='Name of deformation model JSON file')
     parser.add_argument('ggxf_yaml_header',nargs='?',help='Name of output YAML GGXF text format file')
+    parser.add_argument('-g','--group',nargs='*',help='Groups to include in subset file')
+    parser.add_argument('-d','--depth',type=int,help="Maximum grid nesting depth in example file")
+    parser.add_argument('-w','--width',type=int,help="Maximum grid nesting width in example file")
 
     args=parser.parse_args()
     jsonfile=args.deformation_json_file
@@ -53,9 +56,36 @@ def main():
     if yamlfile is None:
         yamlfile=os.path.splitext(jsonfile)[0]+'.gxb'
     smodel=loadJsonGeoTiff(jsonfile)
-    gmodel=ggxfModel(smodel)
+    gmodel=ggxfModel(smodel,usegroups=args.group,maxdepth=args.depth,maxwidth=args.width)
     dumpGGXFYaml(gmodel,yamlfile)
 
+
+def pruneGrids( grids, maxdepth, maxwidth ):
+    idx={}
+    rootgrids=[]
+    for g in grids:
+        g['children']=[]
+        idx[g['gridName']]=g
+    for g in grids:
+        if p := g.get('parentGridName'):
+            idx[p]['children'].append(g)
+        else:
+            rootgrids.append(g)
+    if maxwidth:
+        rootgrids=rootgrids[:maxwidth]
+    usedgrids=[]
+    def trimGrid( g, depth, maxdepth, maxwidth):
+        usedgrids.append(g)
+        children=g.pop('children')
+        if depth == maxdepth:
+            children=[]
+        elif maxwidth:
+            children=children[:maxwidth]
+        for c in children:
+            trimGrid(c,depth+1,maxdepth,maxwidth)
+    for g in rootgrids:
+        trimGrid(g,1,maxdepth,maxwidth)
+    return usedgrids
 
 def loadGTiffGridData(source,sourceref=None,tiffdir=None):
     print(f'Loading {source}')
@@ -71,8 +101,6 @@ def loadGTiffGridData(source,sourceref=None,tiffdir=None):
         gmd=md['']
         gdata['gridName']=gmd['grid_name']
         nchild=int(gmd.get('number_of_nested_grids',0))
-        if nchild:
-            gdata['numberOfChildGrids']=nchild
         parent=gmd.get('parent_grid_name')
         if parent:
             gdata['parentGridName']=parent
@@ -83,11 +111,11 @@ def loadGTiffGridData(source,sourceref=None,tiffdir=None):
         coeffs.extend(affine[:3])
         gdata['affineCoeffs']=coeffs
         size=griddata['size']
-        gdata['iNodeMaximum'] = size[0]
-        gdata['jNodeMaximum'] = size[1]
-        remark=gmd.get('TIFFTAG_IMAGEDESCRIPTION')
-        if remark:
-            gdata['remark']=remark
+        gdata['iNodeMaximum'] = size[0]-1
+        gdata['jNodeMaximum'] = size[1]-1
+        # remark=gmd.get('TIFFTAG_IMAGEDESCRIPTION')
+        # if remark:
+        #     gdata['remark']=remark
         gdata['gridDataSource']=sourceref or source
         for k,v in md.get('SUBDATASETS',{}).items():
             if m := re.match(r'^SUBDATASET_(\d+)_NAME',k):
@@ -115,14 +143,11 @@ def loadJsonGeoTiff(jsonfile,object_pairs_hook=OrderedDict):
     model['gridcrs']=crsdef
     return model
 
-def ggxfTimeFunction( tf, extent ):
+def ggxfTimeFunction( tf ):
     tftype=tf['type']
     params=tf['parameters']
     gtf=OrderedDict()
-    gtf['minEpoch']=extent['first']
-    gtf['maxEpoch']=extent['last']
     functions=[]
-    gtf['baseFunctions']=functions
     if tftype == 'velocity':
         bf=OrderedDict()
         bf['type']='polynomial'
@@ -170,11 +195,13 @@ def ggxfTimeFunction( tf, extent ):
             bf['endMultiplier']=me['scale_factor']-lastsf
             functions.append(bf)
             lastsf=me['scale_factor']
+    gtf['baseFunctions']=functions
     return gtf
 
-def ggxfModel(model):
+def ggxfModel(model,usegroups=None,maxwidth=None,maxdepth=None):
     gmodel=OrderedDict()
     gmodel['ggxfVersion']='1.0'
+    gmodel['filename']='unknown'
     gmodel['content']='deformation model'
     gmodel['version']=model['version']
     gmodel['remark']=cleanstr(model['description'])
@@ -219,18 +246,21 @@ def ggxfModel(model):
     gmodel['groups']=groups
     for c in model['components']:
         sm=c['spatial_model']
-        group=OrderedDict()
         gname=os.path.basename(sm['filename'])
         gname=os.path.splitext(gname)[0]
+        if usegroups and gname not in usegroups:
+            print(f"Skipping component {gname}")
+            continue
+        group=OrderedDict()
         group['groupName']=gname
         if remark := c.get('description'):
             group['remark']=remark
         params=displacementParams[c['displacement_type']][:]
         params.extend(uncertaintyParams[c['uncertainty_type']])
         group['parameters']=params
-        group['timeFunction']=ggxfTimeFunction(c['time_function'],model['time_extent'])
+        group['timeFunction']=ggxfTimeFunction(c['time_function'])
         groups.append(group)
-        group['grids']=sm['grids']
+        group['grids']=pruneGrids(sm['grids'],maxdepth,maxwidth)
     return gmodel
 
 def blockLongLines(yamldef):
