@@ -84,43 +84,20 @@ class BoundingBoxExtent
 
 class TimeFunction
 {
-    startEpoch: date
-    endEpoch: date
     baseFunctions: BaseTimeFunction[]
-    
 }
 
 abstract class BaseTimeFunction
 {
-    
 }
-TimeFunction "1" o-- "many" BaseTimeFunction
-
-/'
-class ConstantTimeFunction
-{
-
-}
-BaseTimeFunction <|-- ConstantTimeFunction
-'/
+TimeFunction "1" *-- "many" BaseTimeFunction
 
 class VelocityTimeFunction
 {
-    referenceEpoch: real
-    velocity: real
+    referenceEpoch: date
 }
 BaseTimeFunction <|-- VelocityTimeFunction
-
-
 /'
-class AccelerationTimeModel
-{
-    referenceEpoch: real
-    acceleration: real
-}
-BaseTimeFunction <|-- AccelerationTimeModel
-'/
-
 class StepTimeFunction
 {
     referenceEpoch: date
@@ -133,9 +110,11 @@ class ReverseStepTimeFunction
     referenceEpoch: date
 }
 BaseTimeFunction <|-- ReverseStepTimeFunction
+'/
 
 class PiecewiseLinearTimeFunction
 {
+epochMultipliers: EpochMultiplier[]
 
 }
 BaseTimeFunction <|-- PiecewiseLinearTimeFunction
@@ -143,31 +122,44 @@ BaseTimeFunction <|-- PiecewiseLinearTimeFunction
 class SpatialModelMultiplier
 {
     epoch: date
-    value: real
+    multiplier: real
 }
-PiecewiseLinearTimeFunction "1" *-- "many" SpatialModelMultiplier
+PiecewiseLinearTimeFunction "1" *-- "many" EpochMultiplier
 
 class ExponentialTimeFunction
 {
     referenceEpoch: date
-    amplitude: real
+    referenceMultplier: real
     decayRate: real
+    endEpoch (optional): date
 }
 BaseTimeFunction <|-- ExponentialTimeFunction
 
 class LogarithmicTimeFunction
 {
     referenceEpoch: date
-    amplitude: real
+    referenceMultiplier: real
     decayRate: real
+    endEpoch (optional): date
 }
 BaseTimeFunction <|-- LogarithmicTimeFunction
+
+class AccelerationTimeModel
+{
+    referenceEpoch: date
+    accelerationMultiplier: real
+    startEpoch (optional): date
+    endEpoch (optional): date
+}
+
+BaseTimeFunction <|-- AccelerationTimeModel
 
 class CyclicTimeFunction
 {
     referenceEpoch: date
-    amplitude: real
     frequency: integer?
+    cosineMultiplier: real
+    sineMultiplier: real
 }
 BaseTimeFunction <|-- CyclicTimeFunction
 

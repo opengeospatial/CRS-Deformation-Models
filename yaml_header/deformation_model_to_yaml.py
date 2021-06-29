@@ -33,6 +33,9 @@ uncertaintyParams={
     'none': []
     }
 
+useramp=False
+usebasefunctions=False
+
 cleanstr=lambda s: re.sub(r'[\r\n]+','\n',s.strip())
 
 epsgwkt={}
@@ -43,18 +46,23 @@ crsname=lambda s: crsnamedict.get(s,s)
 epsgurl=lambda s: re.sub(r'^EPSG\:','http://www.opengis.net/def/crs/epsg/0/',s)
 
 def main():
+    global useramp
     parser=argparse.ArgumentParser('Convert JSON/GeoTIFF model to draft GGXF YAML header')
     parser.add_argument('deformation_json_file',help='Name of deformation model JSON file')
     parser.add_argument('ggxf_yaml_header',nargs='?',help='Name of output YAML GGXF text format file')
     parser.add_argument('-g','--group',nargs='*',help='Groups to include in subset file')
     parser.add_argument('-d','--depth',type=int,help="Maximum grid nesting depth in example file")
     parser.add_argument('-w','--width',type=int,help="Maximum grid nesting width in example file")
+    parser.add_argument('-r','--use-ramp',action='store_true',help="Use ramp functions instead of piecewise")
+    parser.add_argument('-b','--use-base-time-function',action='store_true',help="Use ramp functions instead of piecewise")
 
     args=parser.parse_args()
     jsonfile=args.deformation_json_file
     yamlfile=args.ggxf_yaml_header
     if yamlfile is None:
         yamlfile=os.path.splitext(jsonfile)[0]+'.gxb'
+    ggxfTimeFunction.useramp=args.use_ramp
+    ggxfTimeFunction.usebasefunc=args.use_base_time_function
     smodel=loadJsonGeoTiff(jsonfile)
     gmodel=ggxfModel(smodel,usegroups=args.group,maxdepth=args.depth,maxwidth=args.width)
     dumpGGXFYaml(gmodel,yamlfile)
@@ -144,59 +152,68 @@ def loadJsonGeoTiff(jsonfile,object_pairs_hook=OrderedDict):
     return model
 
 def ggxfTimeFunction( tf ):
+    global useramp
     tftype=tf['type']
     params=tf['parameters']
     gtf=OrderedDict()
     functions=[]
     if tftype == 'velocity':
         bf=OrderedDict()
-        bf['type']='polynomial'
+        bf['type']='velocity'
         bf['referenceEpoch']=params['reference_epoch']
-        bf['velocityMultiplier']=1.0
         functions.append(bf)
     elif tftype == 'step':
-        epoch=params['step_epoch']
-        gtf['minEpoch']=epoch
         bf=OrderedDict()
-        bf['type']='ramp'
-        bf['startEpoch']=epoch
-        bf['startMultiplier']=0.0
-        bf['endEpoch']=epoch
-        bf['endMultiplier']=1.0
+        bf['type']='step'
+        bf['referenceEpoch']=params['step_epoch']        
         functions.append(bf)
     elif tftype == 'reverse_step':
-        epoch=params['step_epoch']
-        gtf['maxEpoch']=epoch
         bf=OrderedDict()
-        bf['type']='ramp'
-        bf['startEpoch']=epoch
-        bf['startMultiplier']=1.0
-        bf['endEpoch']=epoch
-        bf['endMultiplier']=0.0    
+        bf['type']='reverse_step'
+        bf['referenceEpoch']=params['step_epoch']        
+        functions.append(bf)  
     elif tftype == 'piecewise':
         model=params['model']
         before=params['before_first']
         after=params['after_last']
+        epoch0=model[0]['epoch']
+        epochn=model[-1]['epoch']
         if before == 'zero':
-            gtf['minEpoch']=model[0]['epoch']
+            if model[0]['scale_factor'] != 0.0:
+                model.insert(0,{'epoch': epoch0,'scale_factor': 0.0})
         elif before != 'constant':
             raise RuntimeError(f'Cannot handle piecewise before_first={before}')
         if after == 'zero':
-            gtf['maxEpoch']=model[-1]['epoch']
+            if model[-1]['scale_factor'] != 0.0:
+                model.append({'epoch': epochn,'scale_factor': 0.0})
         elif after != 'constant':
             raise RuntimeError(f'Cannot handle piecewise after_first={after}')
-        lastsf=0.0            
-        for ms,me in zip(model[:-1],model[1:]):
+        lastsf=0.0 
+        if ggxfTimeFunction.useramp:           
+            for ms,me in zip(model[:-1],model[1:]):
+                bf=OrderedDict()
+                bf['type']='ramp'
+                bf['startEpoch']=ms['epoch']
+                bf['startMultiplier']=ms['scale_factor']-lastsf
+                bf['endEpoch']=me['epoch']
+                bf['endMultiplier']=me['scale_factor']-lastsf
+                functions.append(bf)
+                lastsf=me['scale_factor']
+        else:
             bf=OrderedDict()
-            bf['type']='ramp'
-            bf['startEpoch']=ms['epoch']
-            bf['startMultiplier']=ms['scale_factor']-lastsf
-            bf['endEpoch']=me['epoch']
-            bf['endMultiplier']=me['scale_factor']-lastsf
+            bf['type']='piecewise'
+            bf['epochMultipliers']=[
+                OrderedDict([('epoch',mp['epoch']),('multiplier',mp['scale_factor'])])
+                for mp in model]
             functions.append(bf)
-            lastsf=me['scale_factor']
-    gtf['baseFunctions']=functions
+    if ggxfTimeFunction.usebasefunc:
+        gtf['baseFunctions']=functions
+    else:
+        gtf=functions
     return gtf
+
+ggxfTimeFunction.useramp=False    
+ggxfTimeFunction.usebasefunc=False    
 
 def ggxfModel(model,usegroups=None,maxwidth=None,maxdepth=None):
     gmodel=OrderedDict()
@@ -239,7 +256,7 @@ def ggxfModel(model,usegroups=None,maxwidth=None,maxdepth=None):
     gmodel['sourceCrsHref']=epsgurl(model['source_crs'])
     gmodel['targetCrsName']=crsname(model['target_crs'])
     gmodel['targetCrsHref']=epsgurl(model['target_crs'])
-    gmodel['operationalAccuracy']='0.01'
+    gmodel['operationAccuracy']=0.01
     gmodel['horizontalErrorType']='circular 95% confidence'
     gmodel['verticalErrorType']='95% confidence limit'
     groups=[]
