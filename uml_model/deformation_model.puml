@@ -119,7 +119,7 @@ epochMultipliers: EpochMultiplier[]
 }
 BaseTimeFunction <|-- PiecewiseLinearTimeFunction
 
-class SpatialModelMultiplier
+class EpochMultiplier
 {
     epoch: date
     multiplier: real
@@ -138,8 +138,8 @@ BaseTimeFunction <|-- ExponentialTimeFunction
 class LogarithmicTimeFunction
 {
     referenceEpoch: date
-    referenceMultiplier: real
-    decayRate: real
+    scaleFactor: real
+    timeFactor: real
     endEpoch (optional): date
 }
 BaseTimeFunction <|-- LogarithmicTimeFunction

@@ -297,8 +297,8 @@ f(__t__) = &#945;~0~ + (&#945;~∞~-&#945;~0~).(1 - exp(-(__t__-t~0~)/θ))     f
 f(_t_) = f(t~e~) for t &#8805; if t~e~ is defined
 
 |logarithmic|Reference epoch t~0~ +
-Amplitude &#945; +
-Decay rate &#964; + 
+Scale factor &#945; +
+Time factor &#964; + 
 _End epoch_ t~e~| 0 for __t__ < t~0~ +
 f(__t__) = &#945;.ln(1 + (__t__-t~0~)/&#964;) for t~0~ &#8804; __t__ +
 f(_t_) = f(t~e~) for t &#8805; if t~e~ is defined
