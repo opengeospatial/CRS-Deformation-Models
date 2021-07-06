@@ -307,10 +307,11 @@ _End epoch_ t~e~| f(_t_) = 0 for _t_ < t~s~ +
 f(_t_) = &#945;.ln(1 + (_t_-t~s~)/&#964;) for t~s~ &#8804; _t_ +
 f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
 
-|acceleration|Start epoch t~s~ +
-Acceleration _a_ + 
-_end epoch_ t~e~|f(_t_) = 0 if _t_ < t~s~ +
-f(_t_)= _a_.(t - t~s~)^2^  if _t_ &#880t; t~s~ +
+|acceleration|Function reference epoch t~0~ +
+Acceleration _a_ +
+_Start epoch_ t~s~ + 
+_End epoch_ t~e~|f(_t_)= _a_.(_t_ - t~0~)^2^  +
+f(_t_) = f(t~s~) for _t_ < t~s~ if t~s~ is defined +
 f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
 
 |hyperbolic tangent|Start epoch t~s~ +
