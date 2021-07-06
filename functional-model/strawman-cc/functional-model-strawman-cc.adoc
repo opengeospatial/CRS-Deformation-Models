@@ -110,12 +110,12 @@ See also the discussion of <<discuss-spatial-model, spatial model types>> below.
 
 8. [[funcmod-time-type]]The time function is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
  * a velocity function
- * an acceleration function
- * a piecewise linear function of time defined by function values at ordered set of times.  The function is interpolated linearly between the specified values. It can be discontinuous – a step is created by two points with the same time and different multipiers.  Two specialisations of the piecewise linear time function are the step and reverse_step functions.
+ * a piecewise linear time function defined by a start and end time and a start and end scale factor.  Two specialisations of the piecewise linear time function are the step and reverse step functions.
  * an exponential decay function
  * a logarithmic function
- * a sine or cosine function
+ * an acceleration function
  * a hyperbolic tangent function
+ * a sine or cosine function
 
 +
 See the <<discuss-time-function, discussion>> and <<formula-time-function, formulae>> for time functions below.
@@ -285,23 +285,18 @@ _End epoch_ t~e~| f(_t_) = _t_ - t~0~ +
 f(_t_) = f(t~s~) for _t_ < t~s~ if t~s~ is defined +
 f(_t_) = f(t~e~) for _t_ < t~e~ if t~e~ is defined
 
-|piecewise|Array of corner points +
-&nbsp;&nbsp;epoch t~i~ +
-&nbsp;&nbsp;multiplier f~i~ +
-for i=0..n|
-f(_t_) = f~0~ for _t_ < t~s~
-
-f(_t_) = (f~i~.(t~i+1~ – _t_) + f~i+1~.(_t_-t~i~))/(t~i+1~-t~i~) +
-for t~i~ &#8804; _t_ < t~i+1~
-
-f(_t_) = f~n~ for _t_ &#8805; t~n~
+|piecewise linear|Start epoch t~s~ +
+Start scale factor f~s~ +
+End epoch t~e~ +
+End scale factor f~e~ |f(_t_) = f~s~ for _t_ < t~s~ +
+f(_t_) = (f~s~.(t~e~ – _t_) + f~e~.(_t_-t~s~))/(t~e~-t~s~) for t~s~ &#8804; _t_ < t~e~ +
+f(_t_) = f~e~ for _t_ &#8805; t~e~
 
 |exponential|Start epoch t~s~ +
 Start amplitude &#945;~0~ +
 Final amplitude &#945;~∞~ +
 Decay constant θ + 
-_End epoch_ t~e~ | f(_t_) = 0     for _t_ < t~s~ 
-
+_End epoch_ t~e~ | f(_t_) = 0   for _t_ < t~s~ +
 f(_t_) = &#945;~0~ + (&#945;~∞~-&#945;~0~).(1 - exp(-(_t_-t~s~)/θ))     for _t_ &#8805; t~s~ +
 f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
 
@@ -321,7 +316,7 @@ f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
 |hyperbolic tangent|Start epoch t~s~ +
 End epoch t~1~ +
 Time constant &#964; +
-Amplitude &#945;|f(_t_)= 0 for _t_ < t~s~ +
+Scale factor &#945;|f(_t_)= 0 for _t_ < t~s~ +
 f(_t_) = A.tanh((_t_ - t~r~)/&#964;) for _t_ &#8805; t~s~ and _t_ < t~e~ +
 f(_t_) = &#945; for _t_ &#8805; t~e~ +
 where: +
@@ -338,17 +333,23 @@ f(_t_) = &#945;cos(_f_(_t_ - t~0~)/2&#120587;)
 
 |===
 
-To improve readability of the time function definition two common special cases are supported as a specialisations of the piecewise function:
+To improve simplicity and readability of the time function definition two common special cases are supported as a specialisations of the piecewise linear function:
 
 [cols="2,5a,5a"]
 [options="header"]
 |===
 |Function type|Parameters|Formula (t~i,min~ &#8804; __t__ < t~i,max~)
-|step | Reference epoch t~s~ |f(__t__) = 0 when t < t~s~, +
+|step | Step epoch t~s~ |f(__t__) = 0 when t < t~s~, +
 f(__t__) = 1 when t &#8805; t~s~
-|reverse_step | Reference epoch t~s~ |f(__t__) = -1 when t < t~s~, +
+|reverse step | Step epoch t~s~ |f(__t__) = -1 when t < t~s~, +
 f(__t__) = 0 when t &#8805; t~s~
 |===
+
+Note: a velocity function including a start and end epoch is functionally identical to the piecewise linear function.  However these two options are provided to support quite different cases.  
+
+Typically the velocity function will not be specified with both a start time and an end time.  It is representing secular deformation and the displacements in the spatial model are the deformation accumulating in one year regardless of the start and end time.
+
+The piecewise linear function is to support a specific time bounded event.  It more meaningfully represents specific deformation events as the spatial model displacements reflect the total deformation.  The step functions are specialisations of it in which the start and end epoch are equal (which is not possible with a velocity function, as the velocity is infinite).  The main role of the piecewise linear function in deformation model time functions is that multiple such functions can be combined to approximate any time evolution.
 
 Future versions of this specification may add new base functions as required.
 
