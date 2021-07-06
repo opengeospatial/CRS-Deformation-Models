@@ -115,6 +115,7 @@ See also the discussion of <<discuss-spatial-model, spatial model types>> below.
  * an exponential decay function
  * a logarithmic function
  * a sine or cosine function
+ * a hyperbolic tangent function
 
 +
 See the <<discuss-time-function, discussion>> and <<formula-time-function, formulae>> for time functions below.
@@ -264,58 +265,77 @@ dn = -dx.cos(λ).sin(φ) - dy.sin(λ).sin(φ) + dz.cos(φ)
 
 The time function f(__t__) for a component evaluates a scalar value by which the spatial model displacement is multiplied to determine the actual displacement at time __t__.  For example in a velocity model the spatial mode represents the displacement that happens in one year, and the time function evaluates the scale factor f(t) applied to component displacements at time t as the number of years since a reference epoch (__t__ - t~0~).
 
-The deformation model metadata defines a temporal extent of the model from T~min~ to T~max~.  Time functions are considered undefined and the model cannot be evaluated for times before T~min~ and for times at or after T~max~.
+The deformation model metadata defines a temporal extent of the entire deformation model from T~min~ to T~max~.  This overrides any information from specific time functions. At times before T~min~ and for times at or after T~max~ every time function is considered undefined and the deformation model cannot be evaluated.
 
-Following conventional use in deformation models the time functions are defined as a functions of decimal years (eg velocities are metres/year).  All date/time values such as calculation epoch, velocity reference epoch) are converted to decimal years for use in the following formulae.  The conversion to decimal years is done by first converting the epoch to UTC.   The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year.  The fractional part of the decimal year is determined by dividing the number of seconds between  _yyyy_-01-01T00:00:00Z and the epoch by the number of seconds between _yyy1_-01-01T00:00:00Z and _yyyy_-01-01T00:00:00Z, where _yyy1_ is _yyyy_+1 (ie dividing the number of seconds since the start of the epoch UTC year by the total number of seconds in the epoch UTC year). 
+Following conventional use in deformation models the time functions are defined as a functions of decimal years (eg velocities are metres/year).  All date/time values such as calculation epoch, velocity reference epoch) are converted to decimal years for use in the following formulae. 
 
-The time function is defined as the sum of one or more of the following generic functions.  In this table some functions include optional parameters start epoch and end epoch indicated by italics.
+The conversion of a UTC epoch __yyyy__-__mm__-__dd__T__HH__:__MM__:__SS__Z to decimal years is done by first converting the epoch to UTC.   The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year.  The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01T00:00:00Z and the epoch by the total number of seconds in the year (ie the number of seconds between _yyyy_-01-01T00:00:00Z and _yyy1_-01-01T00:00:00Z, where _yyy1_ is _yyyy_+1). 
+
+Note that there is a small ambiguity in this formulation due to the occasional introduction of leap second at the end of the year.  This impacts calculations because 1) it is not known at the beginning of the year whether a leap second will be added, and 2) standard software libraries used to implement the time functions may not include leap seconds, or if even if they do it may take some time before the leap second is incorporated into the libraries installed by a particular user.  Since this difference makes no practical difference to deformation model calculations it is proposed that the calculation of the decimal year is considered compliant whether or not it includes it - there are two nominally correct answers.
+
+The time function is defined as the sum of one or more of the following generic functions.  In this table some functions include optional parameters indicated by italics.
 
 [cols="2,5a,5a"]
 [options="header"]
 |===
-|Function type|Parameters|Formula (t~i,min~ &#8804; __t__ < t~i,max~)
-|velocity| Reference epoch t~0~| f(_t_) = _t_ - t~0~
+|Time function type|Parameters|Formula (t~i,min~ &#8804; _t_ < t~i,max~)
+|velocity| Function reference epoch t~0~ +
+_Start epoch_ t~s~ +
+_End epoch_ t~e~| f(_t_) = _t_ - t~0~ +
+f(_t_) = f(t~s~) for _t_ < t~s~ if t~s~ is defined +
+f(_t_) = f(t~e~) for _t_ < t~e~ if t~e~ is defined
 
 |piecewise|Array of corner points +
 &nbsp;&nbsp;epoch t~i~ +
 &nbsp;&nbsp;multiplier f~i~ +
 for i=0..n|
-f(__t__) = f~0~ for __t__ < t~0~
+f(_t_) = f~0~ for _t_ < t~s~
 
-f(__t__) = (f~i~.(t~i+1~ – __t__) + f~i+1~.(__t__-t~i~))/(t~i+1~-t~i~) +
-for t~i~ &#8804; __t__ < t~i+1~
+f(_t_) = (f~i~.(t~i+1~ – _t_) + f~i+1~.(_t_-t~i~))/(t~i+1~-t~i~) +
+for t~i~ &#8804; _t_ < t~i+1~
 
-f(__t__) = f~n~ for __t__ &#8805; t~n~
+f(_t_) = f~n~ for _t_ &#8805; t~n~
 
-|exponential|Reference epoch t~0~ +
+|exponential|Start epoch t~s~ +
 Start amplitude &#945;~0~ +
 Final amplitude &#945;~∞~ +
 Decay constant θ + 
-_End epoch_ t~e~ | f(__t__) = 0     for __t__ < t~0~ 
+_End epoch_ t~e~ | f(_t_) = 0     for _t_ < t~s~ 
 
-f(__t__) = &#945;~0~ + (&#945;~∞~-&#945;~0~).(1 - exp(-(__t__-t~0~)/θ))     for __t__ &#8805; t~0~ +
-f(_t_) = f(t~e~) for t &#8805; if t~e~ is defined
+f(_t_) = &#945;~0~ + (&#945;~∞~-&#945;~0~).(1 - exp(-(_t_-t~s~)/θ))     for _t_ &#8805; t~s~ +
+f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
 
-|logarithmic|Reference epoch t~0~ +
+|logarithmic|Start epoch t~s~ +
 Scale factor &#945; +
-Time factor &#964; + 
-_End epoch_ t~e~| 0 for __t__ < t~0~ +
-f(__t__) = &#945;.ln(1 + (__t__-t~0~)/&#964;) for t~0~ &#8804; __t__ +
-f(_t_) = f(t~e~) for t &#8805; if t~e~ is defined
+Time constant &#964; + 
+_End epoch_ t~e~| f(_t_) = 0 for _t_ < t~s~ +
+f(_t_) = &#945;.ln(1 + (_t_-t~s~)/&#964;) for t~s~ &#8804; _t_ +
+f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
 
-|acceleration|Reference epoch t~0~ +
+|acceleration|Start epoch t~s~ +
 Acceleration _a_ + 
-_Start epoch_ t~s~ +
-_end epoch_ t~e~|f(__t__)= _a_.(t - t~0~)^2^  +
-f(_t_) = f(t~s~) for t < t~s~ if t~s~ is defined +
-f(_t_) = f(t~e~) for t &#8805; if t~e~ is defined
+_end epoch_ t~e~|f(_t_) = 0 if _t_ < t~s~ +
+f(_t_)= _a_.(t - t~s~)^2^  if _t_ &#880t; t~s~ +
+f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
+
+|hyperbolic tangent|Start epoch t~s~ +
+End epoch t~1~ +
+Time constant &#964; +
+Amplitude &#945;|f(_t_)= 0 for _t_ < t~s~ +
+f(_t_) = A.tanh((_t_ - t~r~)/&#964;) for _t_ &#8805; t~s~ and _t_ < t~e~ +
+f(_t_) = &#945; for _t_ &#8805; t~e~ +
+where: +
+t~r~ = (t~s~ + t~e~)/2 +
+A = &#945;/2.tanh(t~e~-t~r~) +
+tanh(x) = (e^x^ - e^-x^)/(e^x^ + e^-x^)
 
 |cyclic|Frequency _f_ (cycles per year) +
-Reference epoch t~0~ +
+Function reference epoch t~0~ +
 Cosine amplitude &#945; +
 Sine amplitude &#946;| 
-f(__t__) = &#945;cos(_f_(__t__ - t~0~)/2&#120587;)
-+ &#946;sin(_f_(__t__ - t~0~)/2&#120587;)
+f(_t_) = &#945;cos(_f_(_t_ - t~0~)/2&#120587;)
++ &#946;sin(_f_(_t_ - t~0~)/2&#120587;)
+
 |===
 
 To improve readability of the time function definition two common special cases are supported as a specialisations of the piecewise function:
@@ -324,13 +344,13 @@ To improve readability of the time function definition two common special cases 
 [options="header"]
 |===
 |Function type|Parameters|Formula (t~i,min~ &#8804; __t__ < t~i,max~)
-|step | Reference epoch t~0~ |f(__t__) = 0 when t < t~0~, +
-f(__t__) = 1 when t &#8805; t~0~
-|reverse_step | Reference epoch t~0~ |f(__t__) = -1 when t < t~0~, +
-f(__t__) = 0 when t &#8805; t~0~
+|step | Reference epoch t~s~ |f(__t__) = 0 when t < t~s~, +
+f(__t__) = 1 when t &#8805; t~s~
+|reverse_step | Reference epoch t~s~ |f(__t__) = -1 when t < t~s~, +
+f(__t__) = 0 when t &#8805; t~s~
 |===
 
-Future versions of the specification may add new base functions as required (for example to support slow slip events).
+Future versions of this specification may add new base functions as required.
 
 
 [[formula-components]]
@@ -437,7 +457,7 @@ This approach is not appropriate for the error components eh, ev.  Uncorrelated 
 While there is no mathematically correct way to define the errors without a much more complex error model, the following approach is recommended if these errors are required. 
 
 
-The time function error factor of the difference between t~0~ and t~1~ is calculated for each component separately as f~e,t1-t0~ = √abs(f(t~1~)-f(t~0~)).  
+The time function error factor of the difference between t~s~ and t~1~ is calculated for each component separately as f~e,t1-t0~ = √abs(f(t~1~)-f(t~s~)).  
 
 
 The eh and ev values from the spatial representation of each component are multiplied by these time function error factor values and then combined as the root sum of squares to give the total error of the deformation between the two epochs. 
