@@ -1,0 +1,206 @@
+@startuml
+
+class GGXF_File 
+{
+    ggxfVersion: characterString
+    fileName: characterString
+    content: characterString
+    sourceCrs: GGXF_CrsDefinition
+    targetCrs: GGXF_CrsDefinition
+    interpolationCrs: GGXF_CrsDefinition
+    operationAccuracy (optional): real
+    startDate (optional): dateTime
+    endDate (optional): dateTime
+
+}
+GGXF_File "1" o-- "many" GGXF_Group
+GGXF_File "1" o-- "1" GGXF_DiscoveryMetadata
+GGXF_File "1" o-- "3" GGXF_CrsDefinition
+
+
+class GGXF_FileDeformation
+{
+    deformationApplicationMethod: characterString
+    deformationUncertaintyType: characterString
+    deformationBursaWolfTransformation (optional): GGXF_BursaWolfTransformation
+}
+GGXF_File <|-- GGXF_FileDeformation
+
+class GGXF_BursaWolfTransformation
+{
+    transformationReferenceDate: dateTime
+    transformationParameters: real[14]
+}
+GGXF_FileDeformation "0/1" *-- "1" GGXF_BursaWolfTransformation
+
+class GGXF_DiscoveryMetadata
+{
+    version: characterString
+    publicationDate: dateTime
+    remark (optional): characterString    
+    contentApplicabilityExtent: GGXF_SpatialExtent
+    licence: characterString
+    authority: GGXF_Contact
+}
+GGXF_DiscoveryMetadata "1" *-- "1" GGXF_Contact
+
+class GGXF_Contact
+{
+    organisationName (optional): characterString
+    addressDeliveryPoint (optional): characterString
+    addressCity (optional): characterString
+    postalCode (optional): characterString
+    electronicMailAddress (optional): characterString
+    onlineResourceLinkage (optional): characterString
+}
+
+class GGXF_CrsDefinition
+{
+    crsName: characterString
+    crsWkt: characterString
+    crsUri: characterString
+}
+
+class GGXF_Group
+{
+    groupName: characterString
+    remark (optional): characterString
+    parameters: GGXF_Parameter[]
+    interpolationMethod: characterString
+    interpolationMethodCitation (optional): characterString
+    grids: GGXF_Grid[]
+}
+
+class GGXF_Parameter
+{
+    parameterID: characterString
+    unitID: characterString
+    unitType: characterString
+    unitSiRatio: real
+    parameterMinimumValue (optional): real
+    parameterMaximumValue (optional): real
+}
+GGXF_Group "1" *-- "many" GGXF_Parameter
+
+class GGXF_GroupDeformation
+{
+    defaultHorizontalUncertainty (optional): real
+    defaultVerticalUncertainty (optional): real
+    deformationTimeFunction: GGXF_DeformationTimeFunction[]
+}
+
+GGXF_Group <|-- GGXF_GroupDeformation
+
+class GGXF_Grid
+{
+    gridName: characterString
+    parentGridName: characterString
+    hierarchyRank: integer 
+    iNodeMaximum: integer
+    jNodeMaximum: integer
+    affineCoeffs: real[]
+    noDataFlag (optional): real
+    gridData: real[][][]
+}
+GGXF_Group "1" *-- "many" GGXF_Grid
+GGXF_Grid *-- GGXF_Grid : parent
+
+class GGXF_SpatialExtent
+{
+    southBoundLatitude: real
+    westBoundLongitude: real
+    northBoundLatitude: real
+    eastBoundLongitude: real
+    extentDescription (optional): characterString
+    extentPolygon (optional): characterString?
+}
+GGXF_DiscoveryMetadata "1" *-- "1" GGXF_SpatialExtent
+
+abstract class GGXF_DeformationTimeFunction
+{
+    timeFunctionType: characterString
+}
+GGXF_GroupDeformation "1" *-- "many" GGXF_DeformationTimeFunction
+
+class GGXF_VelocityTimeFunction
+{
+    functionReferenceDate: dateTime
+    functionMultiplier (optional): real
+    startDate (optional): dateTime
+    endDate (optional): dateTime
+}
+GGXF_DeformationTimeFunction <|-- GGXF_VelocityTimeFunction
+
+class GGXF_StepTimeFunction
+{
+    stepDate: dateTime
+    functionMultiplier (optional): real
+}
+GGXF_DeformationTimeFunction <|-- GGXF_StepTimeFunction
+
+class GGXF_ReverseStepTimeFunction
+{
+    stepDate: dateTime
+    functionMultiplier (optional): real
+}
+GGXF_DeformationTimeFunction <|-- GGXF_ReverseStepTimeFunction
+
+
+class GGXF_PiecewiseLinearTimeFunction
+{
+    startDate: dateTime
+    startScaleFactor: real
+    endDate: dateTime
+    endScaleFactor: real
+}
+GGXF_DeformationTimeFunction <|-- GGXF_PiecewiseLinearTimeFunction
+
+class GGXF_ExponentialTimeFunction
+{
+    startDate: dateTime
+    functionMultiplier: real
+    decayRate: real
+    endDate (optional): dateTime
+}
+GGXF_DeformationTimeFunction <|-- GGXF_ExponentialTimeFunction
+
+class GGXF_LogarithmicTimeFunction
+{
+    startDate: dateTime
+    functionMultiplier: real
+    timeConstant: real
+    endDate (optional): dateTime
+}
+GGXF_DeformationTimeFunction <|-- GGXF_LogarithmicTimeFunction
+
+class GGXF_AccelerationTimeFunction
+{
+    functionReferenceDate: dateTime
+    functionMultiplier: real
+    startDate (optional): dateTime
+    endDate (optional): dateTime
+}
+
+GGXF_DeformationTimeFunction <|-- GGXF_AccelerationTimeFunction
+
+class GGXF_HyperbolicTangentTimeFunction
+{
+    startDate: dateTime
+    endDate: dateTime
+    functionMultiplier (optional): real
+    timeConstant: real
+}
+
+GGXF_DeformationTimeFunction <|-- GGXF_HyperbolicTangentTimeFunction
+
+class GGXF_CyclicTimeFunction
+{
+    functionReferenceDate: dateTime
+    frequencyPerYear: integer?
+    cosineMultiplier: real
+    sineMultiplier: real
+}
+GGXF_DeformationTimeFunction <|-- GGXF_CyclicTimeFunction
+
+
+@enduml 
