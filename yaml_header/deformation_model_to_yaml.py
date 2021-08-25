@@ -3,7 +3,7 @@
 import json
 import os
 import os.path
-import sys
+#import sys
 import argparse
 import yaml
 import re
@@ -180,17 +180,17 @@ def ggxfTimeFunction( tf ):
     functions=[]
     if tftype == 'velocity':
         bf=OrderedDict()
-        bf['timeFunctionType']='velocityTimeFunction'
+        bf['type']='velocity'
         bf['functionReferenceDate']=params['reference_epoch']
         functions.append(bf)
     elif tftype == 'step':
         bf=OrderedDict()
-        bf['timeFunctionType']='stepTimeFunction'
+        bf['type']='step'
         bf['stepDate']=params['step_epoch']        
         functions.append(bf)
     elif tftype == 'reverse_step':
         bf=OrderedDict()
-        bf['timeFunctionType']='reverseStepTimeFunction'
+        bf['type']='reverseStep'
         bf['stepDate']=params['step_epoch']        
         functions.append(bf)  
     elif tftype == 'piecewise':
@@ -213,7 +213,7 @@ def ggxfTimeFunction( tf ):
         if ggxfTimeFunction.useramp:           
             for ms,me in zip(model[:-1],model[1:]):
                 bf=OrderedDict()
-                bf['timeFunctionType']='piecewiseTimeFunction'
+                bf['type']='piecewise'
                 bf['startDate']=ms['epoch']
                 bf['startScaleFactor']=ms['scale_factor']-lastsf
                 bf['endDate']=me['epoch']
@@ -223,7 +223,7 @@ def ggxfTimeFunction( tf ):
         else:
             raise RuntimeError('piecewise function not supported by current UML')
             bf=OrderedDict()
-            bf['timeFunctionType']='piecewiseTimeFunction'
+            bf['type']='piecewise'
             bf['epochMultipliers']=[
                 OrderedDict([('epoch',mp['epoch']),('multiplier',mp['scale_factor'])])
                 for mp in model]
@@ -238,15 +238,20 @@ def ggxfTimeFunction( tf ):
 ggxfTimeFunction.useramp=True    
 ggxfTimeFunction.usebasefunc=False    
 
+def extractDate( datetimestring ):
+    if m := re.match(r'^(\d\d\d\d\-\d\d\-\d\d)',datetimestring):
+        datetimestring=m.group(1)
+    return datetimestring
+
 def ggxfModel(model,usegroups=None,maxwidth=None,maxdepth=None):
     gmodel=OrderedDict()
     gmodel['ggxfVersion']='1.0'
     gmodel['fileName']='unknown'
     gmodel['version']=model['version']
-    gmodel['content']='deformation model'
+    gmodel['content']='deformationModel'
     gmodel['remark']=cleanstr(model['description'])
     authority=OrderedDict()
-    authority['organisationName']=model['authority']['name']
+    authority['partyName']=model['authority']['name']
     address=model['authority']['address']
     address=address.replace("\r\n","\n")
     city='Unknown'
@@ -256,33 +261,47 @@ def ggxfModel(model,usegroups=None,maxwidth=None,maxdepth=None):
     if match := re.match(r"^(.*?)\s*(\d+)\s*$",city):
         city=match.group(1)
         postcode=match.group(2)
-    authority['addressDeliveryPoint']=address
-    authority['addressCity']=city
+    authority['deliveryPoint']=address
+    authority['city']=city
     authority['postalCode']=postcode
     authority['electronicMailAddress']=model['authority']['email']
     about=[link for link in model['links'] if link['rel'] == 'about']
     if about:
         authority['onlineResourceLinkage']=about[0]['href']
-    gmodel['authority']=authority
+    # gmodel['authority']=authority
+    gmodel.update(authority)
     
-    gmodel['publicationDate']=model['publication_date']
+    gmodel['publicationDate']=extractDate(model['publication_date'])
 
     extent=model['extent']['parameters']['bbox']
     gmodel['contentApplicabilityExtent']=OrderedDict((
-        ('southBoundLatitude',extent[1]),
-        ('westBoundLongitude',extent[0]),
-        ('northBoundLatitude',extent[3]),
-        ('eastBoundLongitude',extent[2]),
-        ('extentDescription','New Zealand EEZ')
+        ('extentDescription','New Zealand EEZ'),
+        ('boundingBox',OrderedDict((
 
+            ('southBoundLatitude',extent[1]),
+            ('westBoundLongitude',extent[0]),
+            ('northBoundLatitude',extent[3]),
+            ('eastBoundLongitude',extent[2])
+        )))
     ))
-    gmodel['startDate']=model['time_extent']['first']
-    gmodel['endDate']=model['time_extent']['last']
+    gmodel['startDate']=extractDate(model['time_extent']['first'])
+    gmodel['endDate']=extractDate(model['time_extent']['last'])
     gmodel['sourceCrs']=getepsg(model['source_crs'])
     gmodel['targetCrs']=getepsg(model['target_crs'])
     gmodel['interpolationCrs']=getepsg(model['definition_crs']) # gridcrs is WKT in current file - ignoring
     gmodel['operationAccuracy']=0.01
-    gmodel['deformationUncertaintyType']='2CE/2SE'
+    gmodel['uncertaintyMeasure']=OrderedDict((
+        ('horizontal',OrderedDict((
+            ('name','Circular error probable'),
+            ('id', '2CEP')
+        ))
+        ),
+        ('vertical',OrderedDict((
+            ('name','Standard error (2-sigma)'),
+            ('id', '2SE')
+        ))
+        )
+        ))
     gmodel['deformationApplicationMethod']='addition'
     groups=[]
     gmodel['groups']=groups
@@ -298,14 +317,13 @@ def ggxfModel(model,usegroups=None,maxwidth=None,maxdepth=None):
         if remark := c.get('description'):
             group['remark']=remark
         params=[{            
-            'parameterID': p,
-            'unitID': 'metre',
-            'unitType': 'length',
+            'parameterName': p,
+            'unit': 'metre',
             'unitSiRatio': 1.0
             } for p in displacementParams[c['displacement_type']]
             ]
         group['parameters']=params
-        group['deformationTimeFunction']=ggxfTimeFunction(c['time_function'])
+        group['timeFunction']=ggxfTimeFunction(c['time_function'])
         groups.append(group)
         group['grids']=pruneGrids(sm['grids'],maxdepth,maxwidth)
     return gmodel

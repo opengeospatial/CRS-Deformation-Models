@@ -5,33 +5,33 @@ class GGXF_File
     ggxfVersion: characterString
     fileName: characterString
     content: characterString
-    sourceCrs: GGXF_CrsDefinition
-    targetCrs: GGXF_CrsDefinition
-    interpolationCrs: GGXF_CrsDefinition
+    sourceCrs: characterString
+    targetCrs: characterString
+    interpolationCrs: characterString
     operationAccuracy (optional): real
+    uncertaintyMeasure (optional): GGXF_UncertaintyMeasure
     startDate (optional): dateTime
     endDate (optional): dateTime
 
 }
 GGXF_File "1" o-- "many" GGXF_Group
 GGXF_File "1" o-- "1" GGXF_DiscoveryMetadata
-GGXF_File "1" o-- "3" GGXF_CrsDefinition
+GGXF_File "1" *-- "0/1" GGXF_UncertaintyMeasure
 
 
 class GGXF_FileDeformation
 {
     deformationApplicationMethod: characterString
-    deformationUncertaintyType: characterString
     deformationBursaWolfTransformation (optional): GGXF_BursaWolfTransformation
 }
 GGXF_File <|-- GGXF_FileDeformation
+GGXF_FileDeformation "1" *-- "0/1" GGXF_BursaWolfTransformation
 
 class GGXF_BursaWolfTransformation
 {
     transformationReferenceDate: dateTime
     transformationParameters: real[14]
 }
-GGXF_FileDeformation "0/1" *-- "1" GGXF_BursaWolfTransformation
 
 class GGXF_DiscoveryMetadata
 {
@@ -46,19 +46,25 @@ GGXF_DiscoveryMetadata "1" *-- "1" GGXF_Contact
 
 class GGXF_Contact
 {
-    organisationName (optional): characterString
-    addressDeliveryPoint (optional): characterString
-    addressCity (optional): characterString
+    partyName (optional): characterString
+    deliveryPoint (optional): characterString
+    city (optional): characterString
     postalCode (optional): characterString
     electronicMailAddress (optional): characterString
-    onlineResourceLinkage (optional): characterString
+    onlineResource (optional): characterString
 }
 
-class GGXF_CrsDefinition
+class GGXF_UncertaintyMeasure
 {
-    crsName: characterString
-    crsWkt: characterString
-    crsUri: characterString
+    horizontal (optional): GGXF_UncertaintyComponent
+    vertical (optional): GGXF_UncertaintyComponent
+}
+GGXF_UncertaintyMeasure "1" *--  "many" GGXF_UncertaintyComponent
+
+class GGXF_UncertaintyComponent
+{
+    name: characterString
+    id: characterString
 }
 
 class GGXF_Group
@@ -73,9 +79,8 @@ class GGXF_Group
 
 class GGXF_Parameter
 {
-    parameterID: characterString
-    unitID: characterString
-    unitType: characterString
+    parameterName: characterString
+    unit: characterString
     unitSiRatio: real
     parameterMinimumValue (optional): real
     parameterMaximumValue (optional): real
@@ -86,7 +91,7 @@ class GGXF_GroupDeformation
 {
     defaultHorizontalUncertainty (optional): real
     defaultVerticalUncertainty (optional): real
-    deformationTimeFunction: GGXF_DeformationTimeFunction[]
+    timeFunction: GGXF_TimeFunction[]
 }
 
 GGXF_Group <|-- GGXF_GroupDeformation
@@ -107,20 +112,26 @@ GGXF_Grid *-- GGXF_Grid : parent
 
 class GGXF_SpatialExtent
 {
-    southBoundLatitude: real
-    westBoundLongitude: real
-    northBoundLatitude: real
-    eastBoundLongitude: real
     extentDescription (optional): characterString
+    boundingBox: GGXF_BoundingBox
     extentPolygon (optional): characterString?
 }
 GGXF_DiscoveryMetadata "1" *-- "1" GGXF_SpatialExtent
 
-abstract class GGXF_DeformationTimeFunction
+class GGXF_BoundingBox
 {
-    timeFunctionType: characterString
+    southBoundLatitude: real
+    westBoundLongitude: real
+    northBoundLatitude: real
+    eastBoundLongitude: real
 }
-GGXF_GroupDeformation "1" *-- "many" GGXF_DeformationTimeFunction
+GGXF_SpatialExtent "1" *-- "1" GGXF_BoundingBox
+
+abstract class GGXF_TimeFunction
+{
+    type: characterString
+}
+GGXF_GroupDeformation "1" *-- "many" GGXF_TimeFunction
 
 class GGXF_VelocityTimeFunction
 {
@@ -129,21 +140,21 @@ class GGXF_VelocityTimeFunction
     startDate (optional): dateTime
     endDate (optional): dateTime
 }
-GGXF_DeformationTimeFunction <|-- GGXF_VelocityTimeFunction
+GGXF_TimeFunction <|-- GGXF_VelocityTimeFunction
 
 class GGXF_StepTimeFunction
 {
     stepDate: dateTime
     functionMultiplier (optional): real
 }
-GGXF_DeformationTimeFunction <|-- GGXF_StepTimeFunction
+GGXF_TimeFunction <|-- GGXF_StepTimeFunction
 
 class GGXF_ReverseStepTimeFunction
 {
     stepDate: dateTime
     functionMultiplier (optional): real
 }
-GGXF_DeformationTimeFunction <|-- GGXF_ReverseStepTimeFunction
+GGXF_TimeFunction <|-- GGXF_ReverseStepTimeFunction
 
 
 class GGXF_PiecewiseLinearTimeFunction
@@ -153,7 +164,7 @@ class GGXF_PiecewiseLinearTimeFunction
     endDate: dateTime
     endScaleFactor: real
 }
-GGXF_DeformationTimeFunction <|-- GGXF_PiecewiseLinearTimeFunction
+GGXF_TimeFunction <|-- GGXF_PiecewiseLinearTimeFunction
 
 class GGXF_ExponentialTimeFunction
 {
@@ -162,7 +173,7 @@ class GGXF_ExponentialTimeFunction
     decayRate: real
     endDate (optional): dateTime
 }
-GGXF_DeformationTimeFunction <|-- GGXF_ExponentialTimeFunction
+GGXF_TimeFunction <|-- GGXF_ExponentialTimeFunction
 
 class GGXF_LogarithmicTimeFunction
 {
@@ -171,7 +182,7 @@ class GGXF_LogarithmicTimeFunction
     timeConstant: real
     endDate (optional): dateTime
 }
-GGXF_DeformationTimeFunction <|-- GGXF_LogarithmicTimeFunction
+GGXF_TimeFunction <|-- GGXF_LogarithmicTimeFunction
 
 class GGXF_AccelerationTimeFunction
 {
@@ -181,7 +192,7 @@ class GGXF_AccelerationTimeFunction
     endDate (optional): dateTime
 }
 
-GGXF_DeformationTimeFunction <|-- GGXF_AccelerationTimeFunction
+GGXF_TimeFunction <|-- GGXF_AccelerationTimeFunction
 
 class GGXF_HyperbolicTangentTimeFunction
 {
@@ -191,7 +202,7 @@ class GGXF_HyperbolicTangentTimeFunction
     timeConstant: real
 }
 
-GGXF_DeformationTimeFunction <|-- GGXF_HyperbolicTangentTimeFunction
+GGXF_TimeFunction <|-- GGXF_HyperbolicTangentTimeFunction
 
 class GGXF_CyclicTimeFunction
 {
@@ -200,7 +211,7 @@ class GGXF_CyclicTimeFunction
     cosineMultiplier: real
     sineMultiplier: real
 }
-GGXF_DeformationTimeFunction <|-- GGXF_CyclicTimeFunction
+GGXF_TimeFunction <|-- GGXF_CyclicTimeFunction
 
 
 @enduml 
