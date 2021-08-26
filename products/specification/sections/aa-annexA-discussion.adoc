@@ -1,0 +1,193 @@
+
+[appendix,obligation="informative"]
+== Explanations and expanded discussion points
+
+__Note__: This section is likely not appropriate for the final abstract specification
+
+[[discuss-components]]
+=== Decomposition into components
+
+This specification assumes that the deformation can be decomposed into a set of spatial functions each multiplied by a scalar time function.  This is suitable for many geophysical phenomena such as secular motion (velocity models) and coseismic ground deformation. 
+
+It may be less suitable to deformation with a complex time evolution such as slow slip events propogating along a fault system, or post-seismic deformation.  However currently deformation models for coordinate operations are all represented in this way.  Decomposing in this way can represent any deformation to an arbitrary level of detail, but it may not be the most efficient way to do so.
+
+
+
+
+[[discuss-spatial-model]]
+=== Spatial model types
+
+In practice nearly all current deformation models use grid representations.  Consideration has been given to the inclusion of models based on triangulated networks, though the project team has decided not include this capability in the initial specificiation.
+
+In New Zealand triangulated models were considered for modelling the deformation due to the 2011/12 Christchurch earthquakes but did not offer much advantage in the size of the model, and also are much less efficient to evaluate since it is necessary to search the triangulation to determine which triangle applies at a location.  (See https://www.linz.govt.nz/system/files_force/media/file-attachments/winefield-crook-beavan-application-localised-deformation-model-after-earthquake.pdf?download=1). 
+
+The project team is not aware of any triangulated deformation models either in use or proposed for coordinate operations.  At least one datum transformation is defined this way (Finland EPSG:2393 (KKJ / Finland Uniform Coordinate System) projected CRS to EPSG:3067 (ETRS89 / TM35FIN(E,N))).  This is a similar type of transformation, and indicates that there may be an appetite for triangulated deformation models in the future.
+
+Other potential models may also be considered in the future. 
+
+The project team briefly considered including global plate motion models in the specification.  
+
+Plate motion models are defined by a set of polygons defining the extents of tectonic plates.  Each plate has a defined rigid body rotation around the centre of the earth is defined.  Typically these are used in GNSS analysis to predict the movement of survey marks.  They are discontinuous at the boundaries between plates.  
+
+While these are a form of deformation model they are considered out of scope for this work.  The project team concluded that these models have a very different from the regional deformation models under consideration and there is little value in trying to including them in a common specification. 
+
+It may be worth considering a standard for plate motion models as a separate exercise in the future.
+
+Another potential future development is the use of Discrete Global Grid Systems to define a global grid with a heterogeneous level of detail.  As these acquire more support in software  then this may be worth considering as a mechanism for describing a global deformation model. 
+
+[[discuss-no-data]]
+=== No data and zero values
+
+Most deformation models only cover a limited part of the globe.  They are limited by jurisdictions area of authority or by lack of data - for example areas of sea where there is no measure of deformation.  Also in areas affected by recent large deformation we may not have good data before the event.  There are several approaches to both identifying and handling these areas where there of no or poor information.  
+
+The areas where displacement is not defined could be defined by a complex geographical extent.  However grids must be defined for rectangular regions in their coordinate system, which are unlikely to match the extent of the model.  From an implementor's point of view it is preferable that complex extents are identified by special grid values that identify points beyond the extent rather than a complex bounding shape.  
+
+This specification supports the notion of a "no data" value. Note that an alternative approach is to specify an unreal value with a large uncertainty.  This is considered below in the  <<discuss-continuous-invertible, discussion on continuity of the model>>.  These "no-data" values could be identified in a number of ways, for example by a flag value on the grid nodes, by special values of displacement (eg 99999), or NaN (not a number) floating point values.  
+
+
+The "no data" value is different from a zero displacement.  A value of zero is used where there is no significant displacement. A "no-data" value is used where the deformation is unknown, and might be significant.  
+
+If evaluating the deformation model at a given location and time requires using a "no data" value then the displacement (or uncertainty) calculated at that location is undefined.  This would typically results in an error message to users to this effect.  The diagram below shows how this might look in a deformation model.  In this diagram the square marks the total extent of the deformation model.  Outside this area the deformation model cannot be evaluated.  In the deformation model is a gridded spatial model.  Within there are a number of nodes at which the displacement is not defined (that is it has a "no-data" value).  Where these nodes are required to calculate the displacement, which is any grid cell they are on the boundary of, the deformation model cannot be calculated.  The grey area in this diagram shows the region in which the displacement is not defined by the model and cannot be calculated.  
+
+image::no_data.png[Alt=no data value diagram, width=400,scalewidth=9cm]
+
+This may occur where the area in which deformation is defined is an irregular shape.  It might include coastal 
+regions where the deformation of the seabed is not measured, or it may be that it crosses a jurisdictional boundary.  As the gridded model is by definition a rectangular area it will include these regions in which the deformation is not known, which are correctly represented by a "no data" value.
+
+Where a component only covers a subset of the total area of a deformation model it is assumed to have zero displacement beyond its extent.  An example of this is a deformation model component representing deformation due to an earthquake.  In the vicinity of the epicentre there may be extensive deformation.  However there may also be large regions that lie within the extent of the deformation model but at which the deformation is zero or insignificant.  The deformation component created to represent this only needs to include the area where there is significant deformation.  This is shown in the figure below.  In this diagram the outer square represents the total extent of the deformation model.  Beyond this extent the deformation is undefined.  The nested grid inside the total extents is used to represent the deformation due to an earthquake.  In the region outside the nested grid component the deformation due to this component is zero. 
+
+image::patch_extents.png[Alt=patch extent diagram, width=400,scalewidth=9cm]
+
+[[discuss-params-quality]]
+=== Quality parameters at spatial model nodes
+
+The project team identified an interest in having a quality parameter defined at nodes.  The main driver is to identify where there is surface faulting which where the deformation includes significant distortion or discontinuities that are not well represented by the deformation model.  
+
+The intention is that software could warn users when the coordinate conversion quality is compromised by such distortion.
+
+This could be represented by a quality parameter the corner nodes of affected grid cells.  Software could then assess the impact on an interpolated coordinate conversion by compiling the quality information from each of the nodes used in the interpolation.
+
+There are some unresolved issues in using the quality parameter, including:
+* how should it be represented 
+* how should the measure be interpolated to provide a quality measure at an interpolated point
+* how should the quality measure relate to the time (or times) of a conversion.  If time function evaluates to zero it should clearly be ignored, but how large can the time function be before the quality parameter is considered significant.
+* how does the quality parameter relate to uncertainty
+
+It may also be worth considering alternative methods of defining affected areas. For example in the component header could include one or more areas of concern, each with a spatial definition as a multipolygon and an event time.
+
+[[discuss-continuous-invertible]]
+=== Requirement for model to be continuous and invertible
+
+The deformation model is required to be continuous and invertible within the spatial and temporal extent of the model except where it is not defined (ie "no data" value).  This is a practical requirement on deformation models within the context of coordinate transformations.  
+
+This means that the deformation model cannot exactly represent the true deformation.  For example where deformation is due to surface faulting the actual deformation may not be continuous across a fault line.  
+
+The actual deformation also may not be invertible (at least as a function of horizontal position only) in an area of thrust faulting where points originally on opposite sides of the fault may be moved to the same horizontal position (though at different heights).
+
+However the purpose of this deformation model specification is not to exactly represent deformation, but to represent it to the extent that is useful within the context of coordinate transformations.  
+
+At least for the initial release of a functional model specification it is proposed to require a compliant model is continuous and invertible within the extent of the model.  This simplifies implementations and avoids the need to specify the behaviour where the model is not continuous and invertible.
+
+The requirement for continuity does have implications for how models are defined.  For example it means that in nested grids child grids must be aligned with the parent grid as shown below to ensure continuity at the edge of the child grid. (Note that an alternative approach would be to define child grids as independent deformation components with the same time function which would model a perturbation from the simple parent grid - in this case there would be no requirement for the models to be aligned).
+
+
+image::nested_grid_alignment.png[Alt=Nested grid alignemnt, width=600,scalewidth=12cm]
+
+A question for implementers is how to transform data that extends beyond the deformation model.  If, as is likely, the deformation is not zero at the edge of the model then there is discontinuity across the boundary.  There are a number of possible approaches to handling this in the deformation model functional model.
+
+* Require that valid models should have zero deformation at the boundary.  Producers may have to create an artificial buffer around their area of interest and calculate an unreal deformation field that reduces to zero at the outer edge of the buffer.  The model could also include uncertainties which are larger in the buffer to indicate that this data is not reliable.
+* Specify (or recommend) algorithms for transforming data beyond the edge of the model that smooth out the discontinuity.  Model metadata could include parameters to support the implementation, for example a width of the smoothed region.  The algorithms could also specify how uncertainty is calculated to reflect this.
+* Specify that transformation of data beyond the extents of the deformation model is not permitted, and will result in an exception (or equivalently a no data value).
+* Not specify a behaviour - implementors can choose if and how to transform data outside the extents of the model.  Transformations beyond the extent of the model would be considered out of scope of this functional model specification.
+
+From a producer's perspective the third of these - fail if data beyond the model is transformed - is most correct.  Also producers may not be concerned about transformations beyond their jurisdication, so that any of the last three options could be acceptable.  In any case it is beyond their control.  The first option - building a model with information that is known to be incorrect - is not desirable.  While this might be mitigated to an extent by increasing the uncertainty of the model in these regions, in practice most current software does not consume or report uncertainty information, so the user may be misled to thinking that the transformation is accurate.
+
+From a user's point of view having a transformation fail beyond the extent of the model could be undesirable.  For example they may have features or observations that include points both inside and outside the extent of the model which are observed at different times and which they want to compare accurately within the extent of the model.  Trimming the features to the extent before doing this would be inconvenient.  However they need to be aware of potential inaccuracy in the comparison beyond the model extent.  This could be further complicated if the features span more than one deformation model.  Until we have a global model there may be no good solution for this.  
+
+Also from a user's point of view it is desirable that different implementations give the same result - implementation specific behaviour is not desirable.  
+
+Currently this specification takes the producer's perspective - a transformation beyond the extents of the model should fail. However this is open to debate!
+
+[[discuss-time-function]]
+=== Time functions
+
+The proposed set of base time functions includes those commonly used in geophysical models, for example reference station coordinates in the International Terrestrial Reference Frame.  However in practice there may be little benefit in complex time models, as it is unlikely that the same time function will apply at all points in the area affected by, for example, post-seismic deformation.  That is to say that the actual time evolution at each point within the spatial model may have different attributes and parameterisation.  The deformation model component is necessarily an simplification attempting to best fit the actual deformation over its spatial and temporal extent. 
+
+In the near future it is likely that we may generate far more complex and accurate models using technology such as CORS and InSAR.  The deformation model representing this would most likely have multiple components, each with its own spatial model and time function, rather than a complex time function applying to a single spatial model.  For example each year there could be an updated gridded spatial model.  The deformation at any epoch could be interpolated or extrapolated from the nearest to models (or as in Japan modelled with a step function for each year). This is in effect a three dimensional grid with dimensions latitude, longitude, and time.  It can be easily encoded into this functional model by constructing time functions for each grid that define the interpolation between one grid and the next.
+
+////
+
+This can be encoded using this functional model by a series of gridded spatial models with time functions as illustrated below to interpolate between them.
+
+[.center]
+image::annual_grid_time_func.png[Alt=Example annual displacement grid time function,width=500, scalewidth=10cm]
+////
+
+[[discuss-geoentric-interpolation]]
+=== Geocentric interpolation near poles
+
+The geocentric weighted average method proposed <<formula-geocentric-weighted-average, above>> is proposed for use in near polar regions where east and north topocentric vectors at adjacent grid nodes are in significantly different directions.
+
+
+[.right]
+image::geocentric_bilinear_interpolation.png[Alt=geocentric bilinear interpolation diagram, width=200,scalewidth=7cm]
+
+To estimate the error that could be incurred using simple bilinear interpolation and not accounting for this difference we can consider a case where the deformation is 1m northwards at point A, and zero at point B in the diagram above.  Let the longitude grid spacing be λ~s~ radians.  If the calculation point P is λ radians past A, then the magnitude of the interpolated vector will be (λ~s~-λ)/λ~s~.  The error of orientation will be λ radians (the difference between north at A and north at the calculation point).  So the vector error will be sin(λ).(λ~s~-λ)/λ~s~.  Approximating sin(λ) as λ, this has a maximum absolute value in the range (0,λ~s~) of λ~s~/2.  So for example with a grid longitude spacing of 1° this could result in a 2cm error in the 1m of deformation vector. 
+
+////
+
+Using the geocentric interpolation method to calculate the horizontal component does cause some “leakage” of the horizontal deformation into the vertical component, that is: 
+
+du = dx.cos(λ).cos(φ) + dy.sin(λ).cos(φ) + dz.sin(φ) 
+
+For the interpolation of vertical displacement du this method proposes using the same formulae as the bilinear interpolation method - that is simple bilinear interpolation of the du component.  However this leakage does result in a small loss of magnitude in the horizontal component. The reduction is approximately scaling by the cosine of the angle between the vertical at the calculation point and the vertical at each grid node.  For a grid cell of 1 degree extent this would result in a scale error of 0.2mm for a 1m deformation vector.  (Note that this is a 1 degree extent measured on the globe - not a 1 degree extent of longitude which may be much smaller near the poles).  This can be ignored without significant loss of accuracy.
+
+////
+
+[[discuss-parallel-calculation]]
+=== Sequential or parallel evaluation of components
+
+These formulae use the same input coordinate to calculate the deformation for each component. 
+
+An alternative approach that could be used is to apply components sequentially.  That is the first component is calculated and applied to the coordinate, and then the modified coordinate is used to calculate the second component, and so on.  This may result in a different final coordinate to the proposed method, as the second and subsequent components are evaluated at a different location. 
+
+
+Neither method is more correct from a theoretical point of view.  The main reason for specifying one approach is to ensure that there is an “authoritative” correct value, particularly where the deformation model is used in the definition of a datum (as in New Zealand for example). 
+
+
+If the components are an ordered sequence of discrete events then the sequential approach might seem more intuitive.  However this is not necessarily the case.  For example consider a model in which the first component is a velocity function and the second is a step at 2003-01-01. If the deformation is calculated at 2004-01-01, the velocity function is applied as at 2004, and then that coordinate is used for the step function. If the deformation is calculated at 2014-01-01, then the velocity function is applied as at 2014, and that different coordinate is used to interpolate the step function model.  This means that the contribution from the step function could be different even though nothing else has changed other than the evaluation epoch. 
+
+
+In practice the choice of independent or sequential evaluation of components is very unlikely to make a significant difference to the coordinates - at worst it is very similar to that described below for the inverse method in relation to iterating the inverse calculation or not.  The choice of independent evaluation has some small advantages in calculation in that:
+
+* using the same input coordinates is slightly more efficient as the calculated displacement only needs to be applied to the coordinate once.  This could be a significant difference if the horizontal displacement is applied using the “geocentric” method as described below.  It is insignificant if the displacement is applied by simple addition.
+* using the same input coordinates for all components provides an opportunity for parallelising calculation of components.
+* using the same input coordinates for each component allows optimising transformations between two versions of the deformation model as common components can be ignored.
+
+[[discuss-inverse-iteration]]
+=== Significance of iteration for the inverse deformation model evaluation
+
+The error of not iterating the inverse transformation can be tested for the New Zealand NZGD2000 deformation model.  The least smooth area of deformation in New Zealand is that affected by the 2016 Kaikoura earthquake.  As this has been updated by “reverse patching” the inhomogeneity of the deformation field primarily affects pre-earthquake transformations.  Testing across the fault zone finds that the maximum error from not iterating an inverse transformation of epoch 2000.0 coordinates is about 0.015 metres.  However this is in an area where the deformation model is very inaccurate - it is smoothed across the fault zone and will have errors of many decimetres. For transforming epoch 2019.0 coordinates the maximum error is about 0.000014 metres.   In the North Island in an area largely unaffected by episodic events the maximum error is about 0.00015 metres. 
+
+Based on this result it is recommended that the inverse transformation is iterated.  It is likely that this will double computation time (it would be unusual to require more than two iterations). 
+
+Note that this is not about creating a more accurate transformation - the differences are much less than the uncertainty in the deformation model.  The reason for iterating is to satisfy a user expectation that applying a transformation followed by the inverse transformation will result in coordinates that are materially unchanged. 
+
+=== Conversion of coordinates between versions of the deformation model
+
+A common source of confusion is coordinate transformations between different versions of a datum. 
+
+
+For example in New Zealand the deformation model was recently updated from version 20171201 to 20180701. Technically this is equivalent to a new version of the datum. 
+
+
+Users with a GIS datasetin terms of the 20171201 version of the datum might want to update the dataset to version 20180701. The user expectation is that this will generate correct version 20180701 coordinates of the features in the database. 
+
+
+The critical thing in this transformation is that the coordinate epoch for the transformation is before the event(s) implemented in the update.  This is somewhat counter-intuitive. 
+
+
+Generally the update should not change the coordinates. The reason for the update is typically a deformation event such as an earthquake. The earthquake coseismic deformation is added to the deformation model as a step function that applies for transforming coordinates for epochs after the event. This means that the NZGD2000 coordinate system tracks the movement of features fixed to the ground and therefore the NZGD2000 coordinates of these features are not changed by the earthquake. In this case the deformation model is unchanged before the earthquake. Transforming at an epoch before the earthquake will leave the coordinates unchanged which is what is required.. 
+
+
+Close to faulting the distortion due to the earthquake can be too intense to be included in the coordinates. In that case the deformation model will be smoothed across the fault zone. However the deformation is still measured and is used to update the coordinates. It is also added to the deformation model using a reverse step function that applies a negative deformation that applies when transforming  coordinates for epochs before the earthquake. In this case transforming coordinates at an epoch before the earthquake will result in subtracting the reverse patch from the coordinates.  This adds the deformation to the coordinates, which again is the correct update to coordinates to transform them to the new version of the datum.

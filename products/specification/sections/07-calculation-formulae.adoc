@@ -1,0 +1,320 @@
+
+== Calculation formulae
+
+The formulae below define the expected behaviour of software using the deformtion model.
+While an implementation may use a different method it should produce numerically identical 
+results to be a compliant implementation.  This provides users confidence that their software
+is using the deformation model as intended by the producers of the model.
+
+The formulae below are adopted from the JSON GeoTIFF specification.  This  does not describe interpolating uncertainty other than represented by horizontal and vertical uncertainties e~h~, e~v~. In this specification the grid can be defined either in terms of a geographic (longitude/latitude) or projection (easting/northing) coordinate system.  Displacements and uncertainties are all in metres except that the horizontal displacement may be in degrees if the coordinate system is geographic.
+
+[[formula-spatial-interpolation]]
+=== Spatial interpolation
+
+For all the proposed spatial model and interpolation types the location of the calculation point is used to identify the set of grid nodes that influence the calculated deformation at that point, and also a set of scalar multipliers or weights defining ths significance of that grid node on the calculated value.  That is these the value of any dimension (eg east displacement) at a specific evaluation point is evaluated by forming a weighted average of the values at a set of nodes P~1~, P~2~, .. with weights w~1~, w~2~.  For bilinear interpolation on a grid this is a set of four nodes on the corners of the grid cell within which the evaluation point lies.  
+
+The values at the nodes are combined using these weights as <<formula-weighted-node-combination, described below>>.  For the 
+horizontal components (east and north displacement) two combination methods are defined - a simple weighted average and a geocentric combination which is applicable near the geographic poles where the east and north directions at the nodes may be markedly different.
+
+[[formula-bilinear-grid-interpolation]]
+==== Bilinear grid interpolation
+
+Gridded spatial representations are defined as regular grids in terms of an interpolation coordinate system.  The coordinates of a grid node is defined as  
+
+x~i~ = x~o~ + i.x~s~ +
+y~j~ = y~o~ + j.y~s~ 
+
+
+where  x~o~, y~o~ are the coordinates of a reference point of the grid,  x~s~ and y~s~ are the grid spacing along the x and y axes, and i and j are the column and row number of the grid node (where the west-most column and southernmost row are numbered 0).  Note that the x and y grid spacing need not be equal.  For example in a geographic interpolation coordinate system were x is longitude and y is latitude it may be preferable that x~s~ is approximately equal to y~s~/cos(y~m~), where y~m~ is the latitude of the middle of the grid, as this makes the grid cells approximately square (except at polar latitudes). 
+
+Displacement vector elements are calculated using bilinear interpolation with respect to latitude and longitude from the nodes at the corners of the grid cell within which the calculation point lies.  Each element of the displacement is calculated independently (though of course the interpolation weighting will be the same for each, as they all refer to the same calculation point). 
+
+
+Bilinear interpolation is defined as follows: 
+
+
+The calculation point (x,y) is located in the grid cell between columns i and i+1, and rows j and j+1. 
+
+[.right]
+image::bilinear_interpolation.png[Alt=bilinear interpolation diagram,width=300,scalewidth=7cm]
+
+The displacement elements (de, dn, du) at the calculation point are weighted means of the corresponding elements at the four nodes. 
+
+The weights are calculated as follows: 
+
+
+W~i,j~ = ((x~i+1~-x)/x~s~) * ((y~j+1~-y)/y~s~) +
+W~i+1,j~ = ((x-x~i~)/x~s~) * ((y~j+1~-y)/y~s~) +
+W~i,j+1~ = ((x~i+1~-x)/x~s~) * ((y-y~j~)/y~s~) +
+W~i+1,j+1~ = ((x-x~i~)/x~s~)*((y-y~j~)/y~s~) +
+
+[[formula-weighted-node-combination]]
+==== Calculation of weighted average of node values
+
+Each interpolation method identifies a set of nodes P~i~ and weights W~i~.  At each node the spatial model may define any of the displacements de~i~, dn~i~, du~i~, and uncertainties eh~i~ and ev~i~.  For the horizontal displacement components de and dn two formulae are supported.  Generally a simple weighted average will suffice, but near the poles a more complex "geocentric weighted average" formulae describe below may be preferable.  This is also used for the vertical component du.
+
+So for example the east displacement at the point (x,y) is calculated as  
+
+// ... if we don't have latexmath then need alterative formulation representation
+
+latexmath:[de = \sum_{i} W_i de_i]
+
+// de = W~i,j~*de~i,j~ + W~i+1,j~*de~i+1,j~ + W~i,j+1~*de~i,j+1~ + W~i+1,j+1~*de~i+1,j+1~ 
+
+
+The uncertainties eh, ev are interpolated using a weighted average of the variances eh~i~^2^, ev~i~^2^, for example 
+
+latexmath:[eh = \sqrt{\sum_{i} W_i eh_i^2}]
+
+// eh = √(W~i,j~*eh~i,j~^2^ + W~i+1,j~*eh~i+1,j~^2^ + W~i,j+1~*eh~i,j+1~^2^ + W~i+1,j+1~*eh~i+1,j+1~^2^)
+
+[[formula-geocentric-weighted-average]]
+==== Geocentric weighted average
+
+A simple average of the east and north displacements may not be appropriate where a grid cell spans a wide longitude range, typically for grids in polar regions.  In this situation the directions of the east and north vectors may be quite different at the set of nodes being averaged, as shown in the figure where the directions at nodes A and B and the evaluation point P are all quite different.  The impact of this is discussed below under <<discuss-geocentric-interpolation, errors of normal bilinear interpolation near poles>>.
+
+[.right]
+image::geocentric_bilinear_interpolation.png[Alt=geocentric bilinear interpolation diagram, width=200,scalewidth=7cm]
+
+In such areas it may be more appropriate to base the grid on a local projected coordinate system. Also there is no issue even in polar regions if the grid has very narrow grid cells spanning a small longitude range. 
+
+If grid cells spanning a large longitude range are used then a weighted average of the grid node displacements can be adapted by transforming the east and north vectors to a common direction before averaging them.
+
+The geocentric interpolation method converts the displacement components from east and north components to geocentric X, Y, and Z components.  These are in the same direction and can be scaled and summed using the simple weighted avarage formulae above to calculate the X, Y, Z components of displacement at the calculation point, which are then converted back to components east and north at the calculation point.  
+
+Note that this is only used to determine the horizontal displacement.  The vertical displacement and uncertainties are  computed using the simple weighted average formulae above. 
+
+
+At longitude λ and latitude φ the dx, dy, dz values are calculated from the east and north displacements de, dn as: 
+
+
+dx~i~ = -de~i~.sin(λ~i~) - dn~i~.cos(λ~i~).sin(φ~i~) +
+dy~i~ = de~i~.cos(λ~i~) - dn~i~.sin(λ~i~).sin(φ~i~) +
+dz~i~ = dn~i~.cos(φ~i~)
+
+
+The X, Y, and Z directions are the same at any location, so the dx, dy, and dz displacements can be interpolated independently using bilinear interpolation as described above, eg:  
+
+
+latexmath:[dx = \sum_{i} W_i dx_i]
+
+
+The displacement at the calculation point is then calculated as: 
+
+
+de = -dx.sin(λ) + dy * cos (λ) +
+dn = -dx.cos(λ).sin(φ) - dy.sin(λ).sin(φ) + dz.cos(φ) 
+
+
+[[formula-time-function]]
+=== Time functions
+
+The time function f(__t__) for a component evaluates a scalar value by which the spatial model displacement is multiplied to determine the actual displacement at time __t__.  For example in a velocity model the spatial mode represents the displacement that happens in one year, and the time function evaluates the scale factor f(t) applied to component displacements at time t as the number of years since a reference epoch (__t__ - t~0~).
+
+The deformation model metadata defines a temporal extent of the entire deformation model from T~min~ to T~max~.  This overrides any information from specific time functions. At times before T~min~ and for times at or after T~max~ every time function is considered undefined and the deformation model cannot be evaluated.
+
+Following conventional use in deformation models the time functions are defined as a functions of decimal years (eg velocities are metres/year).  All date/time values such as calculation epoch, velocity reference epoch) are converted to decimal years for use in the following formulae. 
+
+The conversion of a UTC epoch __yyyy__-__mm__-__dd__T__HH__:__MM__:__SS__Z to decimal years is done by first converting the epoch to UTC.   The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year.  The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01T00:00:00Z and the epoch by the total number of seconds in the year (ie the number of seconds between _yyyy_-01-01T00:00:00Z and _yyy1_-01-01T00:00:00Z, where _yyy1_ is _yyyy_+1). 
+
+Note that there is a small ambiguity in this formulation due to the occasional introduction of leap second at the end of the year.  This impacts calculations because 1) it is not known at the beginning of the year whether a leap second will be added, and 2) standard software libraries used to implement the time functions may not include leap seconds, or if even if they do it may take some time before the leap second is incorporated into the libraries installed by a particular user.  Since this difference makes no practical difference to deformation model calculations it is proposed that the calculation of the decimal year is considered compliant whether or not it includes it - there are two nominally correct answers.
+
+The time function is defined as the sum of one or more of the following generic functions.  In this table some functions include optional parameters indicated by italics.
+
+[cols="2,5a,5a"]
+[options="header"]
+|===
+|Time function type|Parameters|Formula (t~i,min~ &#8804; _t_ < t~i,max~)
+|velocity| Function reference epoch t~0~ +
+_Start epoch_ t~s~ +
+_End epoch_ t~e~| f(_t_) = _t_ - t~0~ +
+f(_t_) = f(t~s~) for _t_ < t~s~ if t~s~ is defined +
+f(_t_) = f(t~e~) for _t_ < t~e~ if t~e~ is defined
+
+|piecewise linear|Start epoch t~s~ +
+Start scale factor f~s~ +
+End epoch t~e~ +
+End scale factor f~e~ |f(_t_) = f~s~ for _t_ < t~s~ +
+f(_t_) = (f~s~.(t~e~ – _t_) + f~e~.(_t_-t~s~))/(t~e~-t~s~) for t~s~ &#8804; _t_ < t~e~ +
+f(_t_) = f~e~ for _t_ &#8805; t~e~
+
+|exponential|Start epoch t~s~ +
+Start amplitude &#945;~0~ +
+Final amplitude &#945;~∞~ +
+Decay constant θ + 
+_End epoch_ t~e~ | f(_t_) = 0   for _t_ < t~s~ +
+f(_t_) = &#945;~0~ + (&#945;~∞~-&#945;~0~).(1 - exp(-(_t_-t~s~)/θ))     for _t_ &#8805; t~s~ +
+f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
+
+|logarithmic|Start epoch t~s~ +
+Scale factor &#945; +
+Time constant &#964; + 
+_End epoch_ t~e~| f(_t_) = 0 for _t_ < t~s~ +
+f(_t_) = &#945;.ln(1 + (_t_-t~s~)/&#964;) for t~s~ &#8804; _t_ +
+f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
+
+|acceleration|Function reference epoch t~0~ +
+Acceleration _a_ +
+_Start epoch_ t~s~ + 
+_End epoch_ t~e~|f(_t_)= _a_.(_t_ - t~0~)^2^  +
+f(_t_) = f(t~s~) for _t_ < t~s~ if t~s~ is defined +
+f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
+
+|hyperbolic tangent|Start epoch t~s~ +
+End epoch t~1~ +
+Time constant &#964; +
+Scale factor &#945;|f(_t_)= 0 for _t_ < t~s~ +
+f(_t_) = A.tanh((_t_ - t~r~)/&#964;) for _t_ &#8805; t~s~ and _t_ < t~e~ +
+f(_t_) = &#945; for _t_ &#8805; t~e~ +
+where: +
+t~r~ = (t~s~ + t~e~)/2 +
+A = &#945;/2.tanh(t~e~-t~r~) +
+tanh(x) = (e^x^ - e^-x^)/(e^x^ + e^-x^)
+
+|cyclic|Frequency _f_ (cycles per year) +
+Function reference epoch t~0~ +
+Cosine amplitude &#945; +
+Sine amplitude &#946;| 
+f(_t_) = &#945;cos(_f_(_t_ - t~0~)/2&#120587;)
++ &#946;sin(_f_(_t_ - t~0~)/2&#120587;)
+
+|===
+
+To improve simplicity and readability of the time function definition two common special cases are supported as a specialisations of the piecewise linear function:
+
+[cols="2,5a,5a"]
+[options="header"]
+|===
+|Function type|Parameters|Formula (t~i,min~ &#8804; __t__ < t~i,max~)
+|step | Step epoch t~s~ |f(__t__) = 0 when t < t~s~, +
+f(__t__) = 1 when t &#8805; t~s~
+|reverse step | Step epoch t~s~ |f(__t__) = -1 when t < t~s~, +
+f(__t__) = 0 when t &#8805; t~s~
+|===
+
+Note: a velocity function including a start and end epoch is functionally identical to the piecewise linear function.  However these two options are provided to support quite different cases.  
+
+Typically the velocity function will not be specified with both a start time and an end time.  It is representing secular deformation and the displacements in the spatial model are the deformation accumulating in one year regardless of the start and end time.
+
+The piecewise linear function is to support a specific time bounded event.  It more meaningfully represents specific deformation events as the spatial model displacements reflect the total deformation.  The step functions are specialisations of it in which the start and end epoch are equal (which is not possible with a velocity function, as the velocity is infinite).  The main role of the piecewise linear function in deformation model time functions is that multiple such functions can be combined to approximate any time evolution.
+
+Future versions of this specification may add new base functions as required.
+
+
+[[formula-components]]
+=== Combination of components
+
+To calculate the total deformation at a time and location, the displacement and uncertainties due to each component are calculated independently and then combined using the formulae below to obtain the total displacement and uncertainty at a location.  The total displacement is then applied to the coordinate. 
+
+
+The same input position coordinate is used for each component - the components are not applied sequentially (ie the coordinate is not updated by the first component before being used to calculate the deformation on the second component). See the discussion below on <<discuss-parallel-calculation, using the same position for each component>>.
+
+
+At a given time and location the elements from each component are combined to determine the overall displacement and errors. 
+
+
+The displacement elements de, dn, dh are combined by simply adding their values calculated for each component.  For example, if there are n components for which the spatial representation calculates de as de~1~, de~2~, … to de~n~, and the time function evaluates to f~1~, f~2~, … to  f~n~ then the total model value for de is  
+
+
+de = f~1~.de~1~+ f~2~.de~2~+ … + f~n~.de~n~ 
+
+
+The error values eh, ev are combined by determining the root sum of squares (RSS) of the values determined for each component.  So for example 
+
+
+eh = √(f~1~^2^.eh~1~^2^+ f~2~^2^.eh~2~^2^+ … + f~n~^2^.eh~n~^2^) 
+
+=== Applying the offset to a coordinate
+
+For each physical point on the surface for which the deformation model is defined the model defines the trajectory of that point in the target coordinate system.  The trajectory is defined for any valid epoch by adding the displacement calculated from the model to a reference coordinate for the point - a time invariant  coordinate for the point at which displacement is zero. The reference coordinate is not directly measurable - it is accessed by measuring a position in the target coordinate system and then subtracting the displacement from the deformation model at the epoch of measurement using the <<formula-inverse, inverse formula>> below.
+
+The method used to add the calculated displacement to the reference coordinate is defined in the deformation model metadata.  Two methods are proposed -  _addition_ and _geocentric addition_.  The _addition_ method is relatively simple and adds the offset to the coordinates, converting metres to degrees first if necessary.  The _geocentric_ method is an alternative method that may be used near the poles if the grid latitude spacing is relatively large and accounts for the potentially significant differences in the north and east directions at each grid node.  It is only applicable if the offsets are defined in metres and the coordinate system is a geographic (latitude/longitude) system.   The _addition_ and _geocentric addition_ methods are detailed below.
+
+==== Addition method
+
+The method of the calculated east/north/up displacement to a coordinate depends on the units of the displacement and the type of the source and target coordinate system.  Also for geographic coordinate systems the method described here does not apply very close to the poles.  See the section below “calculation horizontal deformation near the poles” for details. 
+
+
+If the source and target coordinate systems are projected coordinate systems then the units must be metres and the east and north displacements are simply added to the easting, northing ordinate. 
+
+
+If the source and target coordinate systems are geographic coordinate systems and the east and north displacement units are degrees, then again the displacements are added to the longitude and latitude. 
+
+
+If the source and target coordinate systems are geographic coordinate systems and the east and north displacement units are metres then the displacement components must be converted to degrees before they are added to longitude and latitude.  The conversion from metres to degrees requires the ellipsoid parameters of the geographic coordinate system. 
+
+
+If a is the ellipsoid semi-major axis (eg 6378137.0), f is the flattening  (eg 1.0/298.25722210), λ is the latitude, and φ is the longitude then corrections to longitude and latitude (in radians) are given by: 
+
+
+b = a.(1-f) +
+dλ = de.√(b^2^sin^2^(φ)+a^2^cos^2^(φ))/a^2^cos(φ) +
+dφ = dn.(b^2^sin^2^(φ)+a^2^cos^2^(φ))^3/2^/a^2^b^2^ 
+
+
+The vertical displacement is always in metres and is simply added to the height coordinate. 
+
+==== Geocentric addition method
+
+The geocentric method can be applied  if the model is using a geographic coordinate system  and offsets measured in metres.  In this case the horizontal offset is converted to a geocentric (XYZ) offset, added to the geocentric coordinate, and then converted back to geographic coordinates.  The vertical coordinate is always calculated by simple addition of the vertical displacement to the reference coordinate height. 
+
+This method may be applicable for coordinates near the pole, where simple addition of offsets to the longitude/latitude may not give the desired result.  This is shown in the figure below in which the grey vector shows the result of adding an east displacement to the longitude coordinate, and the black vector shows the result applying the same east displacement in the direction of the eastwards vector at the reference coordinate. Close to the pole the eastward vector is different to changing the longitude coordinate.. . 
+
+[.right]
+image::near_pole_east_offset.png[Alt=near pole east offset,width=200,scalewidth=7cm]
+
+Moving away from the pole this issue rapidly becomes insignificant.  For a point at distance R from the pole with a displacement d, the difference is approximately d*(1-cos(d/R)), or approximately d^3^/2R^2^.  So for example a 1m eastward displacement 10km from the pole would have an error of 10^-8^m.  This is only an issue very close to the pole! 
+
+TBC _Add formulae for conversion lat/lon to XYZ and vice versa_
+
+Standard formulae are used for the conversion of geographic coordinates to and from geocentric coordinates.   The initial ellipsoidal height is set to zero before converting, and the resultant ellipsoidal height is discarded. 
+
+The horizontal components of displacement are converted to X,Y,Z components using the same formulae as described for the “geocentric_bilinear” method. 
+
+While this method can be used at any location it is not recommended other than close to the poles. It is computationally very expensive compared to simply adding the offsets to longitude and latitude.   
+
+
+[[formula-inverse]]
+=== Calculation of the inverse deformation model
+
+Calculating the inverse of the deformation model requires an iterative solution as the coordinate in the defintion coordinate reference system is required to evaluate the deformation model, but it is not known until the deformation has been calculated and applied to the input coordinate in the target coordinate reference system.   
+
+
+The iteration is done by
+
+* using the input coordinate as an initial estimate for the output coordinate
+* at each iteration:
+** apply the deformation model to the current estimate of the output coordinate
+** calculate the difference between the calculated coordinate and the input coordinate
+** subtract this difference from the current estimate solution to obtain the estimated solution for the next iteration
+** if this  difference is less than the precision required for the inverse operation then finish
+
+The calculation of the difference and the subtraction of the difference from the current estimate is done by the “addition” or “geocentric” method, as defined in the deformation model metadata. (Formulae are defined above.) 
+
+See the discussion below on the <<discuss-inverse-iteration, iterating the inverse calculation>>. 
+
+
+=== Calculation of deformation between two epochs
+
+Calculating the deformation between two times is straightforward for the displacement elements de, dn, and du as it is simply the difference between the values calculated at each time.   
+
+
+This approach is not appropriate for the error components eh, ev.  Uncorrelated errors are combined as a root sum of squares, but the errors of displacements calculated for one component calculated at different times are clearly correlated.   
+
+
+While there is no mathematically correct way to define the errors without a much more complex error model, the following approach is recommended if these errors are required. 
+
+
+The time function error factor of the difference between t~s~ and t~1~ is calculated for each component separately as f~e,t1-t0~ = √abs(f(t~1~)-f(t~s~)).  
+
+
+The eh and ev values from the spatial representation of each component are multiplied by these time function error factor values and then combined as the root sum of squares to give the total error of the deformation between the two epochs. 
+
+
+[[formula-14prm-transformation]]
+=== Calculation of the 14 parameter transformation
+
+If the model includes a <<funcmod-14prm-transformation, 14 parameter transformation>> then this is applied to the coordinates after the 
+deformation model is calculated and applied in a forward transformation.  In an inverse transformation it is applied (in reverse) before the deformation model components area been applied to the coordinate.
+
+TBC _The 14 parameter transformation formulae need to be included here_ 

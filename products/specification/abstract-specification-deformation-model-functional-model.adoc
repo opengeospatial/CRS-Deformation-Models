@@ -1,0 +1,61 @@
+= Abstract specification topic for OGC Deformation Model Functional Model
+:comment: ### Document type; mandatory. Visit: https://www.metanorma.com/author/ogc/authoring/ for permitted types
+:doctype: abstract-specification-topic
+:comment: ### Language of the document; mandatory. Specified in two-letter code: "en" for English, "fr" for French
+:language: en
+:comment: ### Document status/stage; mandatory. Visit: https://www.metanorma.com/author/ogc/authoring/ for permitted types
+:status: swg-draft
+:comment: ### Relevant committee; mandatory. The permitted types are: technical, planning, and strategic-member-advisory
+:committee: technical
+:comment: ### Version number; optional. Dot-delimited, preferably with this structure <version number>.<minor version number>
+:edition: 1.0
+:comment: ### Internal reference number; mandatory
+:docnumber: 21-999r1
+:comment: ### Date on which the standard was updated; mandatory
+:received-date: 2021-08-27
+:comment: ### Date on which the standard was approved by the issuing authority; mandatory
+:issued-date: 2099-01-01
+:comment: ### Date on which the standard was published; mandatory
+:published-date: 2099-01-01
+:comment: ### External link referencing the document; optional. If not provided, a default value is created following this structure: "http://www.opengis.net/doc/{abbrevation of doctype}/{abbrev}/{version}"
+:external-id: https://github.com/opengeospatial/CRS-Deformation-Models/tree/master/products/specification
+:comment: ### Identifier embedded into a document type-specific external URL
+:referenceURLID: https://github.com/opengeospatial/CRS-Deformation-Models/blob/master/products/specification/abstract-specification-deformation-model-functional-model.pdf
+:comment: ### Author one
+:fullname: Chris Crook
+:comment: ### Role of the authors; mandatory
+:role: editor
+:comment: ### Comma delimited keywords; mandatory
+:keywords: ogcdoc, OGC document, deformation model, crustal deformation, coordinate transformation, coordinate operation, specification
+:comment: ### Semicolon-delimited list of the submitting organizations; mandatory
+:submitting-organizations: Land Information New Zealand; ESRI
+:comment: ### Name of the AsciiDoc file; mandatory
+:docfile: abstract-specification-deformation-model-functional-model.adoc
+:comment: ### Metanorma flavor; mandatory
+:mn-document-class: ogc
+:mn-output-extensions: xml,html,doc,pdf,rxl
+:comment: ### Enable local relaton cache for quick inclusion of prefetched references; optional. For further information, visit: https://www.metanorma.com/author/ref/document-attributes/#caches, https://www.metanorma.com/author/topics/building/reference-lookup/#lookup-result-caching
+:local-cache-only:
+:comment: ### Encode all images in HTML output as inline data-URIs; optional
+:data-uri-image:
+:extension_keys:asciimath:true
+:imagesdir: images
+
+// Clauses
+include::sections/00-preface.adoc[]
+include::sections/01-scope.adoc[]
+include::sections/02-conformance.adoc[]
+include::sections/03-references.adoc[]
+include::sections/04-terms_and_definitions.adoc[]
+include::sections/05-conventions.adoc[]
+
+// Add clause files as needed
+include::sections/06-functional-model-definition.adoc[]
+include::sections/07-calculation-formulae.adoc[]
+
+// Annexes (add annex files as needed)
+include::sections/aa-annexA-discussion.adoc[]
+
+// Bibliography should be the last annex
+include::sections/az-bibliography.adoc[]
+

@@ -1,0 +1,29 @@
+
+== Scope
+
+This abstract specification defines a functional model that is used to define deformation models - models of the ongoing deformation of the earth's crust - to support their implementation into coordinate operations and transformations.
+
+Within this context a deformation model is defined as follows:
+____
+A deformation model is a model of the displacement of the earth’s surface within a defined spatial and temporal extent.  It predicts the location of a point fixed to the surface at any time within the temporal extent in terms of an accessible coordinate system.  The position of the point is represented as a displacement from a reference position for that point.
+____ 
+
+A deformation model allows a "fixed" object's location to be propogated to different times.  Here "fixed" means in the intuitive sense - fixed to the earth's crust and moving with it.  
+
+Common uses for this include:
+
+* determining the current location of an object based a historic measurement of its location,
+* transformation the current observed location of an object to the reference epoch of a static coordinate system
+* determining the correct spatial relationship of data sets observed at different times.
+
+This specification defines a functional model for describing a deformation model.  It describes a way of parameterising deformation such that it can be encoded into a data set and incorporated into software for using in coordinate transformations.  It also defines how to calculate the displacement of a coordinate between two different times using that parameterisation.  
+
+This specification allows producers of deformation models, typically national geodetic agencies, to publish the deformation model in a consistent way and for users of coordinate transformation software to be confident that the deformation model is being used as intended by the producers.
+
+=== Exclusions 
+
+This scope of this functional model definition does not include:
+
+* Rigid body transformation between reference frames such as time dependent helmert or Bursa-Wolf transformations,
+* Trajectory models for individual points, such as ITRF reference station coordinate models,
+* Static distortion models used to represent the deformation between two datums (typically between older datums based on local terrestrial observations and modern datums based on global satellite systems.)
