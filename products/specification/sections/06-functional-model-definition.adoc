@@ -2,30 +2,29 @@
 
 The functional model for a deformation model is characterised as follows.  
 
-0. [[funcmod-extents]] The deformation model is defined within a specified spatial and temporal extent.  Beyond these extents the model is undefined and cannot be evaluated.
+1. [[funcmod-extents]] The deformation model is defined within a specified spatial and temporal extent.  Beyond these extents the model is undefined and cannot be evaluated.
 
-5. [[funcmod-trajectory]]The deformation model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial model.  This trajectory is terms of an explicitly defined accessible coordinate system. 
+2. [[funcmod-trajectory]]The deformation model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial model.  This trajectory is terms of an explicitly defined accessible coordinate system. 
 
-6. [[funcmod-ref-crs]]The position used to calculate the spatial model is not defined in an currently accessible coordinate system - it may be in terms on an accessible coordinate system at a specific epoch.  Its value is only accessible by an inverse calculation using the deformation model.  See the <<formula-inverse, inverse calculation method>> below.
+3. [[funcmod-ref-crs]]The position used to calculate the spatial model is not defined in an currently accessible coordinate system - it may be in terms on an accessible coordinate system at a specific epoch.  Its value is only accessible by an inverse calculation using the deformation model.  See the <<formula-inverse, inverse calculation method>> below.
 
-1. [[funcmod-decomposition]]The total deformation is partitioned into one or more components.  The total deformation at any time and position is calculated by summing the contribution from each component. See <<discuss-components,discussion>> and <<formula-components, formulae>> below.
+4. [[funcmod-decomposition]]The total deformation is partitioned into one or more components.  The total deformation at any time and position is calculated by summing the contribution from each component. See <<discuss-components,discussion>> and <<formula-components, formulae>> below.
 
-2. [[funcmod-component]]Each component comprises a spatial model and a time function. The spatial model defines displacement as a function of position.  The time function evaluates a scalar multiplier as a function of time.  The deformation contribution for the component at a given position and time is obtained by multipying the displacement components by the time function.
+5. [[funcmod-component]]Each component comprises a spatial model and a time function. The spatial model defines displacement as a function of position.  The time function evaluates a scalar multiplier as a function of time.  The deformation contribution for the component at a given position and time is obtained by multipying the displacement components by the time function.
 
-3. [[funcmod-spatial-extent]]The spatial model may be defined over a subset of the total extent of the model.  Where it is not defined it is assumed to be zero (see the <<discuss-no-data, discussion>> below).
+6. [[funcmod-spatial-extent]]The spatial model may be defined over a subset of the total extent of the model.  Where it is not defined it is assumed to be zero (see the <<discuss-no-data, discussion>> below).
 
-4. [[funcmod-spatial-params]]The spatial model may define any or all of the following quantities: 
+7. [[funcmod-spatial-params]]The spatial model may define any or all of the following quantities: 
 * horizontal displacement – the east and north displacement in metres or degrees
 * vertical displacement – the upwards vertical displacement in metres.
 
 +
 Displacements not defined by the model are assumed to be zero.  Uncertainties not defined by the model take a default value defined in the spatial model or deformation model metadata.
 
-4. [[funcmod-spatial-params-uncertainty]]
+8. [[funcmod-spatial-params-uncertainty]]The spatial model may define the uncertainty of the displacement in metres at each node.
+
 +
 --
-The spatial model may define the uncertainty of the displacement in metres at each node.
-
 Horizontal uncertainty can be represented by:
 
 * horizontal circular uncertainty e~h~
@@ -41,18 +40,18 @@ The parameters used to represent uncertainty will be the same for all spatial mo
 The header will also define probability level for the uncertainty, examples would be "1 standard error", "95% confidence"
 --
 
-4. [[funcmod-spatial-params-quality]] Each node may have a quality parameter used to identify potential issues in the quality of the deformation model in the vicinity of the node.
+9. [[funcmod-spatial-params-quality]] Each node may have a quality parameter used to identify potential issues in the quality of the deformation model in the vicinity of the node.
 For example it could indicate that there is surface faulting affecting cells adjacent to the node.  See the <<discuss-params-quality, discussion>> below.
 
-4. [[funcmod-spatial-params-other]] A producer may include additional parameters at each node that will be ignored by compliant software.  The set of parameters must be the same for each node of a spatial model.
+10. [[funcmod-spatial-params-other]] A producer may include additional parameters at each node that will be ignored by compliant software.  The set of parameters must be the same for each node of a spatial model.
 
-4. [[funcmod-nodata]] The displacements and uncertainties of a spatial model may evaluate to a _no data_ value at some locations, meaning that the deformation cannot be evaluated at that location.  At such locations the total deformation is undefined and cannot be calculated. See the <<discuss-no-data, discussion>> below.
+11. [[funcmod-nodata]] The displacements and uncertainties of a spatial model may evaluate to a _no data_ value at some locations, meaning that the deformation cannot be evaluated at that location.  At such locations the total deformation is undefined and cannot be calculated. See the <<discuss-no-data, discussion>> below.
 
-10. [[funcmod-continuous-invertible]]
+12. [[funcmod-continuous-invertible]]
 The displacement defined by the deformation model is required to be continuous and invertible within the spatial and temporal extent of the model except where it evaluates to _no data_.  
 This is not enforced by the mathematical formulation of the deformation model.  It is a compliance requirement on producers of deformation models and can be assumed by implementors of software using the deformation model. See the <<discuss-continuous-invertible, discussion>> below.
 
-7. [[funcmod-spatial-type]]The spatial model is represented by a nested grid structure comprising one or more grids.  To evaluate the spatial model at a specific position the nesting algorithm identifies which grid is applicable at that position and the disclocation is interpolated from this grid alone.  The grids are constrained to be:
+13. [[funcmod-spatial-type]]The spatial model is represented by a nested grid structure comprising one or more grids.  To evaluate the spatial model at a specific position the nesting algorithm identifies which grid is applicable at that position and the disclocation is interpolated from this grid alone.  The grids are constrained to be:
 * Grids with rows equally spaced and columns equally spaced.
 * Grid rows and columns are aligned with the axes of the definition CRS
 * Grids are strictly nested.  Grids may share a common edge but otherise may not intersect unless one is a child grid fully contained by the other grid. The model may have more than one root grid (not contained in any other grid). 
@@ -65,7 +64,7 @@ See <<formula-bilinear-grid-interpolation, grid interpolation formulae>> below.
 See also the discussion of <<discuss-spatial-model, spatial model types>> below.
 --
 
-8. [[funcmod-time-type]]The time function is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
+14. [[funcmod-time-type]]The time function is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
  * a velocity function
  * a piecewise linear time function defined by a start and end time and a start and end scale factor.  Two specialisations of the piecewise linear time function are the step and reverse step functions.
  * an exponential decay function
@@ -77,23 +76,22 @@ See also the discussion of <<discuss-spatial-model, spatial model types>> below.
 +
 See the <<discuss-time-function, discussion>> and <<formula-time-function, formulae>> for time functions below.
 
-9. [[funcmod-14prm-transformation]]The deformation model specification may also include a 14 parameter
+15. [[funcmod-14prm-transformation]]The deformation model specification may also include a 14 parameter
 Bursa-Wolf transformation definition.  This is applied after the deformation components in a forward transformation or before them in an inverse transformation as described in the <<formula-14prm-transformation, formula>>.  
 +
 The 14 parameter transformation can be used to represent the bulk of the transformation between the source and target coordinate systems or epochs. This allows the more complex deformation components to efficiently represent perturbations from this movement which may be smaller and localised.  Note that jurisdictions may choose to implement this using an intermediate coordinate system rather including it than deformation model.  A deformation model should not be used to define a transformation which is fully described by a 14 parameter transformation.
 
-
-11. [[funcmod-component-metadata]]Each component includes metadata defining:
+16. [[funcmod-component-metadata]]Each component includes metadata defining:
 
 * The type of spatial model (grid)
 * The spatial interpolation method to use
 * The quantities it defines (displacements, uncertainties)
 * A spatial definition of the extent of the spatial model (to determine if it is required at a specific position)
 * (optional) default horizontal and vertical uncertainty which applies if the spatial model does not explicitly define uncertainty.
-* (optional) text description of the source of the deformation represented in the model
-* (optional) definition of areas where quality is impacted, for example where there is surface faulting.  The areas each include a description, multipolygon defining the extent of the affected area, and a start and end epoch for the event causing the unmodelled deformation. See the <<discuss-params-quality, discussion>> below.  
+* (optional) text description of the source of the deformation represented in the model. 
+* (optional) definition of areas where quality is impacted, for example where there is surface faulting. The areas each include a description, multipolygon defining the extent of the affected area, and a start and end epoch for the event causing the unmodelled deformation. See the <<discuss-params-quality, discussion>> below.  
 
-12. [[funcmod-model-metadata]]The deformation model includes metadata defining:
+17. [[funcmod-model-metadata]]The deformation model includes metadata defining:
 
 * The version of the deformation model specification with which the model complies
 * The name of the model

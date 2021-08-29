@@ -1,9 +1,12 @@
 
-[appendix,obligation="informative"]
+
+[appendix]
+[bibliography]
+[[Bibliography]]
 == Bibliography
 
-////
 // Typical reference entry (without auto-fetch)
+////
 // Reference content will display as written
 * [[[Simonis2018,Simonis, I.]]], Standardized Big Data Processing in Hybrid Clouds. In: Proceedings of the 4th International Conference on Geographical Information Systems Theory, Applications and Management - Volume 1: GISTAM, pp. 205–210. SciTePress (2018).
 

@@ -68,12 +68,13 @@ The intention is that software could warn users when the coordinate conversion q
 This could be represented by a quality parameter the corner nodes of affected grid cells.  Software could then assess the impact on an interpolated coordinate conversion by compiling the quality information from each of the nodes used in the interpolation.
 
 There are some unresolved issues in using the quality parameter, including:
+
 * how should it be represented 
 * how should the measure be interpolated to provide a quality measure at an interpolated point
 * how should the quality measure relate to the time (or times) of a conversion.  If time function evaluates to zero it should clearly be ignored, but how large can the time function be before the quality parameter is considered significant.
 * how does the quality parameter relate to uncertainty
 
-It may also be worth considering alternative methods of defining affected areas. For example in the component header could include one or more areas of concern, each with a spatial definition as a multipolygon and an event time.
+An alternative methods of defining affected areas could be to include this in the model metadata. For example the component header could include one or more areas of concern, each with a spatial definition as a multipolygon and an event time.
 
 [[discuss-continuous-invertible]]
 === Requirement for model to be continuous and invertible

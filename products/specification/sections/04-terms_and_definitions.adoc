@@ -1,14 +1,14 @@
 
 == Terms and Definitions
 
-=== example term
+=== accessible coordinate system
 
-term used for exemplary purposes
+A coordinate system within which positions can be measured directly?!
 
 [.source]
 <<ogc07036>>
 
-NOTE: An example note.
+NOTE: Need a meaningful definition here.  Need to track this one down to its source.
 
 [example]
-Here's an example of an example term.
+The position used to calculate the spatial model is not defined in an currently accessible coordinate system
