@@ -3,7 +3,7 @@ CRS-Deformation-Models
 
 This repository holds the artefacts and workings of the "Deformation model functional model" project team established by the CRS DWG at the Montreal virtual meeting on 15 June 2020. 
 
-The next virtual meeting of this project team will be at 4pm EDT (20:00 UTC) on 30 August 2021 (https://www4.gotomeeting.com/join/938424573).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
+The next virtual meeting of this project team will be at 4pm EDT (20:00 UTC) on 27 September 2021 (https://www4.gotomeeting.com/join/449738333).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
 
 <!--
 2020-09-07  https://www4.gotomeeting.com/join/494053021
@@ -21,23 +21,23 @@ Note: EDT ends Nov 1
 2021-06-07	https://www4.gotomeeting.com/join/792144133
 2021-07-05	https://www4.gotomeeting.com/join/517573469
 2021-08-02	https://www4.gotomeeting.com/join/403879845
-
 2021-08-30	https://www4.gotomeeting.com/join/938424573
+
 2021-09-27	https://www4.gotomeeting.com/join/449738333
 
 -->
 
+This work is closely aligned with the work of the [GGXF (Geodetic Gridded data exchange format)](https://github.com/opengeospatial/CRS-Gridded-Geodetic-data-eXchange-Format) team.
+
 ## Active discussions
 
+The project team is now working on compiling the abstract specification document that will be the main product of this teams work.
 
-The currently active discussions can be seen in the [github issues](https://github.com/opengeospatial/CRS-Deformation-Models/issues).  Current "hot topics" are:
+The document is open for comment and editing as a Google document at https://docs.google.com/document/d/1bfbqk8KgZ4Y7sj4N3kbrlFMKLK9eyR56l92kI96Acfk/edit?usp=sharing.  This link can be used to submit comments on the document (select some text and then click the + icon to add a comment on the text).  
 
-* [Review deformation model formulae](https://github.com/opengeospatial/CRS-Deformation-Models/issues/33)
+Other work done by this team is held in this repository, in particular the source code for the abstract specification is in the products/specification folder.  The github issues also contain a body of discussion.
 
-* [Review deformation model feature matrix](https://github.com/opengeospatial/CRS-Deformation-Models/issues/32) 
-
-
-This team has undertaken a survey of deformation models either planned or in use. Responses can be viewed at https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us.  While the survey is formally closed,  questionnaire is still at https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0.  New information or updates are always welcome. 
+As an initial investigation this team undertook a survey of deformation models either planned or in use. Responses can be viewed at https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us.  While the survey is formally closed,  questionnaire is still at https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0.  New information or updates are always welcome. 
 
 ## Project overview
 
