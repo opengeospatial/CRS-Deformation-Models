@@ -2,11 +2,13 @@
 
 The functional model for a deformation model is characterised as follows.  
 
-1. [[funcmod-extents]] The deformation model is defined within a specified spatial and temporal extent.  Beyond these extents the model is undefined and cannot be evaluated.
-
+////
 2. [[funcmod-trajectory]]The deformation model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial model.  This trajectory is terms of an explicitly defined accessible coordinate system. 
 
 3. [[funcmod-ref-crs]]The position used to calculate the spatial model is not defined in an currently accessible coordinate system - it may be in terms on an accessible coordinate system at a specific epoch.  Its value is only accessible by an inverse calculation using the deformation model.  See the <<formula-inverse, inverse calculation method>> below.
+////
+
+1. [[funcmod-extents]] The deformation model is defined within a specified spatial and temporal extent.  Beyond these extents the model is undefined and cannot be evaluated.
 
 4. [[funcmod-decomposition]]The total deformation is partitioned into one or more components.  The total deformation at any time and position is calculated by summing the contribution from each component. See <<discuss-components,discussion>> and <<formula-components, formulae>> below.
 
@@ -66,7 +68,7 @@ See also the discussion of <<discuss-spatial-model, spatial model types>> below.
 
 14. [[funcmod-time-type]]The time function is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
  * a velocity function
- * a piecewise linear time function defined by a start and end time and a start and end scale factor.  Two specialisations of the piecewise linear time function are the step and reverse step functions.
+ * a ramp time function defined by a start and end time and a start and end scale factor.  Two specialisations of the ramp time function are the step and reverse step functions.
  * an exponential decay function
  * a logarithmic function
  * an acceleration function

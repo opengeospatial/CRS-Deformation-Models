@@ -1,6 +1,7 @@
 
 == Terms and Definitions
 
+////
 === accessible coordinate system
 
 A coordinate system within which positions can be measured directly?!
@@ -12,3 +13,4 @@ NOTE: Need a meaningful definition here.  Need to track this one down to its sou
 
 [example]
 The position used to calculate the spatial model is not defined in an currently accessible coordinate system
+////

@@ -2,7 +2,7 @@
 [bibliography]
 == References
 
-
+////
 [NOTE]
 ====
 If there are no references, leave this section empty.
@@ -18,4 +18,5 @@ References are to follow the Springer LNCS style, with the exception that option
 
 * [[[ogc07036, OGC 07-036]]], OGC: OGC 07-036, _OpenGIS Geography Markup Language (GML) Encoding Standard_. _(identical in normative content to ISO 19136:2007)_, 2007
 
+////
 

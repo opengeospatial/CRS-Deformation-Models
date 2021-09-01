@@ -184,11 +184,8 @@ For example in New Zealand the deformation model was recently updated from versi
 
 Users with a GIS datasetin terms of the 20171201 version of the datum might want to update the dataset to version 20180701. The user expectation is that this will generate correct version 20180701 coordinates of the features in the database. 
 
-
 The critical thing in this transformation is that the coordinate epoch for the transformation is before the event(s) implemented in the update.  This is somewhat counter-intuitive. 
 
-
 Generally the update should not change the coordinates. The reason for the update is typically a deformation event such as an earthquake. The earthquake coseismic deformation is added to the deformation model as a step function that applies for transforming coordinates for epochs after the event. This means that the NZGD2000 coordinate system tracks the movement of features fixed to the ground and therefore the NZGD2000 coordinates of these features are not changed by the earthquake. In this case the deformation model is unchanged before the earthquake. Transforming at an epoch before the earthquake will leave the coordinates unchanged which is what is required.. 
-
 
 Close to faulting the distortion due to the earthquake can be too intense to be included in the coordinates. In that case the deformation model will be smoothed across the fault zone. However the deformation is still measured and is used to update the coordinates. It is also added to the deformation model using a reverse step function that applies a negative deformation that applies when transforming  coordinates for epochs before the earthquake. In this case transforming coordinates at an epoch before the earthquake will result in subtracting the reverse patch from the coordinates.  This adds the deformation to the coordinates, which again is the correct update to coordinates to transform them to the new version of the datum.

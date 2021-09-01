@@ -1,3 +1,4 @@
+////
 == Conventions
 
 [NOTE]
@@ -18,4 +19,6 @@ All requirements and conformance tests that appear in this document are denoted 
 === Other conventions
 
 <Place any other convention needed with its corresponding title>
+
+////
 

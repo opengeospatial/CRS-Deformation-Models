@@ -131,7 +131,7 @@ _End epoch_ t~e~| f(_t_) = _t_ - t~0~ +
 f(_t_) = f(t~s~) for _t_ < t~s~ if t~s~ is defined +
 f(_t_) = f(t~e~) for _t_ < t~e~ if t~e~ is defined
 
-|piecewise linear|Start epoch t~s~ +
+|ramp|Start epoch t~s~ +
 Start scale factor f~s~ +
 End epoch t~e~ +
 End scale factor f~e~ |f(_t_) = f~s~ for _t_ < t~s~ +
@@ -180,7 +180,7 @@ f(_t_) = &#945;cos(_f_(_t_ - t~0~)/2&#120587;)
 
 |===
 
-To improve simplicity and readability of the time function definition two common special cases are supported as a specialisations of the piecewise linear function:
+To improve simplicity and readability of the time function definition two common specialistations of the ramp function are provided for:
 
 [cols="2,5a,5a"]
 [options="header"]
@@ -192,11 +192,11 @@ f(__t__) = 1 when t &#8805; t~s~
 f(__t__) = 0 when t &#8805; t~s~
 |===
 
-Note: a velocity function including a start and end epoch is functionally identical to the piecewise linear function.  However these two options are provided to support quite different cases.  
+Note: a velocity function including a start and end epoch is functionally identical to a ramp function.  However these two options are provided to support quite different cases.  
 
 Typically the velocity function will not be specified with both a start time and an end time.  It is representing secular deformation and the displacements in the spatial model are the deformation accumulating in one year regardless of the start and end time.
 
-The piecewise linear function is to support a specific time bounded event.  It more meaningfully represents specific deformation events as the spatial model displacements reflect the total deformation.  The step functions are specialisations of it in which the start and end epoch are equal (which is not possible with a velocity function, as the velocity is infinite).  The main role of the piecewise linear function in deformation model time functions is that multiple such functions can be combined to approximate any time evolution.
+The ramp function is to support a specific time bounded event.  It more meaningfully represents specific deformation events as the spatial model displacements reflect the total deformation rather than the rate of deformation.  Also it supports the step function specialisation which is not possible with a velocity function (as the velocity is infinite).  Multiple ramp functions can be combined to approximate any time evolution.
 
 Future versions of this specification may add new base functions as required.
 
