@@ -24,6 +24,9 @@ Note: EDT ends Nov 1
 2021-08-30	https://www4.gotomeeting.com/join/938424573
 
 2021-09-27	https://www4.gotomeeting.com/join/449738333
+2021-10-25      https://www4.gotomeeting.com/join/114555821
+2021-11-22      https://www4.gotomeeting.com/join/864247982 21:00 UTC
+2021-12-20      https://www4.gotomeeting.com/join/207460949
 
 -->
 
