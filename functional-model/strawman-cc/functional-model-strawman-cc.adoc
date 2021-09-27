@@ -317,7 +317,7 @@ f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
 End epoch t~1~ +
 Time constant &#964; +
 Scale factor &#945;|f(_t_)= 0 for _t_ < t~s~ +
-f(_t_) = &#945/2 + A.tanh((_t_ - t~r~)/&#964;) for _t_ &#8805; t~s~ and _t_ < t~e~ +
+f(_t_) = &#945;/2 + A.tanh((_t_ - t~r~)/&#964;) for _t_ &#8805; t~s~ and _t_ < t~e~ +
 f(_t_) = &#945; for _t_ &#8805; t~e~ +
 where: +
 t~r~ = (t~s~ + t~e~)/2 +
