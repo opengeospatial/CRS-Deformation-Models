@@ -56,16 +56,26 @@ h| Submitter h| Affiliation
 
 This specification has been developed by the OGC Coordinate Reference System (CRS) domain working group (DWG) in conjunction with the  the CRS DWG project team developing the "Gridded Geodetic Exchange Format (GGXF)" and with the International Association of Geodesy (IAG)) Working group 1.3.1 on "Time-dependent transformations between reference frames in deforming regions".
 
-It defines a general parameterisation of deformation models for use in coordinate transformation operations.  The primary use case for this parameterisation for geodetic agencies to encode regional deformation models for use in spatial data operations in geographic information systems and in positioning systems.  
+This specification defines a general parameterisation of deformation models as illustrated in <<image_structure>>.  The total deformation is decomposed into a set of elements, each of which is defined by a spatial function and a time function.  The spatial function defines the displacement that applies at a given location, and the time function defines a scalar function that applies for the element at a given time.  The displacement due to the element is the spatial function displacement multiplied by the time function scale factor.  The total displacement at the location and time is the sum of the displacements from each element.
 
-This specification does not encompass other types of deformation model such as:
+[[image_structure]]
+image::structure.png[title="Functional decomposition of a deformation model",width=600,pdfwidth=15cm]
+
+//image::structure.svg[title="Functional decomposition of a deformation model",width=10cm]
+
+Commonly elements will represent specific geophysical causes, such as coseismic deformation due to an earthquake.  However an element could equally represent some measured for which no physical cause has been ascribed.  Equally one event may be represented by more than one element. For example the horizontal deformation due to an earthquake may be represented by one element, and the vertical deforamtion by another.
+
+This specification does not encompass other forms of deformation model such as:
 
 * Rigid body transformation between reference frames such as time dependent helmert or Bursa-Wolf transformations,
 * Trajectory models for individual points, such as ITRF reference station coordinate models,
-* Static distortion models used to represent the deformation between two datums (typically between older datums based on local terrestrial observations and modern datums based on global satellite systems.)
-* Global plate tectonic models, as these use a very different parameterisation of the relative movements of points
-* The format for encoding the parameters and metadata of a deformation model
-* Three dimensional geophysical models of deformation in terms of dislocations on fault surfaces or using finite element model
+* Static distortion models used to represent the deformation between two datums
+* Global plate tectonic models
+* Three dimensional geophysical models of deformation in terms of dislocations on fault surfaces or using finite element models.
+
+This specification also does not describe how the the parameters and metadata of a deformation model should be encoded into a file.
+ 
+The primary use case for this specification is for deformation model producers such as national geodetic agencies to encode regional deformation models for use in spatial data operations in geographic information systems and in positioning systems.  The purpose of this specification is to define what parameters must be encoded in a compliant deformation model, and what formulae compliant software should use to transform coordinates using the model. This compliance will ensure that transformations carried out by users give the results intended by the model producers.
 
 ////
 [.preface]

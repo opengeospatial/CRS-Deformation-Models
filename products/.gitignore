@@ -1,3 +1,9 @@
 .fontist
 relaton
 iev
+*.doc
+*.docx
+*.pdf
+*.err
+*.html
+*.xml

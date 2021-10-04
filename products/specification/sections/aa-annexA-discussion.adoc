@@ -114,6 +114,12 @@ Currently this specification takes the producer's perspective - a transformation
 
 The proposed set of base time functions includes those commonly used in geophysical models, for example reference station coordinates in the International Terrestrial Reference Frame.  However in practice there may be little benefit in complex time models, as it is unlikely that the same time function will apply at all points in the area affected by, for example, post-seismic deformation.  That is to say that the actual time evolution at each point within the spatial model may have different attributes and parameterisation.  The deformation model component is necessarily an simplification attempting to best fit the actual deformation over its spatial and temporal extent. 
 
+There is some redundancy in the selected set of base functions.  In particular a velocity function including a start and end epoch is functionally identical to a ramp function. However these two options are provided to support quite different use cases.
+
+Typically the velocity function will not be specified with both a start time and an end time. It represents secular deformation and the displacements from the spatial function quantify deformation accumulating in one year regardless of the start and end time.  A velocity function with just a start time would be appropriate where a deformation event causes a velocity change of indefinite duration.
+
+The ramp function is used for specific time bounded events. It more meaningfully represents specific deformation events as the spatial model displacements reflect the total deformation rather than the rate of deformation. Also it supports the step function specialisation which is not possible with a velocity function (as the velocity is infinite). Multiple ramp functions can be combined to approximate any time evolution.
+
 In the near future it is likely that we may generate far more complex and accurate models using technology such as CORS and InSAR.  The deformation model representing this would most likely have multiple components, each with its own spatial model and time function, rather than a complex time function applying to a single spatial model.  For example each year there could be an updated gridded spatial model.  The deformation at any epoch could be interpolated or extrapolated from the nearest to models (or as in Japan modelled with a step function for each year). This is in effect a three dimensional grid with dimensions latitude, longitude, and time.  It can be easily encoded into this functional model by constructing time functions for each grid that define the interpolation between one grid and the next.
 
 ////
@@ -173,6 +179,19 @@ The error of not iterating the inverse transformation can be tested for the New 
 Based on this result it is recommended that the inverse transformation is iterated.  It is likely that this will double computation time (it would be unusual to require more than two iterations). 
 
 Note that this is not about creating a more accurate transformation - the differences are much less than the uncertainty in the deformation model.  The reason for iterating is to satisfy a user expectation that applying a transformation followed by the inverse transformation will result in coordinates that are materially unchanged. 
+
+
+=== Calculation of deformation between two epochs
+
+The displacement de, dn and du to transform a coordinate between two epochs is simply the difference between the displacement values calculated at each epoch.
+
+The uncertainties of these displacements require a more sophisticated calculation as uncertainty of displacement components calculated at different times from the same model are clearly correlated.
+
+While there is no mathematically correct way to quantify the uncertainty without a more complete error model than defined in this deformation model representation, the following approach is suggested.
+
+The time function error factor of the difference between t~0~ and t~1~ is calculated for each model component separately as f~e,t1-t0~ = √abs(f(t~1~)-f(t~0~)).
+
+The eh and ev values from the spatial function for each displacement element are multiplied by these time function error factors and then combined as the root sum of squares to give the total uncertainty of the displacement between the two epochs.
 
 === Conversion of coordinates between versions of the deformation model
 
