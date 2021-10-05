@@ -36,7 +36,7 @@ This work is closely aligned with the work of the [GGXF (Geodetic Gridded data e
 
 The project team is now working on compiling the abstract specification document that will be the main product of this teams work.
 
-The document is open for comment and editing as a Google document at https://docs.google.com/document/d/1bfbqk8KgZ4Y7sj4N3kbrlFMKLK9eyR56l92kI96Acfk/edit?usp=sharing.  This link can be used to submit comments on the document (select some text and then click the + icon to add a comment on the text).  
+The document is open for comment and editing as a Google document at https://docs.google.com/document/d/1zz850Cdfo2BbhH7ju9rpeTAhB2V1whgHX_pg80bQlVA/edit?usp=sharing.  This link can be used to submit comments on the document (select some text and then click the + icon to add a comment on the text).  
 
 Other work done by this team is held in this repository, in particular the source code for the abstract specification is in the products/specification folder.  The github issues also contain a body of discussion.
 
