@@ -13,7 +13,7 @@ There are two ways to specify the Preface: "simple clause" or "full clasuse"
 
 If the Preface does not contain subclauses, it is considered a simple preface clause. This one is entered as text after the `.Preface` label and must be placed between the AsciiDoc document attributes and the first AsciiDoc section title. It should not be give a section title of its own.
 
-If the Preface contains subclauses, it needs to be encoded as a full preface clause. This one is recognized as a full Metanorma AsciiDoc section with te title "Preface", i.e. `== Preface`. (Simple preface content can also be encoded like full preface.) 
+If the Preface contains subclauses, it needs to be encoded as a full preface clause. This one is recognized as a full Metanorma AsciiDoc section with te title "Preface", i.e. `== Preface`. (Simple preface content can also be encoded like full preface.)
 ====
 
 ////
@@ -25,7 +25,7 @@ All objects on the surface of the earth are moving.  Intuitively fixed features 
 
 This creates a challenge for the geospatial and positioning community - how to account for this movement when comparing data sets observed at different times, or how to relocate an object located in the past.
 
-One solution to this challenge is to use a deformation model - a mathematical model of the deformation of the crust.  It allows a "fixed" object's location to be propogated to different times. 
+One solution to this challenge is to use a deformation model - a mathematical model of the deformation of the crust.  It allows a "fixed" object's location to be propagated to different times.
 
 Common uses for this include:
 
@@ -33,11 +33,11 @@ Common uses for this include:
 * transformation the current observed location of an object to the reference epoch of a static coordinate system
 * determining the correct spatial relationship of data sets observed at different times.
 
-Currently many national geodetic agencies construct deformation models.  However 
+Currently many national geodetic agencies construct deformation models.  However generally these are using customized formats and typically only used by software developed by the agency.
 
-This specification defines a functional model for describing a deformation model.  It describes a way of parameterising deformation such that it can be encoded into a data set and incorporated into software for using in coordinate transformations.  It also defines how to calculate the displacement of a coordinate between two different times using this parameterisation.  
+This specification defines a functional model for describing a deformation model.  It describes a way of parameterizing deformation such that it can be encoded into a data set and incorporated into software for using in coordinate transformations.  It also defines how to calculate the displacement of a coordinate between two different times using this parameterization.
 
-This specification allows producers of deformation models, typically national geodetic agencies, to publish the deformation model in a consistent way such that users of coordinate transformation software can be confident that the deformation model is being applied as intended by the producers.
+This specification allows producers of deformation models, such as national geodetic agencies, to publish these model in a consistent way such that users of coordinate transformation software can be confident that the model is being applied as intended by the producers.
 
 [.preface]
 == Submitters
@@ -46,7 +46,7 @@ This specification allows producers of deformation models, typically national ge
 |===
 h| Submitter h| Affiliation
 | Chris Crook | Land Information New Zealand
-| Kevin Kelly | ESRI 
+| Kevin Kelly | ESRI
 | ...   | ...
 |===
 
@@ -54,18 +54,28 @@ h| Submitter h| Affiliation
 [.preface]
 == Introduction
 
-This specification has been developed by the OGC Coordinate Reference System (CRS) domain working group (DWG) in conjunction with the  the CRS DWG project team developing the "Gridded Geodetic Exchange Format (GGXF)" and with the International Association of Geodesy (IAG)) Working group 1.3.1 on "Time-dependent transformations between reference frames in deforming regions".
+This specification has been developed by the OGC Coordinate Reference System (CRS) domain working group (DWG) in conjunction with the CRS DWG project team developing the "Gridded Geodetic Exchange Format (GGXF)" and with the International Association of Geodesy (IAG)) Working group 1.3.1 on "Time-dependent transformations between reference frames in deforming regions".
 
-It defines a general parameterisation of deformation models for use in coordinate transformation operations.  The primary use case for this parameterisation for geodetic agencies to encode regional deformation models for use in spatial data operations in geographic information systems and in positioning systems.  
+This specification defines a general parameterization of deformation models as illustrated in <<image_structure>>.  The total deformation is decomposed into a set of elements, each of which is defined by a spatial function and a time function.  The spatial function defines the displacement that applies at a given location, and the time function defines a scalar function that applies for the element at a given time.  The displacement due to the element is the spatial function displacement multiplied by the time function scale factor.  The total displacement at the location and time is the sum of the displacements from each element.
 
-This specification does not encompass other types of deformation model such as:
+[[image_structure]]
+image::structure.png[title="Functional decomposition of a deformation model",width=600,pdfwidth=15cm]
 
-* Rigid body transformation between reference frames such as time dependent helmert or Bursa-Wolf transformations,
+//image::structure.svg[title="Functional decomposition of a deformation model",width=10cm]
+
+Commonly elements will represent specific geophysical causes, such as coseismic deformation due to an earthquake.  However an element could equally represent some measured for which no physical cause has been ascribed.  Equally one event may be represented by more than one element. For example the horizontal deformation due to an earthquake may be represented by one element, and the vertical deformation by another.
+
+This specification does not encompass other forms of deformation model such as:
+
+* Rigid body transformation between reference frames such as time dependent Helmert or Bursa-Wolf transformations,
 * Trajectory models for individual points, such as ITRF reference station coordinate models,
-* Static distortion models used to represent the deformation between two datums (typically between older datums based on local terrestrial observations and modern datums based on global satellite systems.)
-* Global plate tectonic models, as these use a very different parameterisation of the relative movements of points
-* The format for encoding the parameters and metadata of a deformation model
-* Three dimensional geophysical models of deformation in terms of dislocations on fault surfaces or using finite element model
+* Static distortion models used to represent the deformation between two datums
+* Global plate tectonic models
+* Three dimensional geophysical models of deformation in terms of dislocations on fault surfaces or using finite element models.
+
+This specification also does not describe how the parameters and metadata of a deformation model should be encoded into a file.
+
+The primary use case for this specification is for deformation model producers such as national geodetic agencies to encode regional deformation models for use in spatial data operations in geographic information systems and in positioning systems.  The purpose of this specification is to define what parameters must be encoded in a compliant deformation model, and what formulae compliant software should use to transform coordinates using the model. This compliance will ensure that transformations carried out by users give the results intended by the model producers.
 
 ////
 [.preface]

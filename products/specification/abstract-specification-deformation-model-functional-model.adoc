@@ -38,8 +38,10 @@
 :local-cache-only:
 :comment: ### Encode all images in HTML output as inline data-URIs; optional
 :data-uri-image:
-:extension_keys:asciimath:true
+:extension_keys:katex:true
+:step: latexmath
 :imagesdir: images
+:xrefstyle: short
 
 // Clauses
 include::sections/00-preface.adoc[]
