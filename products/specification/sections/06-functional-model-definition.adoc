@@ -1,9 +1,9 @@
 == Deformation model definition
 
-The deformation model is characterised as follows.  
+The deformation model is characterized as follows.
 
 ////
-2. [[funcmod-trajectory]]The model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial function.  This trajectory is terms of an explicitly defined accessible coordinate system. 
+2. [[funcmod-trajectory]]The model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial function.  This trajectory is terms of an explicitly defined accessible coordinate system.
 
 3. [[funcmod-ref-crs]]The position used to calculate the spatial function is not defined in an currently accessible coordinate system - it may be in terms on an accessible coordinate system at a specific epoch.  Its value is only accessible by an inverse calculation using the model.  See the <<formula-inverse>> below.
 ////
@@ -20,7 +20,7 @@ The deformation model is characterised as follows.
 
 4. [[funcmod-spatial-extent]]The spatial function may be defined over a subset of the total extent of the model. Where the spatial function is not defined it is assumed to be zero.
 
-5. [[funcmod-spatial-function]]The spatial function is represented by a nested grid structure comprising one or more grids.  
+5. [[funcmod-spatial-function]]The spatial function is represented by a nested grid structure comprising one or more grids.
 
 +
 --
@@ -35,14 +35,14 @@ The grids must conform to the following requirements:
 To evaluate the spatial function at a specific position the nesting algorithm identifies a single grid is applicable at that position.  The spatial function displacement components are calculated from just that grid using the formulae.  This calculation described in <<formula-spatial-interpolation>>.
 --
 
-6. [[funcmod-spatial-params]]The spatial function can define displacement and uncertainty components.  This set of components must be defined at every node of every grid of the function.  Different spatial functions may defined different componenents. E.g. one function might define horizontal displacement and another may define vertical displacement.
+6. [[funcmod-spatial-params]]The spatial function can define displacement and uncertainty components.  This set of components must be defined at every node of every grid of the function.  Different spatial functions may defined different components. E.g. one function might define horizontal displacement and another may define vertical displacement.
 
 7. [[funcmod-spatial-params-displacement]]Displacement components of the spatial function may include:
-* horizontal displacement - the east and north displacement in metres or degrees
-* vertical displacement - the upwards vertical displacement in metres.
+* horizontal displacement - the east and north displacement in meters or degrees
+* vertical displacement - the upwards vertical displacement in meters.
 
 +
-Displacements components not defined by the spatial function are assumed to be zero. 
+Displacements components not defined by the spatial function are assumed to be zero.
 
 8. [[funcmod-spatial-params-uncertainty]]Uncertainty components of the spatial function may be one of:
 
@@ -66,14 +66,16 @@ If the uncertainty is not defined at a model node its value is defined in the el
 9. [[funcmod-spatial-params-quality]] A spatial function may include a quality parameter at each node providing guidance on the reliability of the spatial function in the vicinity of the node. For example, a quality parameter could indicate surface faulting affecting cells adjacent to the node.
 
 10. [[funcmod-continuous-invertible]]
-The displacement defined by the model is required to be continuous and invertible within the spatial and temporal extent of the model except where it evaluates to _no data_.  
-This is not necessarily enforced by the mathematical formulation of a model. It is a compliance requirement on producers of functional models and thus can be assumed by software implementations of the model. 
+The displacement defined by the model is required to be continuous and invertible within the spatial and temporal extent of the model except where it evaluates to _no data_.
+This is not necessarily enforced by the mathematical formulation of a model. It is a compliance requirement on producers of functional models and thus can be assumed by software implementations of the model.
 
 11. [[funcmod-nodata]] The displacement and uncertainty components at a node of a spatial function may be assigned a  _no data_ value.  This means that their value at that not is undefined.  The model displacement and uncertainty is undefined at specific time and location if calculating it would require using a using a _no data_ value.
 
 14. [[funcmod-time-function]]The time function is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
  * a velocity function
- * a ramp time function defined by a start and end time and a start and end scale factor.  Two specialisations of the ramp time function are the step and reverse step functions.
+ * a step function
+ * a reverse step function
+ * a ramp function
  * an exponential decay function
  * a logarithmic function
  * an acceleration function
@@ -83,7 +85,7 @@ This is not necessarily enforced by the mathematical formulation of a model. It 
 +
 These base time functions are defined mathematically in <<formula-time-function>>.
 
-15. The model may define a 14 parameter Bursa-Wolf transformation definition.  This is applied after the displacement calculated from the deformation elements in a forward transformation or before it in an inverse transformation as described in <<formula-14prm-transformation>>.  
+15. The model may define a 14 parameter Bursa-Wolf transformation definition.  This is applied after the displacement calculated from the deformation elements in a forward transformation or before it in an inverse transformation as described in <<formula-14prm-transformation>>.
 
 
 16. [[funcmod-element-metadata]]Each element definition includes metadata defining:
@@ -98,11 +100,11 @@ These base time functions are defined mathematically in <<formula-time-function>
 It may also include:
 
 * The default horizontal and vertical uncertainty which applies if the spatial function does not explicitly define uncertainty.
-* Other metadata required by the implementation 
+* Other metadata required by the implementation
 * Other producer metadata
 
 ////
-* definition of areas where quality is impacted, for example where there is surface faulting. The areas each include a description, multipolygon defining the extent of the affected area, and a start and end epoch for the event causing the unmodelled deformation. See <<discuss-params-quality>> below.  
+* definition of areas where quality is impacted, for example where there is surface faulting. The areas each include a description, multipolygon defining the extent of the affected area, and a start and end epoch for the event causing the unmodelled deformation. See <<discuss-params-quality>> below.
 ////
 --
 
@@ -120,10 +122,10 @@ It may also include:
 * The spatial function definition CRS
 * The units of horizontal displacement
 * The units of vertical displacement
-* The default horizontal and vertical uncertainty for each element of the model 
-* The parameters representing uncertainty at each spatial function node, e.g. horizontal covariance, vertical uncertainty 
+* The default horizontal and vertical uncertainty for each element of the model
+* The parameters representing uncertainty at each spatial function node, e.g. horizontal covariance, vertical uncertainty
 * the probability level of uncertainties in the model, e.g. 95% confidence level
-* The spatial extent of the model 
+* The spatial extent of the model
 * The time extent of the model
 * The algorithm used to apply the calculated displacement to an input coordinate.
 
@@ -132,6 +134,6 @@ It may also include:
 It may also include:
 
 * Links to reference information about the model
-* Other metadata required by the implementation 
+* Other metadata required by the implementation
 * Other producer metadata
 --
