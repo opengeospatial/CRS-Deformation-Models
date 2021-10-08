@@ -286,9 +286,9 @@ def ggxfModel(model,usegroups=None,maxwidth=None,maxdepth=None):
     ))
     gmodel['startDate']=extractDate(model['time_extent']['first'])
     gmodel['endDate']=extractDate(model['time_extent']['last'])
-    gmodel['sourceCrs']=getepsg(model['source_crs'])
-    gmodel['targetCrs']=getepsg(model['target_crs'])
-    gmodel['interpolationCrs']=getepsg(model['definition_crs']) # gridcrs is WKT in current file - ignoring
+    gmodel['sourceCrsWkt']=getepsg(model['source_crs'])['crsWkt']
+    gmodel['targetCrsWkt']=getepsg(model['target_crs'])['crsWkt']
+    gmodel['interpolationCrsWkt']=getepsg(model['definition_crs'])['crsWkt'] # gridcrs is WKT in current file - ignoring
     gmodel['operationAccuracy']=0.01
     gmodel['uncertaintyMeasure']=OrderedDict((
         ('horizontal',OrderedDict((
