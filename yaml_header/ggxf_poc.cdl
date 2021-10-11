@@ -1,0 +1,128 @@
+netcdf ggxf_poc {
+types:
+  compound ggxfParameterType {
+    char parameterName(32) ;
+    char unit(16) ;
+    double unitSiRatio ;
+  }; // ggxfParameterType
+dimensions:
+	affine = 6 ;
+
+// global attributes:
+		:version = "20180701" ;
+		:content = "deformationModel" ;
+		:operationAccuracy = 0.01 ;
+
+group: nz_linz_nzgd2000-ndm-grid02 {
+  dimensions:
+  	nParam = 2 ;
+  variables:
+  	ggxfParameterType parameters(nParam) ;
+
+  // group attributes:
+  		:remark = "Secular deformation model derived from NUVEL-1A rotation rates\nSecular deformation model derived from GNS model 2011 V4\n" ;
+  data:
+
+   parameters = {{"displacementEast"}, {"metre"}, 1}, 
+      {{"displacementNorth"}, {"metre"}, 1} ;
+
+  group: ndm_grid_nuvel1a_eez {
+    dimensions:
+    	nCol = 73 ;
+    	nRow = 67 ;
+    variables:
+    	double affineCoeffs(affine) ;
+    	double data(nCol, nRow, nParam) ;
+
+    // group attributes:
+    		:remark = "" ;
+    data:
+
+     affineCoeffs = -25, 0, -0.5, 158, 0.5, 0 ;
+
+     data =
+  0.0230039991438389, 0.0512549988925457,
+  0.0225690007209778, 0.0512540005147457,
+  0.0221319999545813, 0.0512529984116554,
+  ....
+  -0.0346629992127419, 0.0337079986929893,
+  -0.0341649986803532, 0.0337070003151894,
+  -0.0336650013923645, 0.0337059982120991 ;
+    } // group ndm_grid_nuvel1a_eez
+
+  group: ndm_grid_igns2011_nz {
+    dimensions:
+    	nCol = 141 ;
+    	nRow = 151 ;
+    variables:
+    	double affineCoeffs(affine) ;
+    	double data(nCol, nRow, nParam) ;
+
+    // group attributes:
+    		:remark = "" ;
+    data:
+
+     affineCoeffs = -33, 0, -0.1, 165.5, 0.1, 0 ;
+
+     data =
+  0.0123929996043444, 0.0461479984223843,
+  0.0122918002307415, 0.0461478009819984,
+  0.0121905999258161, 0.0461475998163223,
+  ...
+  -0.037117000669241, 0.0321564003825188,
+  -0.0370189994573593, 0.0321561992168427,
+  -0.0369209982454777, 0.0321560017764568 ;
+    } // group ndm_grid_igns2011_nz
+  } // group nz_linz_nzgd2000-ndm-grid02
+
+group: nz_linz_nzgd2000-ds20090715-grid011 {
+  dimensions:
+  	nParam = 3 ;
+  variables:
+  	ggxfParameterType parameters(nParam) ;
+
+  // group attributes:
+  		:remark = "Dusky Sound (Fiordland) earthquake" ;
+  data:
+
+   parameters = {{"displacementEast"}, {"metre"}, 1}, 
+      {{"displacementNorth"}, {"metre"}, 1}, 
+      {{"displacementUp"}, {"metre"}, 1} ;
+
+  group: patch_ds_20090715_grid_ds_P0_L1 {
+    dimensions:
+    	nCol = 11 ;
+    	nRow = 11 ;
+    variables:
+    	double affineCoeffs(affine) ;
+    	double data(nCol, nRow, nParam) ;
+
+    // group attributes:
+    		:remark = "" ;
+    data:
+
+     affineCoeffs = -50.125, 0, -0.125, 165.4, 0.15, 0 ;
+
+     data =
+  0, 0, 0,
+  0, 0, 0,
+  0, 0, 0,
+  0, 0, 0,
+  0, 0, 0,
+  0, 0, 0,
+  0, 0, 0,
+  0, 0, 0,
+  0, 0, 0,
+  0, 0, 0,
+  0, 0, 0,
+  0, 0, 0,
+  3.9999998989515e-05, -0.00036000000545755, -0.00023999999393709,
+  9.99999974737875e-05, -0.000739999988581985, -0.00047999998787418,
+  0.00015999999595806, -0.00112000002991408, -0.000720000010915101,
+  ...
+  0, 0, 0,
+  0, 0, 0,
+  0, 0, 0 ;
+    } // group patch_ds_20090715_grid_ds_P0_L1
+  } // group nz_linz_nzgd2000-ds20090715-grid011
+}
