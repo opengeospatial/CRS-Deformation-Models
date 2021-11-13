@@ -14,35 +14,35 @@ The deformation model is characterized as follows.
 
 1. [[funcmod-extents]] The model defines deformation within a specified spatial and temporal extent. Beyond these extents the model is undefined and cannot be evaluated.
 
-2. [[funcmod-decomposition]]The model partitions deformation into one or more elements. The total deformation at any time and position is calculated by summing the contribution from each element as described in <<formula-elements>>.
+2. [[funcmod-decomposition]]The model partitions deformation into one or more elements. The total displacement at a specific time and position is calculated by summing the contribution from each element at that time and position as described in <<formula-elements>>.
 
 3. [[funcmod-element]]Each element of the model comprises a spatial function and a time function. The spatial function evaluates displacement as a function of position. The time function evaluates a scale factor as a function of time. The deformation contribution for the element at a given position and time is obtained by multiplying the displacement from the spatial function by the scale factor from the time function.
 
 4. [[funcmod-spatial-extent]]The spatial function may be defined over a subset of the total extent of the model. Where the spatial function is not defined it is assumed to be zero.
 
-5. [[funcmod-spatial-function]]The spatial function is represented by a nested grid structure comprising one or more grids.
+5. [[funcmod-spatial-function]]The spatial function is represented by displacement vectors at the nodes of a grid or a set of nested grids.
 
 +
 --
 The grids must conform to the following requirements:
 
-* Grids rows are spaced equally spaced
-* Grid columns equally spaced.
-* Grid rows and columns are aligned with the axes of the definition CRS
-* Grids may share a common edge but otherwise may not intersect unless one of the grids is fully contained by the other grid.
-* Grid cells of the contained grid must each be fully contained in a grid cell of the containing grid.
+* Grids rows are equally spaced 
+* Grid columns equally spaced. 
+* Grid rows and columns are aligned with the axes of the definition CRS 
+* Grids may intersect at a one or more common edges but otherwise may not intersect unless one of the grids is fully contained by the other grid.
+* Grid cells of one grid intersect at a one or more common edges with grid cells of another grid but otherwise may not intersect unless one of the cells is fully contained by the other.
 
-To evaluate the spatial function at a specific position the nesting algorithm identifies a single grid is applicable at that position.  The spatial function displacement components are calculated from just that grid using the formulae.  This calculation described in <<formula-spatial-interpolation>>.
+To evaluate the spatial function at a specific position, the nesting algorithm identifies a single grid applicable at that position. The spatial function displacement components are calculated from just that grid, using the formulae. This calculation described in <<formula-spatial-interpolation>>.
 --
 
-6. [[funcmod-spatial-params]]The spatial function can define displacement and uncertainty components.  This set of components must be defined at every node of every grid of the function.  Different spatial functions may defined different components. E.g. one function might define horizontal displacement and another may define vertical displacement.
+6. [[funcmod-spatial-params]]The spatial function can define displacement and uncertainty components.  This set of components must be defined at every node of every grid of the function.  Different spatial functions may have different components.  For example, one function might define horizontal displacement and another may define vertical displacement.
 
 7. [[funcmod-spatial-params-displacement]]Displacement components of the spatial function may include:
 * horizontal displacement - the east and north displacement in meters or degrees
 * vertical displacement - the upwards vertical displacement in meters.
 
 +
-Displacements components not defined by the spatial function are assumed to be zero.
+Displacement components not defined by the spatial function are assumed to be zero.
 
 8. [[funcmod-spatial-params-uncertainty]]Uncertainty components of the spatial function may be one of:
 
@@ -69,7 +69,7 @@ If the uncertainty is not defined at a model node its value is defined in the el
 The displacement defined by the model is required to be continuous and invertible within the spatial and temporal extent of the model except where it evaluates to _no data_.
 This is not necessarily enforced by the mathematical formulation of a model. It is a compliance requirement on producers of functional models and thus can be assumed by software implementations of the model.
 
-11. [[funcmod-nodata]] The displacement and uncertainty components at a node of a spatial function may be assigned a  _no data_ value.  This means that their value at that not is undefined.  The model displacement and uncertainty is undefined at specific time and location if calculating it would require using a using a _no data_ value.
+11. [[funcmod-nodata]] The displacement and uncertainty components at a node of a spatial function may be assigned a  _no data_ value.  This means that their value at that node is undefined.  The model displacement and uncertainty is undefined at specific time and location if calculating it would require using a using a _no data_ value.
 
 14. [[funcmod-time-function]]The time function is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
  * a velocity function
@@ -110,7 +110,7 @@ It may also include:
 
 17. [[funcmod-model-metadata]]The model definition includes metadata defining:
 
-* The version of the this specification with which the model complies
+* The version of this specification with which the model complies
 * The name of the model
 * The version of the model
 * The publication date

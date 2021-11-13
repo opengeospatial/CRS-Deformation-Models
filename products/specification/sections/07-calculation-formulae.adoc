@@ -23,7 +23,7 @@ Spatial functions may be represented as regular grids defined in an interpolatio
 x~i~ = x~o~ + i.x~s~ +
 y~j~ = y~o~ + j.y~s~
 
-where  x~o~, y~o~ are the coordinates of a reference point of the grid,  x~s~ and y~s~ are the grid spacing along the x and y axes respectively, and i and j are the column and row number of the grid node.  Note that the x and y grid spacing need not be equal.  For example in a geographic interpolation coordinate system were x is longitude and y is latitude it may be preferable that x~s~ is approximately equal to y~s~/cos(y~m~), where y~m~ is the latitude of the middle of the grid, as this makes the grid cells approximately square (except at polar latitudes).
+where  x~o~, y~o~ are the coordinates of a reference point of the grid,  x~s~ and y~s~ are the grid spacing along the x and y axes respectively, and i and j are the column and row number of the grid node.  Note that the x and y grid spacing need not be equal.  For example, in a geographic interpolation coordinate system where x is longitude and y is latitude it may be preferable that x~s~ is approximately equal to y~s~/cos(y~m~), where y~m~ is the latitude of the middle of the grid, as this makes the grid cells approximately square (except at polar latitudes).
 
 Displacement vector elements are calculated using bilinear interpolation with respect to x and y between the nodes at the corners of the grid cell within which the calculation point lies, as shown in <<image_bilinear_interpolation>>.  Each element of the displacement is calculated independently.
 
@@ -167,9 +167,9 @@ Future versions of this specification may add new base functions as required.
 [[formula-elements]]
 === Combination of elements
 
-To calculate the total deformation at a time and location, the displacement due to each element is calculated independently and summed. The total displacement is then applied to the coordinate. Displacement uncertainty is calculated similarly. See the formula below.  The same input position coordinate is used for each element. Deformation components are not applied sequentially, that is the input coordinate is not updated by the first element before being used to calculate the deformation of the second element.
+To calculate the total displacement at a time and location, the displacement due to each element is calculated independently and summed. The total displacement is then applied to the coordinate. Displacement uncertainty is calculated similarly using the formula below.  The same input position coordinate is used for each element. Deformation components are not applied sequentially, that is the input coordinate is not updated by the first element before being used to calculate the deformation of the second element.
 
-At a given time and location the values obtained from each element are combined to determine the overall. For example, if there are n components for which the spatial model calculates de as de~1~, de~2~, … to de~n~, and the time function evaluates to f~1~, f~2~, … to f~n~ then the total displacement de is
+At a given time and location the values obtained from each element are combined to determine the overall displacement. For example, if there are n components for which the spatial model calculates de as de~1~, de~2~, … to de~n~, and the time function evaluates to f~1~, f~2~, … to f~n~ then the total displacement de is
 
 de = f~1~.de~1~+ f~2~.de~2~+ … + f~n~.de~n~
 

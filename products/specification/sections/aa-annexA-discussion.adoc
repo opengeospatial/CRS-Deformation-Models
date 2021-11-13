@@ -7,9 +7,9 @@ __Note__: This section is likely not appropriate for the final abstract specific
 [[discuss-elements]]
 === Decomposition into elements
 
-This specification assumes that the deformation can be decomposed into a set of spatial functions each multiplied by a scalar time function.  This is suitable for many geophysical phenomena such as secular motion (velocity models) and coseismic ground deformation.
+This specification assumes that the deformation can be decomposed into a set of spatial functions each multiplied by a scalar time function. This is suitable for many geophysical phenomena such as secular motion (velocity models) and coseismic ground deformation.  It may be less suitable to deformation with a complex time evolution such as slow slip events propagating along a fault system, or post-seismic deformation.
 
-It may be less suitable to deformation with a complex time evolution such as slow slip events propagating along a fault system, or post-seismic deformation. However currently deformation models for coordinate operations are all represented in this way. Decomposing in this way can represent any deformation to an arbitrary level of detail, but it may not be the most efficient way to do so.
+Deformation models for coordinate operations are all currently represented in this way. Decomposing in this way can represent any deformation to an arbitrary level of detail, but it may not be the most efficient way to do so.
 
 [[discuss-spatial-model]]
 === Spatial function types
@@ -28,11 +28,13 @@ Another potential future development is the use of Discrete Global Grid Systems 
 
 Most deformation models are regional and often defined by jurisdiction. In areas affected by recent large deformation pre-event data may be lacking.. There are several approaches to identifying and handling such areas.
 
-Areas where displacement is undefined could be identified by a polygonal geographical extent. However, grids must be defined by rectangular regions, which are unlikely to match the extent of the known deformation. To avoid grids being used in areas where the deformation is undefined it is desirable that special “no-data” grid values can identify points these locations..
+Areas where displacement is undefined could be identified by a polygonal geographical extent. However, grids must be defined by rectangular regions, which are unlikely to match the extent of the known deformation. To avoid grids being used in areas where the deformation is undefined it is desirable that special “no-data” grid values can identify points at these locations..
 
-This specification supports the notion of a “no data” value. An alternative approach is to specify a value with a large uncertainty. This is considered below in the link:#4jpj0b3[_discussion on continuity of the model_]. “No-data” values could be identified in a number of ways, for example by a flag value on the grid nodes, by special values of displacement (e.g. 99999), or by NaN (not a number) floating point values.
+This specification supports the notion of a “no data” value.  “No-data” values could be identified in a number of ways, for example by a flag value on the grid nodes, by special values of displacement (e.g. 99999), or by NaN (not a number) floating point values.  This choice may be dictated by the format used to carry the deformation model.
 
 The “no data” value differs from a zero displacement. A value of zero is used where there is no significant displacement. A “no-data” value is used where the displacement is unknown.
+
+An alternative approach is to specify a value with a large uncertainty.  This may be preferable to ensure a continuous and invertible model, as discussed in <<discuss-continuous-invertible>>.
 
 If any element of the model evaluates to "no-data" at a given location and time then the displacement (or uncertainty) at that location is undefined. <<image-no-data>> illustrates the use of “no-data” values in the model. In this figure the grey area shows the region where displacement is undefined and the square marks the total extent of the model. Outside this area the model cannot be evaluated. Within the gridded spatial function there are a number of nodes at which the displacement is not defined, these are identified with a “no-data” value. Where these nodes are required to interpolate a displacement, which is any grid cell they are on the boundary of, the displacement cannot be calculated..
 
@@ -122,7 +124,9 @@ The geocentric weighted average method proposed in <<formula-geocentric-bilinear
 [[image-geocentric-bilinear-interpolation]]
 image::geocentric_bilinear_interpolation.png[title=geocentric bilinear interpolation diagram, width=200,scalewidth=7cm]
 
-To estimate the error that could be incurred using simple bilinear interpolation and not accounting for this directional difference, consider a case where the displacement is 1 meter northwards at point A in <<image-geocentric-bilinear-interpolation>>, and zero meters at point B. Let the longitude grid spacing be λ~s~ radians. If the calculation point P is λ radians past A, then the magnitude of the interpolated displacement will be (λ~s~-λ)/λ~s~. The error of orientation will be λ radians (the difference between north at A and north at the calculation point) and the displacement error will be sin(λ).(λ~s~-λ)/λ~s~. Approximating sin(λ) as λ, the error has a maximum absolute value in the range (0,λ~s~) of λ~s~/2. For example, with a grid longitude spacing of 1° the displacement error is about 2cm..
+To estimate the error that could be incurred using simple bilinear interpolation and not accounting for this directional difference, consider a case where the displacement is 1 meter northwards at point A in <<image-geocentric-bilinear-interpolation>>, and zero meters at point B. Let the longitude grid spacing be λ~s~ radians. If the calculation point P is λ radians past A, then the magnitude of the interpolated displacement will be (λ~s~-λ)/λ~s~. The error of orientation will be λ radians (the difference between north at A and north at the calculation point) and the displacement error will be sin(λ).(λ~s~-λ)/λ~s~. Approximating sin(λ) as λ, the error has a maximum absolute value in the range (0,λ~s~) of λ~s~/2. For example, with a grid longitude spacing of 1° the displacement error is about 2cm.
+
+Near polar regions can also be handled by using a suitable projection CRS rather than a geographic system.  
 
 ////
 
@@ -167,7 +171,7 @@ Note that this is not about creating a more accurate transformation — the 
 
 The displacement de, dn and du to transform a coordinate between two epochs is simply the difference between the displacement values calculated at each epoch.
 
-The uncertainties of these displacements require a more sophisticated calculation as uncertainty of displacement components calculated at different times from the same model are clearly correlated.
+The uncertainties of these displacements require a more sophisticated calculation as uncertainty of displacements calculated at different times from the same model are clearly correlated.
 
 While there is no mathematically correct way to quantify the uncertainty without a more complete error model than defined in this deformation model representation, the following approach is suggested.
 
