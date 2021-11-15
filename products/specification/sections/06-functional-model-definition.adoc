@@ -29,10 +29,10 @@ The grids must conform to the following requirements:
 * Grids rows are equally spaced 
 * Grid columns equally spaced. 
 * Grid rows and columns are aligned with the axes of the definition CRS 
-* Grids may intersect at a one or more common edges but otherwise may not intersect unless one of the grids is fully contained by the other grid.
-* Grid cells of one grid intersect at a one or more common edges with grid cells of another grid but otherwise may not intersect unless one of the cells is fully contained by the other.
+* Grids may intersect at one or more common edges but otherwise may not intersect unless one of the grids is fully contained by the other grid.
+* Grid cells of one grid may intersect at a one or more common edges with grid cells of another grid but otherwise may not intersect unless one of the cells is fully contained by the other.
 
-To evaluate the spatial function at a specific position, the nesting algorithm identifies a single grid applicable at that position. The spatial function displacement components are calculated from just that grid, using the formulae. This calculation described in <<formula-spatial-interpolation>>.
+To evaluate the spatial function at a specific position, the nesting algorithm identifies a single grid applicable at that position. The spatial function displacement components are calculated from just that grid, using the formulae. This calculation is described in <<formula-spatial-interpolation>>.
 --
 
 6. [[funcmod-spatial-params]]The spatial function can define displacement and uncertainty components.  This set of components must be defined at every node of every grid of the function.  Different spatial functions may have different components.  For example, one function might define horizontal displacement and another may define vertical displacement.
