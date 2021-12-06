@@ -58,14 +58,14 @@ groups:
     affineCoeffs: [-25.0,0.0,-0.5,158.0,0.5,0.0]
     iNodeMaximum: 72
     jNodeMaximum: 66
-    gridDataSource: GTIFF_DIR:1:nz_linz_nzgd2000-ndm-grid02.tif
+    dataSource: GTIFF_DIR:1:nz_linz_nzgd2000-ndm-grid02.tif
   - gridName: ndm_grid_igns2011_nz
     parentGridName: ndm_grid_nuvel1a_eez
     hierarchyRank: 2
     affineCoeffs: [-33.0,0.0,-0.1,165.5,0.1,0.0]
     iNodeMaximum: 140
     jNodeMaximum: 150
-    gridDataSource: GTIFF_DIR:2:nz_linz_nzgd2000-ndm-grid02.tif
+    dataSource: GTIFF_DIR:2:nz_linz_nzgd2000-ndm-grid02.tif
 - groupName: nz_linz_nzgd2000-ds20090715-grid011
   remark: Dusky Sound (Fiordland) earthquake
   parameters:
@@ -95,4 +95,4 @@ groups:
     affineCoeffs: [-50.125,0.0,-0.125,165.4,0.15,0.0]
     iNodeMaximum: 10
     jNodeMaximum: 10
-    gridDataSource: GTIFF_DIR:1:nz_linz_nzgd2000-ds20090715-grid011.tif
+    dataSource: GTIFF_DIR:1:nz_linz_nzgd2000-ds20090715-grid011.tif

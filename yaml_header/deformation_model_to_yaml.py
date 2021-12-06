@@ -145,7 +145,7 @@ def loadGTiffGridData(source,sourceref=None,tiffdir=None):
         # remark=gmd.get('TIFFTAG_IMAGEDESCRIPTION')
         # if remark:
         #     gdata['remark']=remark
-        gdata['gridDataSource']=sourceref or source
+        gdata['dataSource']=sourceref or source
         for k,v in md.get('SUBDATASETS',{}).items():
             if m := re.match(r'^SUBDATASET_(\d+)_NAME',k):
                 if m.group(1) != '1':
