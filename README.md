@@ -28,6 +28,17 @@ Note: EDT ends Nov 1
 2021-11-22      https://www4.gotomeeting.com/join/864247981 21:00 UTC
 2021-12-20      https://www4.gotomeeting.com/join/207460949
 
+2022-01-17 https://www4.gotomeeting.com/join/544346533
+2022-02-14 https://www4.gotomeeting.com/join/606539877
+2022-03-14 https://www4.gotomeeting.com/join/616024989 20:00 UTC
+2022-04-11 https://www4.gotomeeting.com/join/463903845
+
+GGXF 2022-01-10 https://www4.gotomeeting.com/join/178306341
+GGXF 2022-01-31 https://www4.gotomeeting.com/join/426755581
+GGXF 2022-02-28 https://www4.gotomeeting.com/join/950826069
+GGXF 2022-03-28 https://www4.gotomeeting.com/join/477678237
+GGXF 2022-04-25 https://www4.gotomeeting.com/join/237877533
+
 -->
 
 This work is closely aligned with the work of the [GGXF (Geodetic Gridded data exchange format)](https://github.com/opengeospatial/CRS-Gridded-Geodetic-data-eXchange-Format) team.
