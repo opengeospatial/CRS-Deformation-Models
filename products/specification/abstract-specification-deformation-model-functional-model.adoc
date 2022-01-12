@@ -56,7 +56,8 @@ include::sections/06-functional-model-definition.adoc[]
 include::sections/07-calculation-formulae.adoc[]
 
 // Annexes (add annex files as needed)
-include::sections/aa-annexA-discussion.adoc[]
+include::sections/aa-annexA-producernotes.adoc[]
+include::sections/ax-annexX-rationale.adoc[]
 
 // Bibliography should be the last annex
 include::sections/az-bibliography.adoc[]

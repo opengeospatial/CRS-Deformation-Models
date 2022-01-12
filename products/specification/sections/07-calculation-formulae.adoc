@@ -13,7 +13,7 @@ For spatial function and interpolation types defined in this specification, the 
 [[formula-nested-grid-selection]]
 ==== Selection of spatial function grid
 
-Spatial functions are defined as a grid or a set of nested grids.  At a given position only one of the grids is used to calculate the spatial function displacement or uncertainty.  The selected grid is the smallest grid by area that contains the position.  The strictly nested arrangement of grids ensures that this is uniquely defined at any position.  If no grid in the spatial model contains the position then the displacement and uncertainty of the element at that location are both zero.
+Spatial functions are defined as a grid or a set of grids.  At a given position only one of the grids is used to calculate the spatial function displacement or uncertainty.  The implementation must uniquely identify the grid, if any, that applies at any location within the valid extents of the model.  If no grid applies at a location then the displacement and uncertainty of the element at that location are both zero.
 
 [[formula-bilinear-interpolation]]
 ==== Bilinear grid interpolation
@@ -25,7 +25,7 @@ y~j~ = y~o~ + j.y~s~
 
 where  x~o~, y~o~ are the coordinates of a reference point of the grid,  x~s~ and y~s~ are the grid spacing along the x and y axes respectively, and i and j are the column and row number of the grid node.  Note that the x and y grid spacing need not be equal.  For example, in a geographic interpolation coordinate system where x is longitude and y is latitude it may be preferable that x~s~ is approximately equal to y~s~/cos(y~m~), where y~m~ is the latitude of the middle of the grid, as this makes the grid cells approximately square (except at polar latitudes).
 
-Displacement vector elements are calculated using bilinear interpolation with respect to x and y between the nodes at the corners of the grid cell within which the calculation point lies, as shown in <<image_bilinear_interpolation>>.  Each element of the displacement is calculated independently.
+Model components are calculated using bilinear interpolation with respect to x and y between the nodes at the corners of the grid cell within which the calculation point lies, as shown in <<image_bilinear_interpolation>>.  Each element of the displacement is calculated independently.
 
 [[image_bilinear_interpolation]]
 image::bilinear_interpolation.png[title="Bilinear interpolation on a grid cell",width=300,scalewidth=7cm]
@@ -41,13 +41,20 @@ W~i+1,j~ = ((x-x~i~)/x~s~) * ((y~j+1~-y)/y~s~) +
 W~i,j+1~ = ((x~i+1~-x)/x~s~) * ((y-y~j~)/y~s~) +
 W~i+1,j+1~ = ((x-x~i~)/x~s~)*((y-y~j~)/y~s~)
 
-The displacement components de, dn, dh at (x,y) are calculated as the weighted average of the values at the nodes as, e.g.:
+The model components at (x,y) are calculated as the weighted average of the values at the nodes as, e.g.:
 
 de = W~i,j~.de~i,j~ + W~i+1,j~.de~i+1,j~ + W~i,j+1~.de~i,j+1~ + W~i+1,j+1~.de~i+1,j+1~
 
-The uncertainties eh, ev at (x,y) are calculated from the values at the nodes as, for example
-
-eh = √(W~i,j~*eh~i,j~^2^ + W~i+1,j~*eh~i+1,j~^2^ + W~i,j+1~*eh~i,j+1~^2^ + W~i+1,j+1~*eh~i+1,j+1~^2^)
+// Above to be confirmed but above simplification may be more correct - model components from adjacent nodes are highly
+// correlated so doesn't make sense to add as if they are independent.  Original text was
+// 
+// The displacement components de, dn, dh at (x,y) are calculated as the weighted average of the values at the nodes as, e.g.:
+//
+// de = W~i,j~.de~i,j~ + W~i+1,j~.de~i+1,j~ + W~i,j+1~.de~i,j+1~ + W~i+1,j+1~.de~i+1,j+1~
+//
+// The uncertainties eh, ev at (x,y) are calculated from the values at the nodes as, for example
+//
+// eh = √(W~i,j~*eh~i,j~^2^ + W~i+1,j~*eh~i+1,j~^2^ + W~i,j+1~*eh~i,j+1~^2^ + W~i+1,j+1~*eh~i+1,j+1~^2^)
 
 [[formula-geocentric-bilinear-interpolation]]
 ==== Geocentric bilinear grid interpolation
@@ -57,7 +64,7 @@ A simple average of the east and north displacements may not be appropriate wher
 [[image-near-pole-axes]]
 image::geocentric_bilinear_interpolation.png[title="East and north directions at near pole grid axes", width=200,scalewidth=7cm]
 
-In this situation the bilinear interpolation of vector components can be adapted by reparameterizing the vectors to a common set of axes before forming the weighted average.
+In this situation the bilinear interpolation of vector components can be adapted by reparametrizing the vectors to a common set of axes before forming the weighted average.
 
 The geocentric bilinear interpolation method converts the displacement components from east and north components to geocentric X, Y, and Z components. These are consistently aligned at the grid nodes and can be scaled and summed using the bilinear interpolation formulae in <<formula-bilinear-interpolation>> to calculate the X, Y, Z components of displacement at the calculation point, which are then converted back to east and north components at the calculation point.
 
@@ -89,11 +96,11 @@ The deformation model metadata defines a temporal extent for the model from T~mi
 
 Time functions are parameterized as a function of decimal years. For example, velocities are expressed meters/year.
 
-The conversion of a UTC epoch _yyyy_-_mm_-__dd__T__HH__:__MM__:__SS__Z to decimal years is implemented as follows. The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year. The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01T00:00:00Z and the epoch by the total number of seconds in the year (i.e. the number of seconds between _yyyy_-01-01T00:00:00Z and _yyy1_-01-01T00:00:00Z, where _yyy1_ is __yyyy__+1).
+The conversion of a date/time _yyyy_-_mm_-__dd__T__HH__:__MM__:__SS__  to decimal years is implemented as follows. The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year. The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01T00:00:00Z and the date/time by the total number of seconds in the year (i.e. the number of seconds between _yyyy_-01-01T00:00:00Z and _yyy1_-01-01T00:00:00Z, where _yyy1_ is __yyyy__+1).
 
 Note that there is a small ambiguity in this formulation due to the occasional introduction of leap seconds. This impacts calculations because 1) it is not known at the beginning of the year whether a leap second will be added, and 2) standard software libraries used to implement the time functions may not include leap seconds, and if they do there will often be a delay before updates including leap seconds are distributed to users. Since leap seconds impart no practical difference to the deformation model calculations the decimal year is considered compliant whether or not it accounts for leap seconds — there are two nominally correct answers.
 
-The time function is defined as the sum of one or more of the following base functions. In this table some functions include optional parameters which are indicated by italics.
+The time function is defined as the sum of one or more of the following base functions. In this table some functions include optional parameters which are indicated by italics.  The default value for optional parameters is shown in parentheses where a value is required.
 
 .Time functions
 [cols="2,5a,5a"]
@@ -101,60 +108,63 @@ The time function is defined as the sum of one or more of the following base fun
 |===
 |Time function type|Parameters|Formula (t~i,min~ &#8804; _t_ < t~i,max~)
 |velocity| Function reference epoch t~0~ +
+_Scale factor_ s (1.0) +
 _Start epoch_ t~s~ +
-_End epoch_ t~e~| f(_t_) = _t_ - t~0~ +
+_End epoch_ t~e~ | f(_t_) = s.(_t_ - t~0~) +
 f(_t_) = f(t~s~) for _t_ < t~s~ if t~s~ is defined +
 f(_t_) = f(t~e~) for _t_ < t~e~ if t~e~ is defined
 
-|step | Step epoch t~s~ |f(__t__) = 0 when t < t~s~, +
-f(__t__) = 1 when t &#8805; t~s~
-|reverse step | Step epoch t~s~ |f(__t__) = -1 when t < t~s~, +
-f(__t__) = 0 when t &#8805; t~s~
+|step | Reference epoch t~0~ +
+_Scale factor_ s (1.0) | f(__t__) = 0 when t < t~0~, +
+f(__t__) = s when t &#8805; t~0~
+
+|reverse step | Reference epoch t~0~ +
+_Scale factor_ s (1.0) | f(__t__) = -s when t < t~0~, +
+f(__t__) = 0 when t &#8805; t~0~
 
 |ramp|Start epoch t~s~ +
-Start scale factor f~s~ +
 End epoch t~e~ +
-End scale factor f~e~ |f(_t_) = f~s~ for _t_ < t~s~ +
-f(_t_) = (f~s~.(t~e~ – _t_) + f~e~.(_t_-t~s~))/(t~e~-t~s~) for t~s~ &#8804; _t_ < t~e~ +
-f(_t_) = f~e~ for _t_ &#8805; t~e~
+_Start scale factor_ s~s~ (0.0) +
+_End scale factor_ s~e~ (1.0) |f(_t_) = s~s~ for _t_ < t~s~ +
+f(_t_) = (s~s~.(t~e~ – _t_) + s~e~.(_t_-t~s~))/(t~e~-t~s~) for t~s~ &#8804; _t_ < t~e~ +
+f(_t_) = s~e~ for _t_ &#8805; t~e~
 
 |exponential|Start epoch t~s~ +
-Start amplitude &#945;~0~ +
-Final amplitude &#945;~∞~ +
 Decay constant θ +
+_Scale factor_ s (1.0) +
 _End epoch_ t~e~ | f(_t_) = 0   for _t_ < t~s~ +
-f(_t_) = &#945;~0~ + (&#945;~∞~-&#945;~0~).(1 - exp(-(_t_-t~s~)/θ))     for _t_ &#8805; t~s~ +
+f(_t_) = s.(1 - exp(-(_t_-t~s~)/θ))     for _t_ &#8805; t~s~ +
 f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
 
 |logarithmic|Start epoch t~s~ +
-Scale factor &#945; +
 Time constant &#964; +
+_Scale factor_ s (1.0) +
 _End epoch_ t~e~| f(_t_) = 0 for _t_ < t~s~ +
-f(_t_) = &#945;.ln(1 + (_t_-t~s~)/&#964;) for t~s~ &#8804; _t_ +
+f(_t_) = s.ln(1 + (_t_-t~s~)/&#964;) for t~s~ &#8804; _t_ +
 f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
 
 |acceleration|Function reference epoch t~0~ +
-Acceleration _a_ +
+_Scale factor_ s (1.0) +
 _Start epoch_ t~s~ +
-_End epoch_ t~e~|f(_t_)= _a_.(_t_ - t~0~)^2^  +
+_End epoch_ t~e~|f(_t_)= s.(_t_ - t~0~)^2^  +
 f(_t_) = f(t~s~) for _t_ < t~s~ if t~s~ is defined +
 f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
 
 |hyperbolic tangent|Start epoch t~s~ +
 End epoch t~1~ +
 Time constant &#964; +
-Scale factor &#945;|f(_t_)= 0 for _t_ < t~s~ +
-f(_t_) = &#945;/2 + A.tanh((_t_ - t~r~)/&#964;) for _t_ &#8805; t~s~ and _t_ < t~e~ +
-f(_t_) = &#945; for _t_ &#8805; t~e~ +
+_Scale factor_ s (1.0) | f(_t_)= 0 for _t_ < t~s~ +
+f(_t_) = s/2 + A.tanh((_t_ - t~r~)/&#964;) for _t_ &#8805; t~s~ and _t_ < t~e~ +
+f(_t_) = s for _t_ &#8805; t~e~ +
 where: +
 t~r~ = (t~s~ + t~e~)/2 +
-A = &#945;/2.tanh(t~e~-t~r~) +
+A = s/2.tanh((t~e~-t~r~)/&#964;) +
 tanh(x) = (e^x^ - e^-x^)/(e^x^ + e^-x^)
 
 |cyclic|Frequency _f_ (cycles per year) +
 Function reference epoch t~0~ +
-Cosine amplitude &#945; +
-Sine amplitude &#946;|
+Cosine scale factor &#945; +
+Sine scale factor &#946; |
 f(_t_) = &#945;cos(_f_(_t_ - t~0~)/2&#120587;)
 + &#946;sin(_f_(_t_ - t~0~)/2&#120587;)
 
@@ -187,7 +197,9 @@ If the interpolation coordinate system is directly related to the source or targ
 [[formula-displacement-addition]]
 ==== Addition method
 
-The method of applying a displacement to a coordinate depends on the units of the displacement and the type of the source and target coordinate systems. For geographic coordinate systems the method described here does not apply close to the poles. See the section below “calculation horizontal deformation near the poles” for details.
+The method of applying a displacement to a coordinate depends on the units of the displacement and the type of the source and target coordinate systems. 
+
+For geographic coordinate systems at locations near the poles the alternative <<formula-displacement-geocentric-addition>> may be more suitable.
 
 If the source and target coordinate systems are projected coordinate systems then the units must be meters and the east and north displacements are simply added to the easting, northing coordinates.
 
@@ -195,7 +207,7 @@ If the source and target coordinate systems are geographic coordinate systems an
 
 If the source and target coordinate systems are geographic and the east and north displacement units are meters then the displacement components must be converted to degrees before being added to the longitude and latitude coordinates. The conversion from meters to degrees requires the ellipsoid parameters of the geographic coordinate system.
 
-If a is the ellipsoid semi-major axis (e.g. 6378137.0), f is the flattening (e.g. 1.0/298.25722210), λ is the latitude, and φ is the longitude then corrections to longitude and latitude (in radians) are given by:
+If a is the ellipsoid semi-major axis (e.g. 6378137.0), f is the flattening (e.g. 1.0/298.25722210), λ is the longitude, and φ is the latitude then corrections to longitude dλ and latitude dφ (in radians) are given by:
 
 
 b = a.(1-f) +
@@ -208,20 +220,23 @@ The vertical displacement is always in meters and is simply added to the height 
 [[formula-displacement-geocentric-addition]]
 ==== Geocentric addition method
 
-The geocentric method can be applied if the spatial function uses a geographic coordinate system and displacements are given in meters. In this case the horizontal displacements are first converted to geocentric (XYZ) displacements, then added to the geocentric coordinates, and finally converted back to geographic coordinates. The vertical coordinate is always calculated by simple addition of the vertical displacement to the vertical coordinate.
+The geocentric addition method is a more complex method than the addition method which is suitable for geographic coordinate systems at locations close to the poles. 
 
-This method may be applicable for points near the pole, where simple addition of displacements to the geographic coordinates may not give the desired result. This is illustrated in <<image-near-pole-east-displacement>> where the grey vector shows the result of adding an east displacement to the longitude coordinate, and the black vector shows the result applying the same east displacement in the direction of the east vector component. Close to the pole applying a displacement in the direction of the east vector gives a different result to hanging the east (longitude) coordinate.
+This method applies where the coordinates are in a geographic coordinate system and displacements are in meters. 
 
-[[image-near-pole-east-displacement]]
-image::near_pole_east_displacement.png[title="Comparison of vector and angular displacement near a pole",width=200,scalewidth=7cm,align="right"]
+The horizontal displacements are applied using the following procedure:
 
-Moving away from the pole this discrepancy becomes less significant. For a point at distance R from the pole with a displacement d, the difference is approximately d*(1-cos(d/R)), or approximately d^3^/2R^2^. or example, a 1 m east displacement 10 km from the pole would have an error of 10^-8^m, but increases rapidly as one approaches closer to the pole.
+* the horizontal displacement components are converted to geocentric displacement components using the formulae in
+[[formula-geocentric-bilinear-interpolation]]
+* the geographic longitude and latitude are converted to geocentric cartesian coordinates X,Y,Z.  For this calculation the ellipsoidal height is set to zero.
+* the geocentric displacement components are added to the cartesian coordinates
+* the cartesian coordinates are converted back to geographic coordinates.  The resultant longitude and latitude are used in the final coordinate (the ellipsoidal height is discarded).
+
+Note that the height coordinate is not updated by this method - a vertical displacement is added directly to the height coordinate.
 
 TBC _Add formulae for conversion lat/lon to XYZ and vice versa_
 
-Standard formulae are used to convert geographic coordinates to and from geocentric coordinates. The input ellipsoidal height is set to zero before converting to Cartesian coordinates, and the resultant ellipsoidal height after converting back to geographic coordinates is discarded.
-
-The horizontal components of displacement are converted to Cartesian (X,Y,Z) components using the same formulae as described for the geocentric bilinear method in Sec. 6.1.3.
+Standard formulae are used to convert geographic coordinates to and from geocentric cartesian coordinates. The input ellipsoidal height is set to zero before converting to Cartesian coordinates, and the resultant ellipsoidal height after converting back to geographic coordinates is discarded.
 
 [[formula-iterative-application]]
 === Iterative application of displacement
@@ -232,12 +247,12 @@ This will apply in a forward transformation if the interpolation coordinate syst
 
 The iterative calculation uses the following steps:
 
-* using the input coordinate as an initial estimate for the output coordinate
+* use the input coordinate as an initial estimate for the output coordinate
 * at each iteration:
-** use the current estimate of the output coordinate to determine that displacement that applies
+** use the current estimate of the output coordinate to determine the displacement that applies
 ** apply this displacement to the input coordinate to obtain a new estimate for the output coordinate
 ** calculate the difference between the current and new estimates of the output coordinate
-** if this difference is less than the precision required for the inverse operation then finish
+** if this difference is greater than the precision required for the inverse operation then iterate again, otherwise finish
 
 [[formula-14prm-transformation]]
 === Calculation of the 14 parameter transformation
@@ -245,3 +260,14 @@ The iterative calculation uses the following steps:
 If the model includes a link:#206ipza[_14 parameter transformation_] then this is applied to the coordinates after the model is calculated and applied in a forward transformation. In an inverse transformation it is applied before the model components are applied to the coordinate.
 
 TBC _The 14 parameter transformation formulae need to be included here_
+
+[[formula-conversion-between-epochs]]
+=== Calculation of deformation between two epochs
+
+The displacement de, dn and du to transform a coordinate between two epochs is calculated in a similar way to above except that the time functions are evaluated by taking the difference between the values at each epoch.  
+
+To calculate the displacement from epoch t~0~ to epoch t~1~ the time factors in <<formula-elements>> are calculated for the i^th^ element as:
+
+f~i,t1-t0~ = f~i~(t~1~) - f~i~(t~0~)
+
+Note that for calculating displacement components this gives the same result as taking the difference between the displacement components calculated individually for each epoch.  However for the calculating the uncertainty of the displacement between two epochs this method must be used to give the correct result.  

@@ -34,4 +34,7 @@
 * [[[acdd,1]]], ESIP: Attribute Convention for Data Discovery (ACDD) – http://wiki.esipfed.org/index.php/
 ////
 
+////
+This relates to the appendix which will probably not be used
 * [[[Winefieldetal2010,Winefield, R. et al 2010]]] Winefield, R. Crook, C. and Beavan, J, 2010, The Application of a Localised Deformation Model after an Earthquake, in Proceedings of XXIV FIG Congress, April 11-16, Sydney, Australia.https://www.linz.govt.nz/system/files_force/media/file-attachments/winefield-crook-beavan-application-localised-deformation-model-after-earthquake.pdf?download=1
+////

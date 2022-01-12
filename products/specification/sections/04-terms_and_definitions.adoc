@@ -13,4 +13,11 @@ NOTE: Need a meaningful definition here.  Need to track this one down to its sou
 
 [example]
 The position used to calculate the spatial model is not defined in an currently accessible coordinate system
+
+Geographic coordinate system
+
+Projection coordinate system
 ////
+
+
+
