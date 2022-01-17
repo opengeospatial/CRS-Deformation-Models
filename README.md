@@ -47,11 +47,12 @@ This work is closely aligned with the work of the [GGXF (Geodetic Gridded data e
 
 The project team is now working on compiling the abstract specification document that will be the main product of this teams work.
 
-The document is open for comment and editing as a Google document at https://docs.google.com/document/d/196TNxEYsV1ImWw82yi5y2vWPqT1Uh7OgpWHjuC7Ma9c/edit?usp=sharing.  This link can be used to submit comments on the document (select some text and then click the + icon to add a comment on the text).  
+The document is open for comment and editing as a Google document at 
+https://docs.google.com/document/d/1Y66u1jlEij8LoQ5w5-hiXBR34eB7lOb4MYhRPPbw2Dk/edit?usp=sharing.  This link can be used to submit comments on the document (select some text and then click the + icon to add a comment on the text).  
 
-Also open for comment is the domain dictionary/glossary compiled by Richard Stanaway that is at https://docs.google.com/document/d/1kx21j7aveItOJc3_PD7dMV5ZkabHMkpP3_1CKI9DELw/edit?usp=sharing.  This will be included in the abstract specification.
+Also open for comment is the domain dictionary/glossary compiled by Richard Stanaway that is at https://docs.google.com/document/d/1kx21j7aveItOJc3_PD7dMV5ZkabHMkpP3_1CKI9DELw/edit?usp=sharing.  
 
-Other work done by this team is held in this repository, in particular the source code for the abstract specification is in the products/specification folder.  The github issues also contain a body of discussion.
+Other work done by this team is held in this repository, in particular the asciidoc source code for the abstract specification is in the products/specification folder.  The [github issues](https://github.com/opengeospatial/CRS-Deformation-Models/issues?q=is%3Aissue) also contain a body of discussion.
 
 As an initial investigation this team undertook a survey of deformation models either planned or in use. Responses can be viewed at https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us.  While the survey is formally closed, the questionnaire is still at https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0.  New information or updates are always welcome. 
 
