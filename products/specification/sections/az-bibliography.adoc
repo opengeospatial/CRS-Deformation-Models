@@ -8,7 +8,7 @@
 // Typical reference entry (without auto-fetch)
 ////
 // Reference content will display as written
-* [[[Simonis2018,Simonis, I.]]], Standardized Big Data Processing in Hybrid Clouds. In: Proceedings of the 4th International Conference on Geographical Information Systems Theory, Applications and Management - Volume 1: GISTAM, pp. 205–210. SciTePress (2018).
+* [[[Simonis2018,Simonis, I.]]], Standardized Big Data Processing in Hybrid Clouds. In: Proceedings of the 4th International Conference on Geographical Information Systems Theory, Applications and Management - Volume 1: GISTAM, pp. 205 -210. SciTePress (2018).
 
 // Automatic reference fetching (auto-fetch)
 // To verify the reference lookup syntax for all the supported flavors,
@@ -29,9 +29,9 @@
 // Numeric reference entry (with no auto-fetch)
 // To use numeric reference system, place a number as identifer
 // Any number can be used. All references will be re-sorted and auto-incremented during compilation
-* [[[netcdf,1]]], Lawrence Livermore National Laboratory: NetCDF CF Metadata Conventions – http://cfconventions.org/[http://cfconventions.org/]
+* [[[netcdf,1]]], Lawrence Livermore National Laboratory: NetCDF CF Metadata Conventions  - http://cfconventions.org/[http://cfconventions.org/]
 
-* [[[acdd,1]]], ESIP: Attribute Convention for Data Discovery (ACDD) – http://wiki.esipfed.org/index.php/
+* [[[acdd,1]]], ESIP: Attribute Convention for Data Discovery (ACDD)  - http://wiki.esipfed.org/index.php/
 ////
 
 ////

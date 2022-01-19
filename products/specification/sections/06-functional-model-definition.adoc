@@ -48,7 +48,7 @@ Displacement components not defined by the spatial function are assumed to be ze
 
 +
 --
-The set of uncertainty components used to represent uncertainty are defined in the model metadata and must be used for all spatial functions which have uncertainty components.  For example, the deformation metadata could specify that the model uses horizontal circular uncertainty and vertical uncertainty.  A particular spatial component could define just horizontal circular uncertainty.  Another could define verical uncertainty.  But it would not be valid for an element to define east and north uncertainty.
+The set of uncertainty components used to represent uncertainty are defined in the model metadata and must be used for all spatial functions which have uncertainty components.  For example, the deformation metadata could specify that the model uses horizontal circular uncertainty and vertical uncertainty.  A particular spatial component could define just horizontal circular uncertainty.  Another could define vertical uncertainty.  But it would not be valid for an element to define east and north uncertainty.
 
 // * horizontal and vertical uncertainty
 // ** horizontal covariance matrix components c~ee~ , c~en~, c~nn~.
@@ -86,7 +86,7 @@ These base time functions are defined mathematically in <<formula-time-function>
 
 16. [[funcmod-element-metadata]]Each element definition specifies:
 
-* The spatial interpolation method to use (for example bilinear, bicubic)
+* The spatial interpolation method to use (for example, bilinear, bicubic)
 * The quantities it defines (displacement components, uncertainty components)
 * A spatial definition of the extent of the spatial function (to determine if it is required at a specific position)
 
@@ -100,7 +100,7 @@ It may also include:
 * Other producer metadata
 
 ////
-* definition of areas where quality is impacted, for example where there is surface faulting. The areas each include a description, multipolygon defining the extent of the affected area, and a start and end epoch for the event causing the unmodelled deformation. See <<discuss-params-quality>> below.
+* definition of areas where quality is impacted, ,for example where there is surface faulting. The areas each include a description, multipolygon defining the extent of the affected area, and a start and end epoch for the event causing the unmodeled deformation. See <<discuss-params-quality>> below.
 ////
 --
 

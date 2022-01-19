@@ -29,13 +29,13 @@ One solution to this challenge is to use a deformation model - a mathematical mo
 
 Common uses  of a deformation model include:
 
-* determining the current location of an object based a historic measurement of its location, 
+* determining the current location of an object based on a historic measurement of its location, 
 * transformation of the current observed location of an object to the reference epoch of a static coordinate system 
 * determining the correct spatial relationship of data sets observed at different times.
 
 Currently many national geodetic agencies construct deformation models. However, these  generally use customized formats and are typically only used by software developed by the agency.
 
-This specification defines a functional model for describing a deformation model. It describes a way of parameterizing deformation in such that it can be encoded into a data set and incorporated into software for use in coordinate transformations. It also defines how to calculate the displacement of a point between two different epochs using this parameterization.
+This specification defines a functional model for describing a deformation model. It describes a way of parameterizing deformation such that it can be encoded into a data set and incorporated into software for use in coordinate transformations. It also defines how to calculate the displacement of a point between two different epochs using this parameterization.
 This specification allows producers of deformation models, such as national geodetic agencies, to publish these models in a consistent way. Users of coordinate transformation software can be confident that the model is being applied as intended by the producers.
 
 [.preface]

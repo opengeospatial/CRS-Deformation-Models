@@ -90,15 +90,17 @@ Note that this is only used to determine the horizontal displacement. The vertic
 [[formula-time-function]]
 === Time functions
 
-The time function f(_t_) for an element evaluates a scalar value by which the spatial function displacement is multiplied to determine the displacement at time _t_. For example, in a velocity model the spatial model represents the displacement that happens in one year and the time function evaluates the scale factor f(t) applied to the displacement at time t as the number of years since a reference epoch  t~0~, i.e. f(t)=(_t_ - t~0~).
+The time function f(_t_) for an element evaluates a scalar value by which the spatial function displacement is multiplied to determine the displacement at time _t_. For example, in a velocity model the spatial model represents the displacement that happens in one year and the time function evaluates the scale factor f(t) applied to the displacement at time t as the number of years since a reference epoch  t~0~, i.e. f(t)=(_t_ - t~0~).
 
 The deformation model metadata defines a temporal extent for the model from T~min~ to T~max~. At times before T~min~ and after T~max~ every time function is considered undefined and the model cannot be evaluated.
 
-Time functions are parameterized as a function of decimal years. For example, velocities are expressed meters/year.
+Time functions are parameterized as a functions of decimal year. 
 
-The conversion of a date/time _yyyy_-_mm_-__dd__T__HH__:__MM__:__SS__  to decimal years is implemented as follows. The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year. The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01T00:00:00Z and the date/time by the total number of seconds in the year (i.e. the number of seconds between _yyyy_-01-01T00:00:00Z and _yyy1_-01-01T00:00:00Z, where _yyy1_ is __yyyy__+1).
+The conversion of a date/time _yyyy_-_mm_-__dd__T__HH__:__MM__:__SS__  to a decimal year is implemented as follows. The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year. The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01T00:00:00Z and the date/time by the total number of seconds in the year (i.e. the number of seconds between _yyyy_-01-01T00:00:00Z and _yyy1_-01-01T00:00:00Z, where _yyy1_ is __yyyy__+1).
 
-Note that there is a small ambiguity in this formulation due to the occasional introduction of leap seconds. This impacts calculations because 1) it is not known at the beginning of the year whether a leap second will be added, and 2) standard software libraries used to implement the time functions may not include leap seconds, and if they do there will often be a delay before updates including leap seconds are distributed to users. Since leap seconds impart no practical difference to the deformation model calculations the decimal year is considered compliant whether or not it accounts for leap seconds — there are two nominally correct answers.
+Note that there is a small ambiguity in this formulation due to the occasional introduction of leap seconds. This impacts calculations because 1) it is not known at the beginning of the year whether a leap second will be added, and 2) standard software libraries used to implement the time functions may not include leap seconds, and if they do there will often be a delay before updates including leap seconds are distributed to users.  In all realistic usages, apart from the step function at the event epoch, the difference in deformation from one second to the next is insignificant.  
+
+Since leap seconds impart no practical difference to the deformation model calculations the decimal year is considered compliant whether or not it accounts for leap seconds - there are two nominally correct answers.
 
 The time function is defined as the sum of one or more of the following base functions. In this table some functions include optional parameters which are indicated by italics.  The default value for optional parameters is shown in parentheses where a value is required.
 
@@ -126,7 +128,7 @@ f(__t__) = 0 when t &#8805; t~0~
 End epoch t~e~ +
 _Start scale factor_ s~s~ (0.0) +
 _End scale factor_ s~e~ (1.0) |f(_t_) = s~s~ for _t_ < t~s~ +
-f(_t_) = (s~s~.(t~e~ – _t_) + s~e~.(_t_-t~s~))/(t~e~-t~s~) for t~s~ &#8804; _t_ < t~e~ +
+f(_t_) = (s~s~.(t~e~ - _t_) + s~e~.(_t_-t~s~))/(t~e~-t~s~) for t~s~ &#8804; _t_ < t~e~ +
 f(_t_) = s~e~ for _t_ &#8805; t~e~
 
 |exponential|Start epoch t~s~ +
@@ -170,7 +172,7 @@ f(_t_) = &#945;cos(_f_(_t_ - t~0~)/2&#120587;)
 
 |===
 
-The step and reverse step functions are specializations of the ramp function provided to improve simplicity and readability for the two most common uses of it.
+The step and reverse step functions are specializations of the ramp function, provided to improve simplicity and readability for the two most common uses of it.
 
 Future versions of this specification may add new base functions as required.
 
@@ -257,7 +259,7 @@ The iterative calculation uses the following steps:
 [[formula-14prm-transformation]]
 === Calculation of the 14 parameter transformation
 
-If the model includes a link:#206ipza[_14 parameter transformation_] then this is applied to the coordinates after the model is calculated and applied in a forward transformation. In an inverse transformation it is applied before the model components are applied to the coordinate.
+If the model includes a link:#206ipza[_14 parameter transformation_] then this is applied to the coordinates after the model is calculated and applied in a forward transformation. In an inverse transformation, it is applied before the model components are applied to the coordinate.
 
 TBC _The 14 parameter transformation formulae need to be included here_
 
@@ -270,4 +272,4 @@ To calculate the displacement from epoch t~0~ to epoch t~1~ the time factors in 
 
 f~i,t1-t0~ = f~i~(t~1~) - f~i~(t~0~)
 
-Note that for calculating displacement components this gives the same result as taking the difference between the displacement components calculated individually for each epoch.  However for the calculating the uncertainty of the displacement between two epochs this method must be used to give the correct result.  
+Note that for calculating displacement components this gives the same result as taking the difference between the displacement components calculated individually for each epoch.  However, this method must be used to give the correct value of the uncertainty of the displacement between two epochs.
