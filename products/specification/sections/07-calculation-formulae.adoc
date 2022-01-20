@@ -107,8 +107,7 @@ Each base time function is one of the types listed in the following table.
 | velocity | Defines a scale factor that is linear with time.  When multiplied by the spatial function this defines a constant velocity field, typically used to represent secular tectonic velocity.
 | acceleration | Defines a rate of change of the velocity function.  This may be use where the velocity is changing at a constant rate.  This is sometimes used to model glacial isostatic adjustment.
 | step | Represents an instantaneous change of displacement, typically used to model coseismic earthquake deformation.
-| ramp | Represents displacement accumulating at a linear rate over a fixed period of time.  This can be used to simplistically represent post-seismic deformation.  In particular combining several ramp functions can be used to create a piecewise linear time function that can emulate any time evolution of displacement to an arbitrary level of accuracy. 
-The step function is a specialization of the ramp function, provided to improve simplicity and readability for the most common use of it to represent coseismic deformation.
+| ramp | Represents displacement accumulating at a linear rate over a fixed period of time.  This can be used to simplistically represent post-seismic deformation.  In particular combining several ramp functions can be used to create a piecewise linear time function that can emulate any time evolution of displacement to an arbitrary level of accuracy.
 | exponential | Represents a time function commonly used for post-seismic deformation.  Often used in conjunction with a logarithmic model.
 | logarithmic | Represents a time function commonly used for post-seismic deformation.  Often used in conjunction with an exponential model.
 | hyperbolic tangent | Represents a time function observed in slow slip events.
