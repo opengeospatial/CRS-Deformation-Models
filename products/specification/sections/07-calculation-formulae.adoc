@@ -94,85 +94,103 @@ The time function f(_t_) for an element evaluates a scalar value by which the sp
 
 The deformation model metadata defines a temporal extent for the model from T~min~ to T~max~. At times before T~min~ and after T~max~ every time function is considered undefined and the model cannot be evaluated.
 
-Time functions are parameterized as a functions of decimal year. 
+The time function is defined as the sum of one or more base functions. 
 
-The conversion of a date/time _yyyy_-_mm_-__dd__T__HH__:__MM__:__SS__  to a decimal year is implemented as follows. The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year. The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01T00:00:00Z and the date/time by the total number of seconds in the year (i.e. the number of seconds between _yyyy_-01-01T00:00:00Z and _yyy1_-01-01T00:00:00Z, where _yyy1_ is __yyyy__+1).
+Each base time function is one of the types listed in the following table.
 
-Note that there is a small ambiguity in this formulation due to the occasional introduction of leap seconds. This impacts calculations because 1) it is not known at the beginning of the year whether a leap second will be added, and 2) standard software libraries used to implement the time functions may not include leap seconds, and if they do there will often be a delay before updates including leap seconds are distributed to users.  In all realistic usages, apart from the step function at the event epoch, the difference in deformation from one second to the next is insignificant.  
+[[table-time-function-types]]
+.Base time function types
+[cols="2,8a"]
+[options="header"]
+|===
+| Time function type|Description
+| velocity | Defines a scale factor that is linear with time.  When multiplied by the spatial function this defines a constant velocity field, typically used to represent secular tectonic velocity.
+| acceleration | Defines a rate of change of the velocity function.  This may be use where the velocity is changing at a constant rate.  This is sometimes used to model glacial isostatic adjustment.
+| step | Represents an instantaneous change of displacement, typically used to model coseismic earthquake deformation.
+| ramp | Represents displacement accumulating at a linear rate over a fixed period of time.  This can be used to simplistically represent post-seismic deformation.  In particular combining several ramp functions can be used to create a piecewise linear time function that can emulate any time evolution of displacement to an arbitrary level of accuracy. 
+The step function is a specialization of the ramp function, provided to improve simplicity and readability for the most common use of it to represent coseismic deformation.
+| exponential | Represents a time function commonly used for post-seismic deformation.  Often used in conjunction with a logarithmic model.
+| logarithmic | Represents a time function commonly used for post-seismic deformation.  Often used in conjunction with an exponential model.
+| hyperbolic tangent | Represents a time function observed in slow slip events.
+| cyclic | Represents cyclic behaviour, such as deformation due to seasonal groundwater loading.
 
-Since leap seconds impart no practical difference to the deformation model calculations the decimal year is considered compliant whether or not it accounts for leap seconds - there are two nominally correct answers.
+|===
 
-The time function is defined as the sum of one or more of the following base functions. In this table some functions include optional parameters which are indicated by italics.  The default value for optional parameters is shown in parentheses where a value is required.
+Each base time function is computed using the reference formula f~r~(_t_) as in table <<table-time-functions>> below.  The function can be modified by three epoch parameters, start epoch t~s~, end epoch t~e~, and reference epoch t~0~, and a scale factor s.  Note that the ramp function explicitly uses the start and end epoch, and the velocity, acceleration, and cyclic functions explicitly use the reference epoch.
 
-.Time functions
+The base time function f(_t_) is evaluated from the reference function f~r~(_t_) using these epochs as follows:
+
+* If the start epoch is defined then the function is evaluated at the start epoch for all times before the start epoch.  If the end epoch is defined then the function is evaluated at the end epoch for all times after the end epoch.  That is:
+
++
+--
+f~1~(_t_) = f~r~(t~s~) if t~s~ is defined and t < t~s~ +
+f~1~(_t_) = f~r~(t~e~) if t~e~ is defined and t > t~e~ +
+f~1~(_t_) = f~r~(_t_) otherwise
+--
+
+* If the reference epoch t~0~ is defined then a constant is added to f~1~ so that it evaluates to zero at the reference epoch. That is:
+
++
+--
+f~2~(_t_) = f~1~(_t_) - f~1~(t~0~) if t~0~ is defined +
+f~2~(_t_) = f~1~(_t_) otherwise
+-- 
+
+* If the scale factor s is defined then the function is multiplied by it:
+
++
+--
+f(_t_) = s.f~2~(_t_) if s is defined +
+f(_t_) = f~2~(_t_) otherwise.
+--
+
+The following table lists the reference formulae for each type of time function.
+
+[[table-time-functions]]
+.Time function reference formulae
 [cols="2,5a,5a"]
 [options="header"]
 |===
 |Time function type|Parameters|Formula (t~i,min~ &#8804; _t_ < t~i,max~)
-|velocity| Function reference epoch t~0~ +
-_Scale factor_ s (1.0) +
-_Start epoch_ t~s~ +
-_End epoch_ t~e~ | f(_t_) = s.(_t_ - t~0~) +
-f(_t_) = f(t~s~) for _t_ < t~s~ if t~s~ is defined +
-f(_t_) = f(t~e~) for _t_ < t~e~ if t~e~ is defined
+|velocity| Function reference epoch t~0~ | f~r~(_t_) = (_t_ - t~0~)
 
-|step | Reference epoch t~0~ +
-_Scale factor_ s (1.0) | f(__t__) = 0 when t < t~0~, +
-f(__t__) = s when t &#8805; t~0~
+|acceleration|Function reference epoch t~0~ |f~r~(_t_)= (_t_ - t~0~)^2^
 
-|reverse step | Reference epoch t~0~ +
-_Scale factor_ s (1.0) | f(__t__) = -s when t < t~0~, +
-f(__t__) = 0 when t &#8805; t~0~
+|step | Event epoch t~v~ | f~r~(_t_) = 0 when t < t~v~, +
+f~r~(_t_) = 1 when t &#8805; t~v~
 
 |ramp|Start epoch t~s~ +
-End epoch t~e~ +
-_Start scale factor_ s~s~ (0.0) +
-_End scale factor_ s~e~ (1.0) |f(_t_) = s~s~ for _t_ < t~s~ +
-f(_t_) = (s~s~.(t~e~ - _t_) + s~e~.(_t_-t~s~))/(t~e~-t~s~) for t~s~ &#8804; _t_ < t~e~ +
-f(_t_) = s~e~ for _t_ &#8805; t~e~
+End epoch t~e~ | f~r~(_t_) =0 for _t_ < t~s~ +
+f~r~(_t_) = (_t_-t~s~))/(t~e~-t~s~) for t~s~ &#8804; _t_ < t~e~ +
+f~r~(_t_) = 1.0 for _t_ &#8805; t~e~
 
-|exponential|Start epoch t~s~ +
-Decay constant θ +
-_Scale factor_ s (1.0) +
-_End epoch_ t~e~ | f(_t_) = 0   for _t_ < t~s~ +
-f(_t_) = s.(1 - exp(-(_t_-t~s~)/θ))     for _t_ &#8805; t~s~ +
-f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
+|exponential|Event epoch t~v~ +
+Decay constant θ | f~r~(_t_) = 0   for _t_ < t~v~ +
+f~r~(_t_) = (1 - exp(-(_t_-t~v~)/θ))     for _t_ &#8805; t~v~
 
-|logarithmic|Start epoch t~s~ +
-Time constant &#964; +
-_Scale factor_ s (1.0) +
-_End epoch_ t~e~| f(_t_) = 0 for _t_ < t~s~ +
-f(_t_) = s.ln(1 + (_t_-t~s~)/&#964;) for t~s~ &#8804; _t_ +
-f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
+|logarithmic|Event epoch t~v~ +
+Time constant &#964; | f~r~(_t_) = 0 for _t_ < t~v~ +
+f~r~(_t_) = ln(1 + (_t_-t~v~)/&#964;) for  _t_ &#8805; t~v~
 
-|acceleration|Function reference epoch t~0~ +
-_Scale factor_ s (1.0) +
-_Start epoch_ t~s~ +
-_End epoch_ t~e~|f(_t_)= s.(_t_ - t~0~)^2^  +
-f(_t_) = f(t~s~) for _t_ < t~s~ if t~s~ is defined +
-f(_t_) = f(t~e~) for _t_ > t~e~ if t~e~ is defined
-
-|hyperbolic tangent|Start epoch t~s~ +
-End epoch t~1~ +
-Time constant &#964; +
-_Scale factor_ s (1.0) | f(_t_)= 0 for _t_ < t~s~ +
-f(_t_) = s/2 + A.tanh((_t_ - t~r~)/&#964;) for _t_ &#8805; t~s~ and _t_ < t~e~ +
-f(_t_) = s for _t_ &#8805; t~e~ +
-where: +
-t~r~ = (t~s~ + t~e~)/2 +
-A = s/2.tanh((t~e~-t~r~)/&#964;) +
-tanh(x) = (e^x^ - e^-x^)/(e^x^ + e^-x^)
+|hyperbolic tangent|Event epoch t~v~ +
+Time constant &#964; | f~r~(_t_) = (1 + tanh((_t_ - t~v~)/&#964;))/2 +
+where tanh(x) = (e^x^ - e^-x^)/(e^x^ + e^-x^)
 
 |cyclic|Frequency _f_ (cycles per year) +
-Function reference epoch t~0~ +
-Cosine scale factor &#945; +
-Sine scale factor &#946; |
-f(_t_) = &#945;cos(_f_(_t_ - t~0~)/2&#120587;)
-+ &#946;sin(_f_(_t_ - t~0~)/2&#120587;)
+Function reference epoch t~0~ |
+f~r~(_t_) = sin(_f_(_t_ - t~0~)/2&#120587;)
 
 |===
 
-The step and reverse step functions are specializations of the ramp function, provided to improve simplicity and readability for the two most common uses of it.
+
+In these formulae all epochs _t_ are defined as a decimal year. 
+
+A date/time _yyyy_-_mm_-__dd__T__HH__:__MM__:__SS__  is converted to a decimal year as follows. The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year. The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01T00:00:00Z and the date/time by the total number of seconds in the year (i.e. the number of seconds between _yyyy_-01-01T00:00:00Z and _yyy1_-01-01T00:00:00Z, where _yyy1_ is __yyyy__+1).
+
+Note that there is a small ambiguity in this formulation due to the occasional introduction of leap seconds. This impacts calculations because 1) it is not known at the beginning of the year whether a leap second will be added, and 2) standard software libraries used to implement the time functions may not include leap seconds, and if they do there will often be a delay before updates including leap seconds are distributed to users.  In all realistic usages, apart from the step function at the event epoch, the difference in deformation from one second to the next is insignificant.  
+
+Since leap seconds impart no practical difference to the deformation model calculations the decimal year is considered compliant whether or not it accounts for leap seconds - there are two nominally correct answers.
 
 Future versions of this specification may add new base functions as required.
 
