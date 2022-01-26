@@ -30,7 +30,7 @@ The only opportunity for discontinuity in a deformation model is at the edges of
 
 This places two constraints on deformation model producers. 
 
-* where an element does not over the full extent of the deformation model then the deformation at the edge of the element must be zero.  For example, an element might represent coseismic deformation from an earthquake.  The deformation caused by the earthquake may not be significant over the full extent of the model so the element would only cover a subset of that area.  To ensure continuity the displacements at the edge element should be set to zero, even though the actual displacements will be slightly different from zero. 
+* where an element does not cover the full extent of the deformation model then the deformation at the edge of the element must be zero.  For example, an element might represent coseismic deformation from an earthquake.  The deformation caused by the earthquake may not be significant over the full extent of the model so the element would only cover a subset of that area.  To ensure continuity the displacements at the edge element should be set to zero, even though the actual displacements will be slightly different from zero. 
 
 * where an element is represented by multiple overlapping or nested grids there will be transitions between one preferred grid and another.  At these transitions the values interpolated from each grid must be exactly the same.  For example, the displacement at the edge of a child grid will generally have exactly match that of its parent grid.  However if the edge abuts the edge of another child grid, then its displacement only needs to match that of the abutting grid.
 
