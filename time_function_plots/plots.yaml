@@ -1,0 +1,64 @@
+min_epoch: 2012
+max_epoch: 2016
+intervals: 400
+annotate: true
+
+plots:
+  exp:
+    title: "Exponential"
+    time_function:
+      functionType: exponential
+      eventEpoch: 2013.5
+      timeConstant: 0.7
+
+  exp_te:
+    title: "Exponential - end epoch"
+    time_function:
+      functionType: exponential
+      eventEpoch: 2013.5
+      endEpoch: 2015.2
+      timeConstant: 0.7
+
+  exp_te:
+    title: "Exponential - ref epoch"
+    time_function:
+      functionType: exponential
+      eventEpoch: 2013.5
+      endEpoch: 2015.2
+      functionReferenceEpoch: 2015.2
+      timeConstant: 0.7
+
+  exp_te2:
+    title: "Exponential - ref epoch"
+    time_function:
+      functionType: exponential
+      eventEpoch: 2013.5
+      endEpoch: 2015.2
+      functionReferenceEpoch: 2014.5
+      timeConstant: 0.7
+
+  step:
+    title: Step function
+    time_function: 
+      functionType: step
+      eventEpoch: 2014.5
+      functionReferenceEpoch: 2013.2
+
+  reverse_step:
+    title: Reverse step
+    time_function: 
+      functionType: step
+      eventEpoch: 2014.5
+      functionReferenceEpoch: 2015.2
+
+  hyperbolic:
+    title: Hyperbolic tangent
+    time_function:
+      functionType: hyperbolicTangent
+      # functionReferenceEpoch: 2012.3
+      eventEpoch: 2013.8
+      timeConstant: 0.3
+      startEpoch: 2013.4
+      endEpoch:  2015.5
+
+    
