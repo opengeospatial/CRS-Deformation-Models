@@ -48,7 +48,7 @@ This work is closely aligned with the work of the [GGXF (Geodetic Gridded data e
 The project team is now working on compiling the abstract specification document that will be the main product of this teams work.
 
 The document is open for comment and editing as a Google document at 
-https://docs.google.com/document/d/1iuc1x3HsGZlCLQPHI-KKs2QwXFexRv18em51zWjnsjM/edit#heading.  This link can be used to submit comments on the document (select some text and then click the + icon to add a comment on the text).  
+https://docs.google.com/document/d/1wlcB3zQjXqMmV-P6IHcLjUo-yC7PLeut_u9hazTbiEE/edit?usp=sharing.  This link can be used to submit comments on the document (select some text and then click the + icon to add a comment on the text).  
 
 Also open for comment is the domain dictionary/glossary compiled by Richard Stanaway that is at https://docs.google.com/document/d/1kx21j7aveItOJc3_PD7dMV5ZkabHMkpP3_1CKI9DELw/edit?usp=sharing.  
 
