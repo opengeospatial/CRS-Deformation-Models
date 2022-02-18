@@ -90,7 +90,7 @@ Note that this is only used to determine the horizontal displacement. The vertic
 [[formula-time-function]]
 === Time functions
 
-The time function f(_t_) for an element evaluates a scalar value by which the spatial function displacement is multiplied to determine the displacement at time _t_. For example, in a velocity model the spatial model represents the displacement that happens in one year and the time function evaluates the scale factor f(t) applied to the displacement at time t as the number of years since a reference epoch  t~0~, i.e. f(t)=(_t_ - t~0~).
+The time function f(_t_) for an element evaluates a scalar value by which the spatial function displacement is multiplied to determine the displacement at time _t_. For example, in a velocity model the spatial model represents the displacement that happens in one year and the time function evaluates the scale factor f(t) applied to the displacement at time t as the number of years since a function reference epoch  t~0~, i.e. f(t)=(_t_ - t~0~).
 
 The deformation model metadata defines a temporal extent for the model from T~min~ to T~max~. At times before T~min~ and after T~max~ every time function is considered undefined and the model cannot be evaluated.
 
@@ -109,40 +109,12 @@ Each base time function is one of the types listed in the following table.
 | step | Defines an instantaneous change of displacement, typically used to model coseismic earthquake deformation.
 | ramp | Defines displacement accumulating at a linear rate over a fixed period of time.  This can be used to simplistically represent post-seismic deformation.  In particular, combining several ramp functions can be used to create a piecewise linear time function that can emulate any time behavior to an arbitrary level of accuracy.
 | exponential | Defines a displacement accumulating at an exponentially decaying rate after an event.  This is commonly used to approximate post-seismic deformation.  Often used in conjunction with a logarithmic model.
-| logarithmic | Defines a displacement accumulating proportionally to the logarithm of elapsed time since an event.  This is commonly used to approximate post-seismic deformation.  Often used in conjunction with an exponential model.
-| hyperbolic tangent | Represents a time function observed in slow slip events.
+| logarithmic | Defines a displacement accumulating proportionally to the logarithm of elapsed time since an event.  This is commonly used to approximate post-seismic deformation.  It is often used in conjunction with an exponential model.
+| hyperbolic tangent | Approximates a time behavior observed in slow slip events.
 | cyclic | Represents cyclic behavior, such as deformation due to seasonal groundwater loading.
 
 |===
 
-Each base time function is computed using the reference formula f~r~(_t_) as in table <<table-time-functions>> below.  The function can be modified by three epoch parameters, start epoch t~s~, end epoch t~e~, and reference epoch t~0~, and a scale factor s.  Note that the ramp function explicitly uses the start and end epoch, and the velocity, acceleration, and cyclic functions explicitly use the reference epoch.
-
-The base time function f(_t_) is evaluated from the reference function f~r~(_t_) using these epochs as follows:
-
-* If the start epoch is defined then the function is evaluated at the start epoch for all times before the start epoch.  If the end epoch is defined then the function is evaluated at the end epoch for all times after the end epoch.  That is:
-
-+
---
-f~1~(_t_) = f~r~(t~s~) if t~s~ is defined and _t_ < t~s~ +
-f~1~(_t_) = f~r~(t~e~) if t~e~ is defined and _t_ > t~e~ +
-f~1~(_t_) = f~r~(_t_) otherwise
---
-
-* If the reference epoch t~0~ is defined then a constant is added to f~1~ so that it evaluates to zero at the reference epoch. That is:
-
-+
---
-f~2~(_t_) = f~1~(_t_) - f~1~(t~0~) if t~0~ is defined +
-f~2~(_t_) = f~1~(_t_) otherwise
--- 
-
-* If the scale factor s is defined then the function is multiplied by it:
-
-+
---
-f(_t_) = s.f~2~(_t_) if s is defined +
-f(_t_) = f~2~(_t_) otherwise.
---
 
 The following table lists the reference formulae for each type of time function.
 
@@ -182,6 +154,35 @@ f~r~(_t_) = sin(_f_(_t_ - t~0~)/2&#120587;)
 
 |===
 
+
+Each base time function is computed using the reference formula f~r~(_t_) as in table <<table-time-functions>> above.  The result can be modified by three epoch parameters, start epoch t~s~, end epoch t~e~, and function reference epoch t~0~, and a scale factor s.  (Note that the ramp function explicitly uses the start and end epoch, and the velocity, acceleration, and cyclic functions explicitly use the function reference epoch.)
+
+The base time function f(_t_) is evaluated from the reference function f~r~(_t_) using these epochs as follows:
+
+* If the start epoch is defined then the function is evaluated at the start epoch for all times before the start epoch.  If the end epoch is defined then the function is evaluated at the end epoch for all times after the end epoch.  That is:
+
++
+--
+f~1~(_t_) = f~r~(t~s~) if t~s~ is defined and _t_ < t~s~ +
+f~1~(_t_) = f~r~(t~e~) if t~e~ is defined and _t_ > t~e~ +
+f~1~(_t_) = f~r~(_t_) otherwise
+--
+
+* If the function reference epoch t~0~ is defined then a constant is added to f~1~ so that it evaluates to zero at the function reference epoch. That is:
+
++
+--
+f~2~(_t_) = f~1~(_t_) - f~1~(t~0~) if t~0~ is defined +
+f~2~(_t_) = f~1~(_t_) otherwise
+-- 
+
+* If the scale factor s is defined then the function is multiplied by it:
+
++
+--
+f(_t_) = s.f~2~(_t_) if s is defined +
+f(_t_) = f~2~(_t_) otherwise.
+--
 
 In these formulae all epochs _t_ are defined as a decimal year. 
 
@@ -233,6 +234,7 @@ b = a.(1-f) +
 dλ = de.√(b^2^sin^2^(φ)+a^2^cos^2^(φ))/a^2^cos(φ) +
 dφ = dn.(b^2^sin^2^(φ)+a^2^cos^2^(φ))^3/2^/a^2^b^2^
 
+Note that this formula does not account for the height of a calculation point above the ellipsoidal surface. The deformation model is assumed to represent deformation on the ellipsoidal surface, so the actual east and north offset of a point above or below this surface will be slightly different to that defined in the model.
 
 The vertical displacement is always in meters and is simply added to the height coordinate.
 
@@ -258,7 +260,7 @@ TBC _Add formulae for conversion lat/lon to XYZ and vice versa_
 Standard formulae are used to convert geographic coordinates to and from geocentric cartesian coordinates. The input ellipsoidal height is set to zero before converting to Cartesian coordinates, and the resultant ellipsoidal height after converting back to geographic coordinates is discarded.
 
 [[formula-iterative-application]]
-=== Iterative application of displacement
+=== Iterative calculation of inverse transformation
 
 Calculating the inverse of the model requires an iterative solution if the interpolation coordinate system is dependent on the output coordinate system. The coordinate in the interpolation coordinate reference system is required to evaluate the displacement, but that coordinate is not known until the displacement has been calculated and applied to the input coordinate to derive the output coordinate.
 
@@ -273,12 +275,7 @@ The iterative calculation uses the following steps:
 ** calculate the difference between the current and new estimates of the output coordinate
 ** if this difference is greater than the precision required for the inverse operation then iterate again, otherwise finish
 
-[[formula-14prm-transformation]]
-=== Calculation of the 14 parameter transformation
-
-If the model includes a link:#206ipza[_14 parameter transformation_] then this is applied to the coordinates after the model is calculated and applied in a forward transformation. In an inverse transformation, it is applied before the model components are applied to the coordinate.
-
-TBC _The 14 parameter transformation formulae need to be included here_
+Note that at the edge of the model it may not be possible to calculate the inverse transformation.  The model is undefined outside its spatial extent in the interpolation coordinate system.  If the transformation of a point near the edge of the model moves it to a location outside that extent, then the first step of the iterative calculation will fail.  This step uses the transformed coordinate as a first estimate for the untransformed coordinate.  However that will be a point outside the model, so calculating the transformation at that point is not possible.  A more sophisticated algorithm could address this, for example using the nearest point within the spatial extent of the model at the first iteration.
 
 [[formula-conversion-between-epochs]]
 === Calculation of deformation between two epochs

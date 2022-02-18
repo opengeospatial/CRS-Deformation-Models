@@ -61,13 +61,13 @@ If the uncertainty of an element is not defined at a model node its value is def
 // 9. [[funcmod-spatial-params-quality]] A spatial function may include a quality parameter at each node providing guidance on the reliability of the spatial function in the vicinity of the node. For example, a quality parameter could indicate surface faulting affecting cells adjacent to the node.
 --
 
-10. [[funcmod-continuous-invertible]]
+9. [[funcmod-continuous-invertible]]
 The displacement defined by the model is required to be continuous and invertible within the spatial and temporal extent of the model except where it evaluates to _no data_.
 This is not necessarily enforced by the mathematical formulation of a model. It is a compliance requirement on producers of functional models.  Continuity can be assumed by software implementations of the model.
 
-11. [[funcmod-nodata]] The displacement and uncertainty components at a node of a spatial function may be assigned a  _no data_ value.  This means that their value at that node is undefined.  The model displacement and uncertainty is undefined at specific time and location if calculating it would require using a using a _no data_ value.
+10. [[funcmod-nodata]] The displacement and uncertainty components at a node of a spatial function may be assigned a  _no data_ value.  This means that their value at that node is undefined.  The model displacement and uncertainty is undefined at specific time and location if calculating it would require using a using a _no data_ value.
 
-14. [[funcmod-time-function]]The time function of an element is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
+11. [[funcmod-time-function]]The time function of an element is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
  * a velocity function
  * a step function
  * a reverse step function
@@ -81,10 +81,7 @@ This is not necessarily enforced by the mathematical formulation of a model. It 
 +
 These base time functions are defined mathematically in <<formula-time-function>>.
 
-15. The model may define a 14 parameter Bursa-Wolf transformation definition.  This is applied after the displacement calculated from the deformation elements in a forward transformation, as described in <<formula-14prm-transformation>>.  It is applied before the displacement calculated from the deformation elements in an inverse transformation.
-
-
-16. [[funcmod-element-metadata]]Each element definition specifies:
+12. [[funcmod-element-metadata]]Each element definition specifies:
 
 * The spatial interpolation method to use (for example, bilinear, bicubic)
 * The quantities it defines (displacement components, uncertainty components)
@@ -104,7 +101,7 @@ It may also include:
 ////
 --
 
-17. [[funcmod-model-metadata]]The model definition specifies:
+13. [[funcmod-model-metadata]]The model definition specifies:
 
 * The source CRS definition (e.g., EPSG:xxxx)
 * The target CRS definition (if the model is implemented as a point motion model this will be the same as the source CRS).

@@ -4,9 +4,9 @@
 [[discuss-elements]]
 === Decomposition into elements
 
-This deformation model specification assumes that the deformation can be partitioned into one or more elements each of which is characterized by a time function.  The same time function applies at every point in the element.  The spatial model defines a displacement at each point which is multiplied by the time function so the effect is different at different locations, but it is the same time function.  
+This deformation model specification assumes that the deformation can be partitioned into one or more elements each of which is characterized by a time function.  There are many other ways deformation can be modelled.  For example in geophysical research it is often modelled using uniform dislocation on a rectangular fault surfaces in a uniform elastic half space.  While such models may be used to research and develop deformation models, the common practice in publishing them for coordinate transformtions is to convert the model to a grid describing the resultant surface displacement.  
 
-Deformation is caused by a number of geophysical phenomena, each of which may be represented be one or more elements in a deformation model.  
+Deformation is caused by a number of geophysical phenomena, each of which may be represented by one or more elements in a deformation model.  
 
 Typically, there is a secular velocity element representing the long term tectonic deformation - this is a single element with a velocity time function.  
 
@@ -105,3 +105,18 @@ For the interpolation of vertical displacement du this method proposes using the
 
 
 ////
+
+
+
+[[discuss-time-function-epochs]]
+=== Time function epochs
+
+The time functions used for deformation model elements can be modified by specifying a function reference epoch t~0~, a start epoch t~s~, and an end epoch t~e~.  The effect of these is illustrated in <<image-hyperbolic-epoch-modification>> showing a hyperbolic tangent function without these parameters and the same function with all three parameters applied.  In both cases the function has an event epoch t~v~ = 2013.8 and a time constant &#964; = 0.8 years.  
+
+[[image-hyperbolic-epoch-modification]]
+image::hyperbolic_epoch_modification.png[title="The effect of adding a start and end epoch (t~s~, t~e~) and a function reference epoch (t~0~) to a time function"]
+
+The unmodified function shows an event building in magnitude from 0.0 to 1.0.  This might represent, for example, a slow slip event.  The mathematical definition of this function is never quite 0 or 1 - it approaches 0 exponentially as the epoch moves further into the past and approaches 1 asymptotically as the epoch moves further into the future.  The rate of change becomes infinitesimally small more than a few years from the event date. From the point of view of deformation model producer managing a coordinate system, it is may be more practical to define start and end epochs for the event, t~s~ and t~e~ s such that the change before t~s~, and after t~e~, is actually zero.  This may also be more realistic geophysically.
+
+The function reference epoch t~0~ is an epoch at which the function will be zero, and therefore when the calculated displacement for the event will be zero.  A constant offset is added to the function to force it to be zero before this epoch.  A common usage for function reference epoch is to include deformation model that occurred before the reference epoch of a datum. 
+
