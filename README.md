@@ -50,7 +50,7 @@ The project team is now working on compiling the abstract specification document
 The document is open for comment and editing as a Google document at 
 https://docs.google.com/document/d/1wlcB3zQjXqMmV-P6IHcLjUo-yC7PLeut_u9hazTbiEE/edit?usp=sharing.  This link can be used to submit comments on the document (select some text and then click the + icon to add a comment on the text).  
 
-Other work done by this team is held in this repository, in particular the asciidoc source code for the abstract specification is in the products/specification folder.  The [github issues](https://github.com/opengeospatial/CRS-Deformation-Models/issues?q=is%3Aissue) also contain a body of discussion.
+Other work done by this team is held in this repository, in particular the asciidoc source code for the abstract specification is in the [products/specification](https://github.com/opengeospatial/CRS-Deformation-Models/tree/master/products/specification) folder.  The [github issues](https://github.com/opengeospatial/CRS-Deformation-Models/issues?q=is%3Aissue) also contain a body of discussion.
 
 As an initial investigation this team undertook a survey of deformation models either planned or in use. Responses can be viewed at https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us.  While the survey is formally closed, the questionnaire is still at https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0.  New information or updates are always welcome. 
 
