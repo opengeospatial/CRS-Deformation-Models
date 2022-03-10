@@ -52,12 +52,41 @@ plots:
       functionReferenceEpoch: 2015.2
 
   hyperbolic_base:
-    # title: Hyperbolic tangent
+    title: Base function
     time_function:
       functionType: hyperbolicTangent
       # functionReferenceEpoch: 2012.3
       eventEpoch: 2013.8
       timeConstant: 0.5
+
+
+
+  hyperbolic_start_epoch:
+    title: With start epoch
+    time_function:
+      functionType: hyperbolicTangent
+      # functionReferenceEpoch: 2012.3
+      eventEpoch: 2013.8
+      timeConstant: 0.5
+      startEpoch: 2013.2
+    
+  hyperbolic_end_epoch:
+    title: With end epoch
+    time_function:
+      functionType: hyperbolicTangent
+      # functionReferenceEpoch: 2012.3
+      eventEpoch: 2013.8
+      timeConstant: 0.5
+      endEpoch:  2014.5
+    
+  hyperbolic_func_ref_epoch:
+    title: With function reference epoch
+    time_function:
+      functionType: hyperbolicTangent
+      # functionReferenceEpoch: 2012.3
+      eventEpoch: 2013.8
+      timeConstant: 0.5
+      functionReferenceEpoch: 2014.2
 
   hyperbolic:
     # title: Hyperbolic tangent
@@ -66,7 +95,7 @@ plots:
       # functionReferenceEpoch: 2012.3
       eventEpoch: 2013.8
       timeConstant: 0.5
-      startEpoch: 2013.1
-      endEpoch:  2015.5
-      functionReferenceEpoch: 2014.4
+      startEpoch: 2013.2
+      endEpoch:  2014.5
+      functionReferenceEpoch: 2014.2
     
