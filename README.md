@@ -50,9 +50,7 @@ The project team is now working on compiling the abstract specification document
 The document is open for comment and editing as a Google document at 
 https://docs.google.com/document/d/1wlcB3zQjXqMmV-P6IHcLjUo-yC7PLeut_u9hazTbiEE/edit?usp=sharing.  This link can be used to submit comments on the document (select some text and then click the + icon to add a comment on the text).  
 
-Also open for comment is the domain dictionary/glossary compiled by Richard Stanaway that is at https://docs.google.com/document/d/1kx21j7aveItOJc3_PD7dMV5ZkabHMkpP3_1CKI9DELw/edit?usp=sharing.  
-
-Other work done by this team is held in this repository, in particular the asciidoc source code for the abstract specification is in the products/specification folder.  The [github issues](https://github.com/opengeospatial/CRS-Deformation-Models/issues?q=is%3Aissue) also contain a body of discussion.
+Other work done by this team is held in this repository, in particular the asciidoc source code for the abstract specification is in the [products/specification](https://github.com/opengeospatial/CRS-Deformation-Models/tree/master/products/specification) folder.  The [github issues](https://github.com/opengeospatial/CRS-Deformation-Models/issues?q=is%3Aissue) also contain a body of discussion.
 
 As an initial investigation this team undertook a survey of deformation models either planned or in use. Responses can be viewed at https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us.  While the survey is formally closed, the questionnaire is still at https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0.  New information or updates are always welcome. 
 
@@ -86,6 +84,6 @@ you are signed on to github please raise a [new issue](https://github.com/openge
 [Project Team](https://github.com/opengeospatial/CRS-Deformation-Models/wiki/Project-team) page then include a brief biography and a photo.  This is not 
 required - be aware that everything on the page is visible to the public -  but it is good to have faces for names!  
 
-Also once you have a github id you are encouraged to click the "Watch" button at the top of this page so that you will be notified of postings in the issues log.  Ideally we can capture most of the discussion in the issue logs where they will be recorded and easily searchable.  We will create an issue for each major discussion topic.
+Also once you have a github id you are encouraged to click the "Watch" button at the top of this page so that you will be notified of postings in the issues log.  Ideally we can capture most of the discussion in the [issue logs](https://github.com/opengeospatial/CRS-Deformation-Models/issues) where they will be recorded and easily searchable.  We will create an issue for each major discussion topic.
 
 
