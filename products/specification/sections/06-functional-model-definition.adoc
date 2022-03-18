@@ -27,7 +27,7 @@ The deformation model is characterized as follows.
 If a set of grids is used then only one of the grids will be used to evaluate the function at a specific location.  The implementation must unambiguously define which grid (if any) is to be used at a specific location.
 
 
-The spatial function displacement components at a location are calculated from the selected grid using a specified interpolation method. Supported interpolation methods are described in <<formula-spatial-interpolation>>.
+The spatial function displacement components at a location are calculated from the selected grid using a specified interpolation method.  The only interpolation method supported is bilinear interpolation, as described in  <<formula-spatial-interpolation>>.
 --
 
 6. [[funcmod-spatial-params]]The spatial function can define displacement and uncertainty components.  This set of components must be defined at every node of every grid of the function.  Different spatial functions may have different components.  For example, the spatial function of one element might define horizontal displacement, and the spatial function of another may define vertical displacement.
@@ -83,7 +83,7 @@ These base time functions are defined mathematically in <<formula-time-function>
 
 12. [[funcmod-element-metadata]]Each element definition specifies:
 
-* The spatial interpolation method to use (for example, bilinear, bicubic)
+* The spatial interpolation method to use (bilinear)
 * The quantities it defines (displacement components, uncertainty components)
 * A spatial definition of the extent of the spatial function (to determine if it is required at a specific position)
 

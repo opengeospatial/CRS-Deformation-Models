@@ -8,24 +8,26 @@ In this specification the grid can be defined either in terms of a geographic (l
 [[formula-spatial-interpolation]]
 === Spatial interpolation
 
-For spatial function and interpolation types defined in this specification, the position of the calculation point is used to identify a set of grid nodes for calculating displacement at that point and the weights to be assigned to the displacement at each of those nodes. The displacement values at the nodes are combined using a simple weighted average as described in <<formula-bilinear-interpolation>>.  For the horizontal components (east and north displacement) near the geographic poles an alternative method of combining the node horizontal displacements is described in <<formula-geocentric-bilinear-interpolation>>.
+This specification defines spatial functions by bilinear interpolation on a grid or set of grids.  In the future other interpolation methods or spatial representations may be supported.
 
 [[formula-nested-grid-selection]]
 ==== Selection of spatial function grid
 
-Spatial functions are defined as a grid or a set of grids.  At a given position only one of the grids is used to calculate the spatial function displacement or uncertainty.  The implementation must uniquely identify the grid, if any, that applies at any location within the valid extents of the model.  If no grid applies at a location then the displacement and uncertainty of the element at that location are both zero.
+Spatial functions are using a set of one or more grids.  At a given position only one of the grids is used to calculate the spatial function displacement or uncertainty.  The implementation must uniquely identify the grid, if any, that applies at any location within the valid extents of the model.  If no grid applies at a location then the displacement and uncertainty of the element at that location are both zero.
 
 [[formula-bilinear-interpolation]]
 ==== Bilinear grid interpolation
 
-Spatial functions may be represented as regular grids defined in an interpolation CRS. The coordinates of a grid node are given by
+Each grid of a spatial function is a regular grids defined in an interpolation CRS. The coordinates of a grid node are given by
 
 x~i~ = x~o~ + i.x~s~ +
 y~j~ = y~o~ + j.y~s~
 
+// Note - this is less general than GGXF
+
 where  x~o~, y~o~ are the coordinates of a reference point of the grid,  x~s~ and y~s~ are the grid spacing along the x and y axes respectively, and i and j are the column and row number of the grid node.  Note that the x and y grid spacing need not be equal.  For example, in a geographic interpolation coordinate system where x is longitude and y is latitude it may be preferable that x~s~ is approximately equal to y~s~/cos(y~m~), where y~m~ is the latitude of the middle of the grid, as this makes the grid cells approximately square (except at polar latitudes).
 
-Model components are calculated using bilinear interpolation with respect to x and y between the nodes at the corners of the grid cell within which the calculation point lies, as shown in <<image_bilinear_interpolation>>.  Each element of the displacement is calculated independently.
+Model components are calculated using bilinear interpolation with respect to x and y between the nodes at the corners of the grid cell within which the calculation point lies, as shown in <<image_bilinear_interpolation>>.  Each component of the displacement is calculated independently.
 
 [[image_bilinear_interpolation]]
 image::bilinear_interpolation.png[title="Bilinear interpolation on a grid cell",width=300,scalewidth=7cm]
@@ -45,6 +47,7 @@ The model components at (x,y) are calculated as the weighted average of the valu
 
 de = W~i,j~.de~i,j~ + W~i+1,j~.de~i+1,j~ + W~i,j+1~.de~i,j+1~ + W~i+1,j+1~.de~i+1,j+1~
 
+Uncertainties are interpolated from the grid node values using the same formulae.
 // Above to be confirmed but above simplification may be more correct - model components from adjacent nodes are highly
 // correlated so doesn't make sense to add as if they are independent.  Original text was
 // 
@@ -55,37 +58,6 @@ de = W~i,j~.de~i,j~ + W~i+1,j~.de~i+1,j~ + W~i,j+1~.de~i,j+1~ + W~i+1,j+1~.de~i+
 // The uncertainties eh, ev at (x,y) are calculated from the values at the nodes as, for example
 //
 // eh = √(W~i,j~*eh~i,j~^2^ + W~i+1,j~*eh~i+1,j~^2^ + W~i,j+1~*eh~i,j+1~^2^ + W~i+1,j+1~*eh~i+1,j+1~^2^)
-
-[[formula-geocentric-bilinear-interpolation]]
-==== Geocentric bilinear grid interpolation
-
-A simple average of the east and north displacements may not be appropriate where a grid cell spans a wide longitude range, typically for grids in polar regions.  In this situation the directions of the east and north vectors may be quite different at nodes being averaged, as shown in <<image-near-pole-axes>> where their directions at nodes A and B and the evaluation point P differ significantly.
-
-[[image-near-pole-axes]]
-image::geocentric_bilinear_interpolation.png[title="East and north directions at near pole grid axes", width=200,scalewidth=7cm]
-
-In this situation the bilinear interpolation of vector components can be adapted by reparametrizing the vectors to a common set of axes before forming the weighted average.
-
-The geocentric bilinear interpolation method converts the displacement components from east and north components to geocentric X, Y, and Z components. These are consistently aligned at the grid nodes and can be scaled and summed using the bilinear interpolation formulae in <<formula-bilinear-interpolation>> to calculate the X, Y, Z components of displacement at the calculation point, which are then converted back to east and north components at the calculation point.
-
-At longitude λ and latitude φ the geocentric displacement components dx, dy, dz are calculated from the east and north components de, dn as:
-
-dx~i,j~ = -de~i,j~.sin(λ~i,j~) - dn~i,j~.cos(λ~i,j~).sin(φ~i,j~) +
-dy~i,j~ = de~i,j~.cos(λ~i,j~) - dn~i,j~.sin(λ~i,j~).sin(φ~i,j~) +
-dz~i,j~ = dn~i,j~.cos(φ~i,j~)
-
-The X, Y, and Z directions are the same at any location, so the dx, dy, and dz displacements can be interpolated independently using bilinear interpolation, e.g.:
-
-dx = W~i,j~.dx~i,j~ + W~i+1,j~.dx~i+1,j~ + W~i,j+1~.dx~i,j+1~ + W~i+1,j+1~.dx~i+1,j+1~
-
-where the weights W~i,j~ are as defined in <<formula-bilinear-interpolation>>.
-
-The displacement at the calculation point is then calculated as:
-
-de = -dx.sin(λ) + dy * cos (λ) +
-dn = -dx.cos(λ).sin(φ) - dy.sin(λ).sin(φ) + dz.cos(φ)
-
-Note that this is only used to determine the horizontal displacement. The vertical displacement and uncertainties are computed using the bilinear formula above.
 
 [[formula-time-function]]
 === Time functions
@@ -192,7 +164,7 @@ Note that there is a small ambiguity in this formulation due to the occasional i
 
 Since leap seconds impart no practical difference to the deformation model calculations the decimal year is considered compliant whether or not it accounts for leap seconds - there are two nominally correct answers.
 
-Future versions of this specification may add new base functions as required.
+Future versions of this specification may add new base time functions.
 
 [[formula-elements]]
 === Combination of elements
@@ -210,16 +182,10 @@ eh = √(f~1~^2^.eh~1~^2^+ f~2~^2^.eh~2~^2^+ … + f~n~^2^.eh~n~^2^)
 [formula-apply-displacement]
 === Applying the total displacement to a coordinate
 
-The method used to add the calculated displacement to the reference coordinate is defined in the deformation model metadata. Two methods are defined - _addition_ described in <<formula-displacement-addition>> and _geocentric addition_ described in <<formula-displacement-geocentric-addition>>. The _addition_ method simply adds the displacements to the coordinates.  The _geocentric_ method accounts for the difference between a linear east offset and a longitude offset in polar regions. It is only applicable if the displacements are expressed as linear distance (e.g. meters) and the source and target coordinate system are geographic.
+// Is there a better way to specify this without specifying units of 
+// displacement and coordinates
 
-If the interpolation coordinate system is directly related to the source or target coordinate systems then applying the  displacement to a point may change its coordinate in the interpolation coordinate system, which in turn may change the calculated value of displacement.  In this case the calculation and application of displacement to an input coordinate may require iteration, as described in <<formula-iterative-application>>.
-
-[[formula-displacement-addition]]
-==== Addition method
-
-The method of applying a displacement to a coordinate depends on the units of the displacement and the type of the source and target coordinate systems. 
-
-For geographic coordinate systems at locations near the poles the alternative <<formula-displacement-geocentric-addition>> may be more suitable.
+The algorithm for applying a displacement to a coordinate depends on the units of the displacement and the type of the source and target coordinate systems. 
 
 If the source and target coordinate systems are projected coordinate systems then the units must be meters and the east and north displacements are simply added to the easting, northing coordinates.
 
@@ -236,31 +202,12 @@ dφ = dn.(b^2^sin^2^(φ)+a^2^cos^2^(φ))^3/2^/a^2^b^2^
 
 Note that this formula does not account for the height of a calculation point above the ellipsoidal surface. The deformation model is assumed to represent deformation on the ellipsoidal surface, so the actual east and north offset of a point above or below this surface will be slightly different to that defined in the model.
 
-The vertical displacement is always in meters and is simply added to the height coordinate.
-
-[[formula-displacement-geocentric-addition]]
-==== Geocentric addition method
-
-The geocentric addition method is a more complex method than the addition method which is suitable for geographic coordinate systems at locations close to the poles. 
-
-This method applies where the coordinates are in a geographic coordinate system and displacements are in meters. 
-
-The horizontal displacements are applied using the following procedure:
-
-* the horizontal displacement components are converted to geocentric displacement components using the formulae in
-[[formula-geocentric-bilinear-interpolation]]
-* the geographic longitude and latitude are converted to geocentric cartesian coordinates X,Y,Z.  For this calculation the ellipsoidal height is set to zero.
-* the geocentric displacement components are added to the cartesian coordinates
-* the cartesian coordinates are converted back to geographic coordinates.  The resultant longitude and latitude are used in the final coordinate (the ellipsoidal height is discarded).
-
-Note that the height coordinate is not updated by this method - a vertical displacement is added directly to the height coordinate.
-
-TBC _Add formulae for conversion lat/lon to XYZ and vice versa_
-
-Standard formulae are used to convert geographic coordinates to and from geocentric cartesian coordinates. The input ellipsoidal height is set to zero before converting to Cartesian coordinates, and the resultant ellipsoidal height after converting back to geographic coordinates is discarded.
+The vertical displacement is always simply added to the height coordinate.
 
 [[formula-iterative-application]]
 === Iterative calculation of inverse transformation
+
+If the interpolation coordinate system is directly related to the source or target coordinate systems then applying the  displacement to a point may change its coordinate in the interpolation coordinate system, which in turn may change the calculated value of displacement.  In this case the calculation and application of displacement to an input coordinate may require iteration, as described in <<formula-iterative-application>>.
 
 Calculating the inverse of the model requires an iterative solution if the interpolation coordinate system is dependent on the output coordinate system. The coordinate in the interpolation coordinate reference system is required to evaluate the displacement, but that coordinate is not known until the displacement has been calculated and applied to the input coordinate to derive the output coordinate.
 
