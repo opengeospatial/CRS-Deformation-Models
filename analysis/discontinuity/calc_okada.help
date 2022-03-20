@@ -1,0 +1,216 @@
+calc_okada: Calculates surface deformation from a GNS deformation model file.
+
+The model consists of one or more rectangular fault planes on which strike slip,
+dip slip and tensile slip (opening) are defined.  The details of the format
+are defined below.  
+
+The program is run using the following syntax:
+
+  calc_okada [options] fault_model_file test_point_file output_file
+
+where
+  fault_model_file   defines the fault model (details below).  Several fault
+                     models can be combined using file1+file2+file3..
+                     Each file can be preceded by a scale factor, eg
+                     1.5*file1+0.2*file2
+  test_point_file    defines the points at which the deformation will be 
+                     computed.  The test_point_file can be replaced with
+                     a grid definition entered as 
+                      grid:min_lon:min_lat:max_lon:max_lat:nlon:nlat
+                     or a point entered as 
+                      point:lon:lat
+  output_file        A tab delimited file of test points and their east, 
+                     north, and up displacements
+
+Options can include:
+  -p lon lat         Defines the projection (crude projection based on 
+                     latitude and longitude) used in the fault model. 
+                     Use "none" if the coordinates defining the
+                     model are already projected.  If not specified then 
+                     the first values in the fault model file are used.
+                     This may be overridden by a projection specification
+                     in the model file.
+
+  -w[l|p] wktfile    Generates a WKT file defining the fault model.  This can
+		     either be formatted as a MULTILINESTRING (-wl) or 
+                     POLYGON (-wp).
+
+  -f                 Apply scale factor and convergence if defined for the 
+                     projection.  Note that currently this is only applied to
+                     the dislocation components, not the strain.  This is 
+                     ignored if the model file explicitly defines the 
+                     vector orientation.
+
+  -n                 The first field in the test point file is a name field
+
+  -c                 Will compare the calculated dislocations with those in
+                     the test point file, and calculate differences
+
+  -l                 Include the horizontal length of vectors in the output
+
+  -s                 Include strain parameters in the output
+
+  -t                 Include tilt parameters in the output
+
+  -v                 Use comma as delimiter for input/output
+
+  -x                 Extra significant figures to reduce rounding errors
+
+  -h nskip           Skip specified number of header lines in the definition 
+                     file
+
+The fault model line contains metadata lines, header lines, and fault
+model lines.  Blank lines and lines starting with # are ignored.
+
+Metadata lines start with a series of alphanumeric or blank characters followed 
+by a colon.  These are ignored by this program except for "Origin", "Projection",
+"Columns", and "Additional data" which are described below.  
+
+Header lines define the format of fault model lines (defining the fields 
+in each line).  Usually there will be only one before the first fault model
+line. They are identified by containing the string "slip_m". The header
+line is equivalent to the "Columns" metadata line.
+
+The header line can specify the following fields separated by whitespace:
+
+  fault_num       fault segment number - each fault plane may have multiple 
+                  segments.  This is not used in calc_okada.
+  fault_type      defines how the various parameters are interpreted (see below)
+ *strike_deg      strike of fault in degrees east of north, measured from 
+                  (latf, lonf) towards the right as the observer looks along dip.
+ *dip_deg         dip of fault in degrees measured in degrees above horizontal
+                  looking to the left of the direction of strike (unless 
+                  specified otherwise for fault type below)
+ *rake_deg        rake of slip vector, measured in fault plane in degrees; 
+                  From the point of view of observer standing on reference
+                  point looking down the dip vector 0=left lateral, 
+                  90=up to the right, 180=right lateral, and
+                  270=up to the left.
+ *length_km       length of fault along strike in km.
+ *width_km        width of fault measured down dip in km.
+ *slip_m          magnitude of in-plane (shear) slip in m.
+  opening_m       opening of fault in m.  (Used for modelling dykes, etc.)
+ *depth_km        depth of fault in km (depends on fault_type)
+  top_depth_km    synonym for depth_km 
+ *bottom_depth_km bottom depth of fault in km (depends on fault_type)
+ *lat_deg         latitude of fault (depends on fault_type - see below)
+ *lon_deg         longitude of fault (depends on fault_type)
+  east_m          easting of the fault (projection coordinates only)
+  north_m         northing of the fault (projection coordinates only)
+  fault_x_km      location of segment relative to total fault plane (ignored)
+  fault_y_km      location of segment relative to total fault plane (ignored)
+  fault_description   name of the fault model
+
+If no header line is specified then the model is assumed to contain only
+the fields with asterisks in the order above.  Header lines are identified 
+by containing the text "strike_deg".
+
+The fault_num, fault_type, fault_x_km, fault_y_km and fault_descrip fields are
+optional.  If the coordinates are in a projection coordinate system then the
+east_m and north_m fields must be included, otherwise the lat_deg and lon_deg
+fields are required.  The width_km field must be present except for type 6
+models for which bottom_depth_km is required instead.
+
+The fault model lines contain data corresponding to the fields defined by the 
+last header line, or the default fields.  Fields are separated by whitespace.
+If the last field is fault_description then it will include any remaining text
+on the line, including whitespace.
+
+The "Fault parameter type" metadata line can set the value for fault_type.
+
+The "Additional data" metadata line(s) can include strings formatted as 
+fieldname=value, which define the default value for fields not included in 
+the data lines, for example fault_type.
+
+The metadata lines can include a definition of the coordinate system of the
+fault model - this can be one of:
+
+Origin: lon lat
+   The coordinates are latitude and longitude, and the model is the
+   specified latitude and longitude are taken as the orgin of a 
+   "Seismologists projection"!
+
+Projection: definition
+   The coordinates and model are defined in terms of a projection coordinate
+   system.  The definition can be one of UTM59, UTM60, NZTM, or a 
+   transverse mercator definition
+      TM a rf cm sf lto fe fn 
+   where the parameters are semi-major axis, reciprocal flattening, 
+   central meridian, scale factor, origin of latitude, false easting,
+   false northing.
+
+   The projection can also be NONE in which case the model coordinates
+   and the test point coordinates are in an arbitrary x,y system unrelated
+   to a projection.
+
+Where a projection is used an additional parameter can be used
+
+Vector orientation: orientation
+    The orientation can be "geographic" or "projection".  Where it is
+    projection the calculated de and dn values are treated as being in
+    terms of the projection coordinate system and are converted to 
+    a geographic coordinate system.  Note that strain components are 
+    not corrected.
+
+    Where the model is defined in terms of a projection the only reason
+    for treating de,dn as being geographic is if the model was derived
+    by inverting geographic de,dn values.
+
+If no coordinate system is defined then the model uses the equivalent of
+a "Origin" definition based on the latitude and longitude of the first 
+fault model.
+
+The fault model file has default extension ".model".  If it is not found
+from the current directory, it will try using a directory defined by 
+environment variable FAULT_MODEL_DIR.
+
+The test_point_file contains the points at which the dislocations are to 
+be calculated.  The format depends upon the -c and -n parameters. If the
+-n parameter is included then the first field is a name.  This is followed
+by longitude and latitude.  If the -c parameter is specified, this is then
+followed by the observed dislocation east, north, and up components.
+
+If neither the -c or -n parameter is specified, the test point file can include
+a grid definition formatted as 
+
+grid min_lon min_lat max_lon max_lat nlon nlat
+
+Note: nlon and nlat are the number of grid cells, so the number of points in
+each direction is one greater than this.
+
+-----------------------------
+
+The fault_type parameter defines how the location of the fault is 
+defined in terms of the depth, latf, lonf, and so on as follows:
+
+  typef  describes how the position and depth of the fault are parameterised.  
+         Observer is standing on surface looking down dip.
+
+typef depth               latf, lonf
+0     to bottom of fault  above bottom of fault; far RH corner as observer 
+                          looks down dip
+1     to top of fault     place where fault would outcrop looking back 
+                          over right shoulder
+2     to top of fault     above top of fault; nearest RH corner as 
+                          observer looks down dip
+3     to middle of fault  above middle of fault
+4     to top of fault     place where fault would outcrop; half-way along fault
+5     to top of fault     middle of surface projection of top of fault
+6     to top of fault     place where fault would outcrop; half-way along fault
+                          dip is down from horizontal.
+                          rake reflected so that 0 is right-lateral
+                          width_km is replaced with bottom_depth_km
+7     to top of fault     middle of the fault
+                          dip is down from horizontal.
+                          rake reflected so that 0 is right-lateral
+                          width_km is replaced with bottom_depth_km
+
+
+Example fault definition file:
+
+azif dip rake length width slip open depth latf  lonf
+84 88.8 168 24.6 6.85 5.3 0 3.43 -43.5909 172.222
+48 75 143 6 8.3 5.4 0 6 -43.5479 172.173
+125 80.6 152 14.3 7 2.9 0 3.55 -43.582 172.005
+30 60 90 6 3.5 2.8 0 2.8 -43.5603 171.892
+

@@ -67,7 +67,7 @@ image::no_data.png[title=Influence of "no data" values, width=400,scalewidth=9cm
 The gray area, where displacement is undefined, might include coastal regions where the deformation of the seabed is not measured, or it may cross a jurisdictional boundary. Since the grid is rectangular, it may include regions where the deformation is not known, which are represented in the model by a “no data” value.
 
 
-[[discuss-geoentric-interpolation]]
+[[discuss-deformation-near-poles]]
 === Deformation models near poles
 
 Representing deformation in near polar regions using this specification may 
@@ -126,7 +126,7 @@ The function reference epoch t~0~ is an epoch at which the function is forced to
 
 In a more realistic example the start epoch and function reference epoch would both be used.  In graph B, for example, the producer could set the function reference epoch to the same value as the start epoch - 2013.2.  This would ensure that the time function is exactly zero for any epoch before this.
 
-One usage of the function reference epoch is to describe deformation that occurred before the reference epoch of a datum. For example an earthquake occurring before the datum epoch may be modeled by a step function with a function reference epoch set to the datum epoch. This is illustrated in <<image-reverse-step>> which shows the modified step time function where the event epoch is 2014.5 and the datum epoch is 2015.2. As the datum is referenced to 2015.2 the earthquake has no effect on coordinates observed at or after that date. However, to calculate the location of an object before the earthquake, the displacements caused by the earthquake must be subtracted from the object coordinates. This is implemented by the “reverse step” time function, which is -1.0 for dates before the earthquake, and 0.0 for dates after it.
+One usage of the function reference epoch is to describe deformation that occurred before the reference epoch of a datum. For example an earthquake occurring before the datum epoch may be modeled by a step function with a function reference epoch set to the datum epoch. This is illustrated in <<image-reverse-step>> which shows the modified step time function where the event epoch is 2014.5 and the datum epoch is 2015.2. As the datum is referenced to 2015.2 the earthquake has no effect on coordinates observed at or after that date. However, to calculate the location of an object before the earthquake, the displacements caused by the earthquake must be subtracted from the object coordinates. By setting the function reference epoch to 2015.2, the step function becomes -1.0 for dates before the earthquake, and 0.0 for dates after it - a "reverse step" function.
 
 [[image-reverse-step]]
 image::reverse_step.png[title="A \" reverse step\" function modeling an earthquake occurring before the datum reference epoch (defined by the function reference epoch t~0~)"]

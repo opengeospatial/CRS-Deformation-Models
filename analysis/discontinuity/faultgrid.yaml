@@ -1,0 +1,7 @@
+
+grid:
+  size: [ 11,11 ]
+  se: [0.0,0.0 ]
+  spacing: [ 1000.0,1000.0 ]
+  subdivision: 5 # (for testing)
+

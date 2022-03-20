@@ -1,0 +1,5 @@
+Projection: None
+Fault parameter type: 5
+
+strike_deg dip_deg  rake_deg length_km width_km slip_m depth_km  east_m   north_m
+0.0        -90.0     0.0      4.0       2.0      2.5    0.0       4001.0   3500.0

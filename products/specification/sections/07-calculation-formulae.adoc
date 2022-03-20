@@ -179,7 +179,7 @@ The uncertainty eh or ev is the root sum of squares (RSS) of the uncertainty val
 
 eh = √(f~1~^2^.eh~1~^2^+ f~2~^2^.eh~2~^2^+ … + f~n~^2^.eh~n~^2^)
 
-[formula-apply-displacement]
+[[formula-apply-displacement]]
 === Applying the total displacement to a coordinate
 
 // Is there a better way to specify this without specifying units of 
