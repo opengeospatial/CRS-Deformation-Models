@@ -47,8 +47,7 @@ This work is closely aligned with the work of the [GGXF (Geodetic Gridded data e
 
 The project team is now working on compiling the abstract specification document that will be the main product of this teams work.
 
-The document is open for comment and editing as a Google document at 
-https://docs.google.com/document/d/1wlcB3zQjXqMmV-P6IHcLjUo-yC7PLeut_u9hazTbiEE/edit?usp=sharing.  This link can be used to submit comments on the document (select some text and then click the + icon to add a comment on the text).  
+The document is open for comment and editing as a Google document at https://docs.google.com/document/d/1EsKJvasc54OgIngdABL263lCNjj6HgpYMtqGvOq0KyQ/edit?usp=sharing.  This link can be used to submit comments on the document (select some text and then click the + icon to add a comment on the text).  
 
 Other work done by this team is held in this repository, in particular the asciidoc source code for the abstract specification is in the [products/specification](https://github.com/opengeospatial/CRS-Deformation-Models/tree/master/products/specification) folder.  The [github issues](https://github.com/opengeospatial/CRS-Deformation-Models/issues?q=is%3Aissue) also contain a body of discussion.
 
