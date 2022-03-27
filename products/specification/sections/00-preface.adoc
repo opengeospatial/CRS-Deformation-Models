@@ -21,22 +21,23 @@ If the Preface contains subclauses, it needs to be encoded as a full preface cla
 [abstract]
 == Abstract
 
-All objects on the surface of the earth are moving. Apparently fixed features such as buildings are moving with the earth's crust - subject to ongoing plate tectonic movement and episodic deformation events such as earthquakes. Increasingly we rely on Global Navigation Satellite Systems (GNSS) which can precisely determine the coordinates of features - coordinates we then store in Geographic Information Systems (GIS) and other spatial databases. However, the coordinates from GNSS are referenced to global reference frames and coordinate systems  In these reference frames the ongoing movement of apparently fixed objects means that the coordinates of these features are continually changing over time. 
+All objects on the surface of the earth are moving. Apparently fixed features such as buildings are moving with the earth's crust, being subject to ongoing plate tectonic movement and episodic deformation events such as earthquakes. Increasingly, we rely on Global Navigation Satellite Systems (GNSS) which can precisely determine the coordinates of features - coordinates we then store and use in Geographic Information Systems (GIS) and other spatial databases. However, the coordinates from GNSS are referenced to global reference frames and coordinate systems.  In these reference frames ongoing movement of fixed objects means that the coordinates of these features are continually changing over time. 
 
-This creates a challenge for the geospatial and positioning community - how to account for this movement when comparing data sets observed at different times, or how to relocate an object located in the past.
+This creates a challenge for the geospatial and positioning community: how to account for this movement when comparing data sets observed at different times, or how to relocate an object located in the past.
 
-One solution to this challenge is to use a deformation model - a mathematical model of the deformation of the crust. It allows the coordinates of an apparently fixed object to be propagated to different times so that they track the object's location.
+One solution to this challenge is to use a deformation model - a mathematical model of the deformation of the crust. It allows the coordinates of a fixed object to be propagated to different times so that they track the object's location.
 
 Common uses  of a deformation model include:
 
-* determining the current location of an object based on a historic measurement of its location, 
-* transformation of the current observed location of an object to the reference epoch of a static coordinate system 
-* determining the correct spatial relationship of data sets observed at different times.
+* determining the current location of an object based on historic measurement of its location, 
+* transformation of the current observed location of an object to the reference epoch of a static coordinate system,
+* determining the spatial relationship of data sets observed at different times,
+* predicting the location of an object at some future time.
 
-Currently many national geodetic agencies construct deformation models. However, these  generally use customized formats and are typically only used by software developed by the agency.
+Currently, many national geodetic agencies construct deformation models. However, these  generally use customized formats and are typically only used by software developed by the agency.
 
-This specification defines a functional model for describing a deformation model. It describes a way of parameterizing deformation such that it can be encoded into a data set and incorporated into software for use in coordinate transformations. It also defines how to calculate the displacement of a point between two different epochs using this parameterization.
-This specification allows producers of deformation models, such as national geodetic agencies, to publish these models in a consistent way. Users of coordinate transformation software can be confident that the model is being applied as intended by the producers.
+This specification defines a framework for describing a deformation model. We call this framework a functional model.  It describes a way of parameterizing deformation such that it can be encoded into a data set and incorporated into software for use in coordinate operations. It also defines how to calculate the displacement of a point between two different epochs.
+This specification allows producers of deformation models, such as national geodetic agencies, to publish these models in a consistent way. Users of software that performs coordinate operations, such as coordinate transformations, can be confident that the model is being applied as intended by the producers.
 
 [.preface]
 == Submitters
@@ -45,7 +46,7 @@ This specification allows producers of deformation models, such as national geod
 |===
 h| Submitter h| Affiliation
 | Chris Crook | Land Information New Zealand
-| Kevin Kelly | ESRI
+| Kevin Kelly | Esri
 | ...   | ...
 |===
 
@@ -62,19 +63,19 @@ image::structure.png[title="Functional decomposition of a deformation model",wid
 
 //image::structure.svg[title="Functional decomposition of a deformation model",width=10cm]
 
-Commonly elements represent identified geophysical causes, such as coseismic deformation due to an earthquake. However, an element could equally represent some measured displacement for which no physical cause has been ascribed. Also, several elements may represent different aspects of a single geophysical cause.  For example, the horizontal deformation due to an earthquake may be represented by one element, and the vertical deformation by another.
+Commonly, elements represent the effects of geophysical events, such as coseismic deformation due to an earthquake. However, an element could equally represent some measured displacement for which no physical cause has been ascribed. Also, several elements may represent different aspects of a single geophysical event.  For example, the horizontal deformation due to an earthquake may be represented by one element, and the vertical deformation by another.
 
-This specification does not encompass other forms of deformation model such as:
+Other types of deformation model not encompassed by this specification include:
 
-* Rigid body transformation between reference frames such as time dependent Helmert or Bursa-Wolf transformations, 
-* Trajectory models for individual points, such as ITRF reference station coordinate models, 
-* Static distortion models used to represent the deformation between two datums 
-* Global plate tectonic models 
-* Three dimensional geophysical models of deformation in terms of dislocations on fault surfaces or using finite element models. 
+* rigid body transformation between reference frames such as time dependent Helmert or Bursa-Wolf transformations, 
+* trajectory models for individual points, such as ITRF reference station coordinate models, 
+* static distortion models used to represent the deformation between two datums,
+* global plate tectonic models,
+* three dimensional geophysical models of deformation in terms of dislocations on fault surfaces such as elastic half space or finite element models. 
 
-Also, this specification does not describe how the parameters and metadata of a deformation model should be encoded into a file.
+Also, this specification does not describe how the parameters and metadata of a deformation model should be encoded into a digital file.
 
-The primary use case for this specification is for deformation model producers such as national geodetic agencies to encode regional deformation models for use in spatial data operations in geographic information systems and positioning systems. The purpose of this specification is to define the parameters that must be encoded in a compliant deformation model, and the formulae that compliant software should use to transform coordinates using the model.
+The intention of this specification is to allow deformation model producers, such as national geodetic agencies, to be confident that the models they provide are being used as they intended.  It defines the parameters that must be encoded to define a deformation model, and the formulae that must be used by software to calculate and apply the deformation to coordinates.  
 
 ////
 [.preface]

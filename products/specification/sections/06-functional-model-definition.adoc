@@ -3,43 +3,43 @@
 The deformation model is characterized as follows.
 
 ////
-2. [[funcmod-trajectory]]The model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial function.  This trajectory is terms of an explicitly defined accessible coordinate system.
+. [[funcmod-trajectory]]The model defines a trajectory for each point on the physical surface by adding the calculated displacement as function of time to the position used to evaluate the spatial function.  This trajectory is terms of an explicitly defined accessible coordinate system.
 
-3. [[funcmod-ref-crs]]The position used to calculate the spatial function is not defined in an currently accessible coordinate system - it may be in terms on an accessible coordinate system at a specific epoch.  Its value is only accessible by an inverse calculation using the model.  See the <<formula-inverse>> below.
+. [[funcmod-ref-crs]]The position used to calculate the spatial function is not defined in an currently accessible coordinate system - it may be in terms on an accessible coordinate system at a specific epoch.  Its value is only accessible by an inverse calculation using the model.  See the <<formula-inverse>> below.
 ////
 ////
 10. [[funcmod-spatial-params-other]] A producer may include additional parameters at each node that will be ignored by compliant software.  The set of parameters must be the same for each node of a spatial function.
 ////
 
 
-1. [[funcmod-extents]] The model defines deformation within a specified spatial and temporal extent. Beyond these extents the model is undefined and cannot be evaluated.
+. [[funcmod-extents]] The model defines deformation within a specified spatial and temporal extent. Beyond these extents it is undefined and cannot be evaluated.
 
-2. [[funcmod-decomposition]]The model partitions deformation into one or more elements. The total displacement at a specific time and position is calculated by summing the contribution from each element at that time and position, as described in <<formula-elements>>.
+. [[funcmod-decomposition]]The model partitions deformation into one or more elements. The total displacement at a specific time and position is calculated by summing the contribution from each element at that time and position, as described in <<formula-elements>>.
 
-3. [[funcmod-element]]Each element of the model comprises a spatial function and a time function. The spatial function evaluates displacement as a function of position. The time function evaluates a scale factor as a function of time. The deformation contribution for the element at a given position and time is obtained by multiplying the displacement from the spatial function by the scale factor from the time function.
+. [[funcmod-element]]Each element of the model comprises a spatial function and a time function. The spatial function evaluates displacement as a function of position. The time function evaluates a scale factor as a function of time. The deformation contribution for the element at a given position and time is obtained by multiplying the displacement from the spatial function by the scale factor from the time function.
 
-4. [[funcmod-spatial-extent]]The spatial function may be defined over a subset of the total extent of the model. Where the spatial function is not defined it is assumed to be zero.
+. [[funcmod-spatial-extent]]The spatial function may be defined over a subset of the total extent of the model. Where the spatial function is not defined it is assumed to be zero.
 
-5. [[funcmod-spatial-function]]The spatial function is represented by displacement vectors at the nodes of a grid or a set of grids. 
+. [[funcmod-spatial-function]]The spatial function is represented by displacement vectors at the nodes of a grid or set of grids. 
 
 +
 --
-If a set of grids is used then only one of the grids will be used to evaluate the function at a specific location.  The implementation must unambiguously define which grid (if any) is to be used at a specific location.
+If a set of grids is given then only one of the grids will be used to evaluate the function at a specific location.  The implementation must unambiguously define which grid (if any) is to be used at a specific location.
 
 
 The spatial function displacement components at a location are calculated from the selected grid using a specified interpolation method.  The only interpolation method supported is bilinear interpolation, as described in  <<formula-spatial-interpolation>>.
 --
 
-6. [[funcmod-spatial-params]]The spatial function can define displacement and uncertainty components.  This set of components must be defined at every node of every grid of the function.  Different spatial functions may have different components.  For example, the spatial function of one element might define horizontal displacement, and the spatial function of another may define vertical displacement.
+. [[funcmod-spatial-params]]The spatial function can define displacement and uncertainty components.  This set of components must be defined at every node of every grid of the function.  Different spatial functions may have different components.  For example, the spatial function of one element might define horizontal displacement, and the spatial function of another may define vertical displacement.
 
-7. [[funcmod-spatial-params-displacement]]Displacement components of the spatial function may include:
+. [[funcmod-spatial-params-displacement]]Displacement components of the spatial function may include:
 * horizontal displacement - the east and north displacement in meters or degrees
 * vertical displacement - the upwards vertical displacement in meters.
 
 +
 Displacement components not defined by the spatial function are assumed to be zero.
 
-8. [[funcmod-spatial-params-uncertainty]]Uncertainty components of the spatial function may be one of:
+. [[funcmod-spatial-params-uncertainty]]Uncertainty components of the spatial function may include:
 
 * horizontal uncertainty specified as one of:
 ** horizontal circular uncertainty e~h~
@@ -48,7 +48,7 @@ Displacement components not defined by the spatial function are assumed to be ze
 
 +
 --
-The set of uncertainty components used to represent uncertainty are defined in the model metadata and must be used for all spatial functions which have uncertainty components.  For example, the deformation metadata could specify that the model uses horizontal circular uncertainty and vertical uncertainty.  A particular spatial component could define just horizontal circular uncertainty.  Another could define vertical uncertainty.  But it would not be valid for an element to define east and north uncertainty.
+The set of components used to represent uncertainty are defined in the model metadata and must be used for all spatial functions which have uncertainty components.  For example, the deformation metadata could specify that the model uses horizontal circular uncertainty and vertical uncertainty.  A particular spatial component could define just horizontal circular uncertainty.  Another could define vertical uncertainty.  But it would not be valid for an element to define east and north uncertainty.
 
 // * horizontal and vertical uncertainty
 // ** horizontal covariance matrix components c~ee~ , c~en~, c~nn~.
@@ -56,18 +56,18 @@ The set of uncertainty components used to represent uncertainty are defined in t
 
 The probability level for the uncertainty is defined in the model metadata, e.g. "1 standard error", "95% confidence".
 
-If the uncertainty of an element is not defined at a model node its value is defined by a default value element metadata or, if it is not defined there, in the model metadata.
+If the uncertainty of an element is not defined at a grid node then the uncertainty is taken from a default value in the element metadata or, if it is not defined there, in the model metadata.
 
-// 9. [[funcmod-spatial-params-quality]] A spatial function may include a quality parameter at each node providing guidance on the reliability of the spatial function in the vicinity of the node. For example, a quality parameter could indicate surface faulting affecting cells adjacent to the node.
+// . [[funcmod-spatial-params-quality]] A spatial function may include a quality parameter at each node providing guidance on the reliability of the spatial function in the vicinity of the node. For example, a quality parameter could indicate surface faulting affecting cells adjacent to the node.
 --
 
-9. [[funcmod-continuous-invertible]]
-The displacement defined by the model is required to be continuous and invertible within the spatial and temporal extent of the model except where it evaluates to _no data_.
-This is not necessarily enforced by the mathematical formulation of a model. It is a compliance requirement on producers of functional models.  Continuity can be assumed by software implementations of the model.
+. [[funcmod-continuous-invertible]]
+The displacement defined by the model is required to be continuous within the spatial and temporal extent of the model except where it evaluates to _no data_.
+This is not necessarily enforced by the mathematical formulation of a model. It is a compliance requirement on producers of deformation models.  Continuity can be assumed by software implementations of the model.
 
-10. [[funcmod-nodata]] The displacement and uncertainty components at a node of a spatial function may be assigned a  _no data_ value.  This means that their value at that node is undefined.  The model displacement and uncertainty is undefined at specific time and location if calculating it would require using a using a _no data_ value.
+. [[funcmod-nodata]] The displacement and uncertainty components at a node of a spatial function may be assigned a  _no data_ value.  This means that their value at that node is undefined.  A calculated  displacement or uncertainty is considered undefined at a specific time and location if the calculation involves a no data value.
 
-11. [[funcmod-time-function]]The time function of an element is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
+. [[funcmod-time-function]]The time function of an element is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
  * a velocity function
  * a step function
  * a reverse step function
@@ -79,11 +79,11 @@ This is not necessarily enforced by the mathematical formulation of a model. It 
  * a sine or cosine function
 
 +
-These base time functions are defined mathematically in <<formula-time-function>>.
+These base time functions are defined in <<formula-time-function>>.
 
-12. [[funcmod-element-metadata]]Each element definition specifies:
+. [[funcmod-element-metadata]]Each element definition specifies:
 
-* The spatial interpolation method to use (bilinear)
+* The spatial interpolation method to be used (currently only bilinear is supported)
 * The quantities it defines (displacement components, uncertainty components)
 * A spatial definition of the extent of the spatial function (to determine if it is required at a specific position)
 
@@ -92,7 +92,7 @@ These base time functions are defined mathematically in <<formula-time-function>
 // * The type of spatial function (grid).  This may be specified by implication if the carrier only supports grid format. 
 It may also include:
 
-* The default uncertainty, which applies if the spatial function does not explicitly define uncertainty.
+* The default uncertainty, used if the spatial function does not explicitly define uncertainty.
 * Other metadata required by the implementation
 * Other producer metadata
 
@@ -103,15 +103,15 @@ It may also include:
 
 13. [[funcmod-model-metadata]]The model definition specifies:
 
-* The source CRS definition (e.g., EPSG:xxxx)
-* The target CRS definition (if the model is implemented as a point motion model this will be the same as the source CRS).
-* The spatial function definition CRS
-* The valid spatial extent of the model (defined in terms of the definition CRS)
+* The source CRS (e.g., EPSG:xxxx)
+* The target CRS (if the model is implemented as a point motion model this will be the same as the source CRS).
+* The interpolation CRS used to define the spatial function(s)
+* The valid spatial extent of the model (defined in terms of the interpolation CRS)
 * The valid time extent of the model
 * The units of horizontal displacement
 * The units of vertical displacement
 * The parameters used to represent uncertainty, for example, horizontal 95% circular confidence, vertical 95% confidence level.
-* The default uncertainty for each element of the model, if the model does not explicitly define uncertainty
+* The default uncertainty for each element of the model, used if the element does not explicitly define uncertainty
 
 +
 --

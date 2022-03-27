@@ -1,9 +1,9 @@
 
 == Calculation formulae
 
-The formulae below define the expected behavior of software implementations of the deformation model. Whatever algorithm a software implementation may use it should produce numerically indistinguishable results to be a compliant implementation. This ensures the software implementation applies the model as intended by the producers.
+The formulae below define the expected behavior of software implementations of the deformation model.  A compliant software may use different formulae provided that for every location and time within the extents of the model it gives results that are practically identical with these formulae.
 
-In this specification the grid can be defined either in terms of a geographic (longitude/latitude) or projected (easting/northing) coordinate system. Displacements and uncertainties are expressed as linear distance except that the horizontal displacement may be an [.question]#angular distance# if the source and target coordinate systems are geographic.
+Grids can be defined either in terms of a geographic (longitude/latitude) or projected (easting/northing) coordinate system. Horizontal displacements and uncertainties are expressed as linear distances or, if the source and target coordinate systems are geographic, an angular measure.Vertical displacements are expressed in linear units.
 
 [[formula-spatial-interpolation]]
 === Spatial interpolation
@@ -13,12 +13,12 @@ This specification defines spatial functions by bilinear interpolation on a grid
 [[formula-nested-grid-selection]]
 ==== Selection of spatial function grid
 
-Spatial functions are using a set of one or more grids.  At a given position only one of the grids is used to calculate the spatial function displacement or uncertainty.  The implementation must uniquely identify the grid, if any, that applies at any location within the valid extents of the model.  If no grid applies at a location then the displacement and uncertainty of the element at that location are both zero.
+Spatial functions use a set of one or more grids. At a given location only one grid is used to calculate the spatial function displacement or uncertainty.  For each location within the valid extents of the model, the implementation must uniquely identify which grid, if any, applies. If no grid applies then the displacement and uncertainty of the element at that location are both zero.
 
 [[formula-bilinear-interpolation]]
 ==== Bilinear grid interpolation
 
-Each grid of a spatial function is a regular grids defined in an interpolation CRS. The coordinates of a grid node are given by
+Each grid of a spatial function is a regular grid in the interpolation CRS.  The coordinates of a grid node are defined as
 
 x~i~ = x~o~ + i.x~s~ +
 y~j~ = y~o~ + j.y~s~
@@ -36,7 +36,7 @@ Bilinear interpolation is defined as follows:
 
 The calculation point (x,y) is located in the grid cell between columns i and i+1, and rows j and j+1.
 
-The weights are assigned to these nodes using the formulae:
+Weights are assigned to these nodes using the formulae:
 
 W~i,j~ = ((x~i+1~-x)/x~s~) * ((y~j+1~-y)/y~s~) +
 W~i+1,j~ = ((x-x~i~)/x~s~) * ((y~j+1~-y)/y~s~) +
@@ -68,7 +68,7 @@ The deformation model metadata defines a temporal extent for the model from T~mi
 
 The time function is defined as the sum of one or more base functions. 
 
-Each base time function is one of the types listed in the following table.
+Each base function is one of the types listed in the following <<table-time-function-types>>.
 
 [[table-time-function-types]]
 .Base time function types
@@ -76,13 +76,13 @@ Each base time function is one of the types listed in the following table.
 [options="header"]
 |===
 | Time function type|Description
-| velocity | Defines a scale factor that is linear with time.  When multiplied by the spatial function this defines a constant velocity field, typically used to represent secular tectonic velocity.
-| acceleration | Defines a rate of change of the velocity function.  This may be used where the velocity is changing at a constant rate.  This is sometimes used to model glacial isostatic adjustment.
-| step | Defines an instantaneous change of displacement, typically used to model coseismic earthquake deformation.
-| ramp | Defines displacement accumulating at a linear rate over a fixed period of time.  This can be used to simplistically represent post-seismic deformation.  In particular, combining several ramp functions can be used to create a piecewise linear time function that can emulate any time behavior to an arbitrary level of accuracy.
+| velocity | Defines a scale factor that is linear with time.  When multiplied by the spatial function, it defines a constant velocity field, typically used to represent secular tectonic velocity.
+| acceleration | Defines a rate of change of the velocity function.  This is sometimes used to model glacial isostatic adjustment.
+| step | Defines an instantaneous displacement, typically used to model coseismic earthquake deformation.
+| ramp | Defines displacement accumulating at a linear rate over a fixed period of time.  This can be used to represent post-seismic deformation.  Combining several ramp functions creates a piecewise linear time function that can emulate any time behavior to an arbitrary level of accuracy.
 | exponential | Defines a displacement accumulating at an exponentially decaying rate after an event.  This is commonly used to approximate post-seismic deformation.  Often used in conjunction with a logarithmic model.
 | logarithmic | Defines a displacement accumulating proportionally to the logarithm of elapsed time since an event.  This is commonly used to approximate post-seismic deformation.  It is often used in conjunction with an exponential model.
-| hyperbolic tangent | Approximates a time behavior observed in slow slip events.
+| hyperbolic tangent | Approximates time behavior observed in slow slip events.
 | cyclic | Represents cyclic behavior, such as deformation due to seasonal groundwater loading.
 
 |===
@@ -127,11 +127,11 @@ f~r~(_t_) = sin(_f_(_t_ - t~0~)/2&#120587;)
 |===
 
 
-Each base time function is computed using the reference formula f~r~(_t_) as in table <<table-time-functions>> above.  The result can be modified by three epoch parameters, start epoch t~s~, end epoch t~e~, and function reference epoch t~0~, and a scale factor s.  (Note that the ramp function explicitly uses the start and end epoch, and the velocity, acceleration, and cyclic functions explicitly use the function reference epoch.)
+Each base time function is computed using the reference formula f~r~(_t_) as in table <<table-time-functions>>.  The result can be modified by three epoch parameters, start epoch t~s~, end epoch t~e~, and function reference epoch t~0~, and a scale factor s.  (Note that the ramp function explicitly uses the start and end epoch; the velocity, acceleration, and cyclic functions explicitly use the function reference epoch.)
 
 The base time function f(_t_) is evaluated from the reference function f~r~(_t_) using these epochs as follows:
 
-* If the start epoch is defined then the function is evaluated at the start epoch for all times before the start epoch.  If the end epoch is defined then the function is evaluated at the end epoch for all times after the end epoch.  That is:
+* If the start epoch is defined then the function value at the start epoch applies for all times before the start epoch.  If the end epoch is defined then the function value at the end epoch applies for all times after the end epoch.  That is:
 
 +
 --
@@ -158,24 +158,20 @@ f(_t_) = f~2~(_t_) otherwise.
 
 In these formulae all epochs _t_ are defined as a decimal year. 
 
-A date/time _yyyy_-_mm_-__dd__T__HH__:__MM__:__SS__  is converted to a decimal year as follows. The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year. The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01T00:00:00Z and the date/time by the total number of seconds in the year (i.e. the number of seconds between _yyyy_-01-01T00:00:00Z and _yyy1_-01-01T00:00:00Z, where _yyy1_ is __yyyy__+1).
-
-Note that there is a small ambiguity in this formulation due to the occasional introduction of leap seconds. This impacts calculations because 1) it is not known at the beginning of the year whether a leap second will be added, and 2) standard software libraries used to implement the time functions may not include leap seconds, and if they do there will often be a delay before updates including leap seconds are distributed to users.  In all realistic usages, apart from the step function at the event epoch, the difference in deformation from one second to the next is insignificant.  
-
-Since leap seconds impart no practical difference to the deformation model calculations the decimal year is considered compliant whether or not it accounts for leap seconds - there are two nominally correct answers.
+A date/time _yyyy_-_mm_-__dd__T__HH__:__MM__:__SS__  is converted to a decimal year as follows. The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year. The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01T00:00:00Z and the date/time by the total number of seconds in the year (i.e. the number of seconds between _yyyy_-01-01T00:00:00Z and _yyy1_-01-01T00:00:00Z, where _yyy1_ is __yyyy__+1).  An implementation is considered compliant whether or not it accounts for leap seconds.
 
 Future versions of this specification may add new base time functions.
 
 [[formula-elements]]
 === Combination of elements
 
-To calculate the total displacement at a time and location, the displacement due to each element is calculated independently and summed. The total displacement is then applied to the coordinate. Displacement uncertainty is calculated similarly using the formula below.  The same input position coordinate is used for each element. Deformation components are not applied sequentially, that is the input coordinate is not updated by the first element before being used to calculate the deformation of the second element.
+To calculate the total displacement at a time and location, the displacement due to each element is calculated independently and summed. The total displacement is then applied to the coordinate. The same input position coordinate is used for each element. Deformation components are not applied sequentially, that is the input coordinate is not updated by the first element before being used to calculate the deformation of the second element.
 
 At a given time and location the values obtained from each element are combined to determine the overall displacement. For example, if there are n components for which the spatial model calculates de as de~1~, de~2~, … to de~n~, and the time function evaluates to f~1~, f~2~, … to f~n~ then the total displacement de is
 
 de = f~1~.de~1~+ f~2~.de~2~+ … + f~n~.de~n~
 
-The uncertainty eh or ev is the root sum of squares (RSS) of the uncertainty values determined for each element. For example,
+The uncertainty eh or ev is the root sum of squares (RSS) of the uncertainty values determined for each element, for example:
 
 eh = √(f~1~^2^.eh~1~^2^+ f~2~^2^.eh~2~^2^+ … + f~n~^2^.eh~n~^2^)
 
@@ -185,9 +181,9 @@ eh = √(f~1~^2^.eh~1~^2^+ f~2~^2^.eh~2~^2^+ … + f~n~^2^.eh~n~^2^)
 // Is there a better way to specify this without specifying units of 
 // displacement and coordinates
 
-The algorithm for applying a displacement to a coordinate depends on the units of the displacement and the type of the source and target coordinate systems. 
+The algorithm for applying a displacement to a coordinate depends on the units of the displacement and the source and target coordinate systems. 
 
-If the source and target coordinate systems are projected coordinate systems then the units must be meters and the east and north displacements are simply added to the easting, northing coordinates.
+If the source and target coordinate systems are projected coordinate systems then the units must be meters and the east and north displacements are simply added to the easting and northing coordinates respectively.
 
 If the source and target coordinate systems are geographic coordinate systems and the east and north displacement units are degrees, then the displacements are added to the longitude and latitude coordinates.
 
@@ -207,30 +203,24 @@ The vertical displacement is always simply added to the height coordinate.
 [[formula-iterative-application]]
 === Iterative calculation of inverse transformation
 
-If the interpolation coordinate system is directly related to the source or target coordinate systems then applying the  displacement to a point may change its coordinate in the interpolation coordinate system, which in turn may change the calculated value of displacement.  In this case the calculation and application of displacement to an input coordinate may require iteration, as described in <<formula-iterative-application>>.
-
-Calculating the inverse of the model requires an iterative solution if the interpolation coordinate system is dependent on the output coordinate system. The coordinate in the interpolation coordinate reference system is required to evaluate the displacement, but that coordinate is not known until the displacement has been calculated and applied to the input coordinate to derive the output coordinate.
-
-This will apply in a forward transformation if the interpolation coordinate system is dependent on the target coordinate system, and in a reverse transformation if it is dependent on the source coordinate system.
+If the interpolation CRS is derived from the target CRS in a transformation, then it is not defined until after the displacement has been applied to the source CRS coordinate to obtain the target CRS coordinate.  In this case an iterative calculation is required starting with an approximation for the interpolation CRS coordinate, and iteratively refining this approximation by calculating the target CRS coordinate.
 
 The iterative calculation uses the following steps:
 
-* use the input coordinate as an initial estimate for the output coordinate
+* use the source CRS coordinate as an initial estimate for the target CRS coordinate
 * at each iteration:
-** use the current estimate of the output coordinate to determine the displacement that applies
-** apply this displacement to the input coordinate to obtain a new estimate for the output coordinate
-** calculate the difference between the current and new estimates of the output coordinate
+** use the current estimate of the target CRS coordinate to determine the displacement that applies
+** apply this displacement to the source CRS coordinate to obtain a new estimate for the target CRS coordinate
+** calculate the difference between the current and new estimates of the target CRS coordinate
 ** if this difference is greater than the precision required for the inverse operation then iterate again, otherwise finish
 
-Note that at the edge of the model it may not be possible to calculate the inverse transformation.  The model is undefined outside its spatial extent in the interpolation coordinate system.  If the transformation of a point near the edge of the model moves it to a location outside that extent, then the first step of the iterative calculation will fail.  This step uses the transformed coordinate as a first estimate for the untransformed coordinate.  However that will be a point outside the model, so calculating the transformation at that point is not possible.  A more sophisticated algorithm could address this, for example using the nearest point within the spatial extent of the model at the first iteration.
+Note that at the edge of the model it may not be possible to calculate the inverse transformation.  The model is undefined outside its spatial extent in the interpolation coordinate system.  If the transformation of a point near the edge of the model moves it to a location outside that extent, then the first step of the iterative calculation will fail.  This step uses the transformed coordinate as a first estimate for the untransformed coordinate.  However, that will be a point outside the model, so calculating the transformation at that point is not possible.  A more sophisticated algorithm could address this, for example using the nearest point within the spatial extent of the model at the first iteration.
 
 [[formula-conversion-between-epochs]]
 === Calculation of deformation between two epochs
 
-The displacement de, dn and du to transform a coordinate between two epochs is calculated in a similar way to above except that the time functions are evaluated by taking the difference between the values at each epoch.  
-
-To calculate the displacement from epoch t~0~ to epoch t~1~ the time factors in <<formula-elements>> are calculated for the i^th^ element as:
+The displacements de, dn and du used to transform a coordinate between two epochs are calculated by replacing the time function values f~i~ used in <<formula-elements>> with the difference between the time function for the two epochs.  That is, to calculate the displacement from epoch t~0~ to epoch t~1~ the time function for the i^th^ element is calculated as:
 
 f~i,t1-t0~ = f~i~(t~1~) - f~i~(t~0~)
 
-Note that for calculating displacement components this gives the same result as taking the difference between the displacement components calculated individually for each epoch.  However, this method must be used to give the correct value of the uncertainty of the displacement between two epochs.
+When calculating displacement components this gives the same result as taking the difference between the displacement components calculated individually for each epoch.  However, the method described here must be used to give the correct value of the uncertainty of the displacement between two epochs.

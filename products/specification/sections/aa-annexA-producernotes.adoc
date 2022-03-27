@@ -10,35 +10,33 @@ Deformation is caused by a number of geophysical phenomena, each of which may be
 
 Typically, there is a secular velocity element representing the long term tectonic deformation - this is a single element with a velocity time function.  
 
-Overlaid on this there may be deformation due to earthquakes.  The coseismic deformation will be represented by an element with a step time function.  Postseismic deformation from the earthquake may be represented by several elements depending on the complexity of the deformation and the quality of information about it.  Several versions of a deformation model may be published after an earthquake as the ongoing postseismic deformation evolves and as the measurements and modeling of deformation are refined.
+Overlaid on this there may be deformation due to earthquakes.  The coseismic deformation will be represented by an element with a step time function.  Postseismic deformation following the earthquake may be represented by several elements depending on the complexity of the deformation and the quality of information available.  Several versions of a deformation model may be published after an earthquake as the ongoing postseismic deformation evolves and as  measurements and modeling of deformation are refined.
 
-Alternatively, the deformation model may be based more directly on observations.  For example, in Japan the dense network of CORS stations provides a continuous record of deformation.  Each year a new version of the deformation model is generated based on these measurements. Each of these could be represented by an element with a step time function.
+Alternatively, the deformation model may be based directly on observations of displacement rather than modelling from geophysical phenomena.  For example, in Japan the dense network of continuous GNSS (cGNSS) stations provides a continuous record of deformation.  Each year a new version of the deformation model is generated based on these measurements. Each of these could be represented by an element with a step time function.
 
 
 [[discuss-continuous-invertible]]
 === Requirement for the model to be continuous and invertible
 
-Deformation models described by this specification are used for coordinate operations - either to define time dependent transformations between different coordinate systems or to track the motion of objects between different epochs within a single coordinate system.  
+Deformation models described in this specification are intended for use in coordinate operations - either to define time dependent transformations between different coordinate systems or to track the motion of objects between different epochs within a single coordinate system.  
 
-Generally, the user expectation of these functions is that they are invertible.  That is, data can be transformed between any two epochs, and transforming data from one epoch to another and then back again leaves it unchanged.  
+Generally, the user expectation of such operations is that they are invertible.  If a coordinate is transformed from the source CRS to the target CRS, and then the resulting coordinate is transformed back to the source CRS, the final coordinate will be the same as the original coordinate.  Similarly, if the model is used as a point motion model, transforming a coordinate from one epoch to another, and then transforming the resulting coordinate back to the original epoch, will result in the original coordinate.  
 
-To support this expectation the deformation model should be spatially continuous and invertible for any valid epoch.  This is specified above as a compliance requirement of a deformation model. 
+To support this expectation, this specification requires that the spatial function of each element of the deformation model is continuous.  This does not guarantee that the resulting coordinate operation is invertible.  It is possible to define deformation models that are continuous but are not invertible.  However these are not realistic models.  Ensuring that a spatial function is continuous is much easier than ensuring that the resulting coordinate is operation.  Continuity is used as a practical surrogate for invertibility.
 
-Within a single grid the use of bilinear interpolation ensures that the deformation is spatially continuous.  It also ensures the deformation is invertible provided the displacements calculated in the grid are not greater than the grid spacing, which is generally very unlikely.
+Within a single grid the spatial function must be continuous - that is ensured by the use of bilinear interpolation. 
 
-The only opportunity for discontinuity in a deformation model is at the edges of grids.
+If a spatial function uses more than one grid, requirement for continuity places two constraints on deformation model producers. 
 
-This places two constraints on deformation model producers. 
+. Where an element does not cover the full extent of the deformation model then the deformation at the edge of the element must be zero.  For example, an element might represent coseismic deformation from an earthquake.  The deformation caused by the earthquake may not be significant over the full extent of the model so the element would only cover a subset of that area.  To ensure continuity, the displacements at the edge of the element should be set to zero, even though the actual displacements will be slightly different from zero. 
 
-* where an element does not cover the full extent of the deformation model then the deformation at the edge of the element must be zero.  For example, an element might represent coseismic deformation from an earthquake.  The deformation caused by the earthquake may not be significant over the full extent of the model so the element would only cover a subset of that area.  To ensure continuity the displacements at the edge element should be set to zero, even though the actual displacements will be slightly different from zero. 
-
-* where an element is represented by multiple overlapping or nested grids there will be transitions between one preferred grid and another.  At these transitions the values interpolated from each grid must be exactly the same.  For example, the displacement at the edge of a child grid will generally have exactly match that of its parent grid.  However if the edge abuts the edge of another child grid, then its displacement only needs to match that of the abutting grid.
+. Where an element is represented by multiple overlapping or nested grids there will be transitions across which the selected grid changes from one grid to another.  At these transitions the values interpolated from each grid must be the same.  For example, the displacement at the edge of a child grid will generally have to exactly match that of its parent grid.  However if the edge abuts the edge of another child grid, then its displacement only needs to match that of the abutting grid.
 
 In practice the second of these constraints means that parent and child grids must be aligned - any node of a parent grid that lies within the child grid must also be a node of the child grid.  Where grids are abutting, then along the common edge at least one of the grids should include all the nodes of the other.
 
 These constraints, and indeed the use of a gridded model, mean that the model cannot represent the true deformation exactly. For example, where there is surface faulting the actual deformation may not be continuous across a fault line. The deformation also may not be invertible (at least as a function of horizontal position) in areas of thrust faulting where points originally on opposite sides of the fault may be moved to the same horizontal position (though at different heights).
 
-For model producers, this can create a tension between the scientific desire to represent deformation as accurately as possible, and the practical constraints of a deformation model suitable for coordinate operations.  This specification is framed within the context of coordinate operations - it is not purporting to model deformation for scientific use.
+For model producers, this can create a tension between the scientific desire to represent deformation as accurately as possible, and the practical constraints of a deformation model suitable for coordinate operations.  This specification is framed within the context of coordinate operations - it does not purport to model deformation for scientific use.
 
 The challenge for model producers is to decide the extent to which the deformation can be usefully modeled to best support the geospatial community.
 
@@ -51,9 +49,9 @@ The challenge for model producers is to decide the extent to which the deformati
 [[discuss-no-data]]
 === No data and zero values
 
-There may be areas within the extent of the deformation model grids where the deformation is either not known or is not within the model producer's jurisdiction.  In these areas the model producer may prefer to not specify an unreliable or unauthoritative displacement.
+There may be areas within the extent of the deformation model grids where the deformation is either not known or is not within the model producer's jurisdiction.  In these areas the model producer may prefer not to specify an unreliable or unauthoritative displacement.
 
-Grids must be defined by rectangular regions, which are unlikely to match the extent of the known deformation. To avoid grids being used in areas where the deformation is undefined, it is desirable that special “no-data” values can be used for displacements at nodes where this applies.  The implementation of “no-data” will be dictated by the format used to carry the deformation model.
+Grids must be defined by rectangular regions, which are unlikely to match the extent of the known deformation. To avoid grids being used in areas where the deformation is undefined, it is desirable that special “no-data” values be used for displacements at nodes where this applies.  The implementation of “no-data” will be dictated by the format used to carry the deformation model.
 
 The “no data” value for a displacement is different from a zero displacement. A value of zero is used where there is no significant displacement. A “no-data” value is used where the displacement is unknown.
 
@@ -70,20 +68,19 @@ The gray area, where displacement is undefined, might include coastal regions wh
 [[discuss-deformation-near-poles]]
 === Deformation models near poles
 
-Representing deformation in near polar regions using this specification may 
-not give the desired results if the interpolation coordinate system or source and target coordinate systems are geographic. Both the means of interpolating across a grid cell, and the formulae for applying the displacment to a coordinate, may not be suitable.  The simplest way to represent deformation in such cases is to use a suitable projection coordinate system.  Future versions of this specification may add support for geographic coordinate systems in polar regions.
+The formulae defined in this specification are not suitable for transforming geographic (longitude and latitude) coordinates in near polar regions. Both the means of interpolating within a grid cell, and the formulae for applying the displacment to a coordinate, may yield unintended results.  The simplest way to represent deformation in such cases is to use a suitable projected (easting and northing) coordinate system.  Future versions of this specification may add support for geographic coordinate systems in polar regions.
 
-Near the poles grid cells may span a large longitude range. Consequently the east and north components of a vector at adjacent grid nodes may be in quite different directions, as illustrated in <<image-near-pole-axes>>.  Interpolating east and north components independently as described in <<formula-bilinear-interpolation>> fails to account for this. For example, if the grid cell spans 1° of longitude and the displacement is 1m then bilinear interpolation may give rise to an error of up to about 2cm (the length of the displacement vector multiplied by the cosine of the longitude range of the grid cell).  This can be mitigated by using a finer longitude grid spacing.
+Near the poles grid cells may span a large longitude range. Consequently the east and north components of a vector at adjacent grid nodes may lie in quite different directions, as illustrated in <<image-near-pole-axes>>.  Interpolating east and north components independently as described in <<formula-bilinear-interpolation>> fails to account for this. For example, if the grid cell spans 1° of longitude and the displacement is 1m then bilinear interpolation may give rise to an error of up to about 2cm (the length of the displacement vector multiplied by the cosine of the longitude range of the grid cell).  This can be mitigated by using a finer longitude grid spacing.
 
 [[image-near-pole-axes]]
 image::geocentric_bilinear_interpolation.png[title="Different directions of east and north components at grid nodes and a calculation point", width=200,scalewidth=7cm. align="right"]
 
-Where the source and target coordinate systems are geographic, then adding east and north offsets to the the latitude and longitude coordinates may not be appropriate.  This is illustrated in <<image-near-pole-east-displacement>> where the gray vector shows the result of adding an east displacement to the longitude coordinate, and the black vector shows the result applying the same east displacement in the direction of the east vector component. Close to the pole, offsetting the longitude coordinate can give a significantly different result to applying a displacement in the direction of the east vector.  At the pole itself, offsetting the longitude coordinate makes no difference to the location at all and the formuala described in <<formula-apply-displacement>> cannot be used.
+Where the source and target coordinate systems are geographic, then adding east and north offsets to the the longitude and latitude coordinates may not be appropriate.  This is illustrated in <<image-near-pole-east-displacement>> where the gray vector shows the result of adding an east displacement to the longitude coordinate, and the black vector shows the result applying the same east displacement in the direction of the east vector component. Close to the pole, applying an east displacement by changing the longitude coordinate, as defined by the formulae in <<formula-apply-displacement>>,  may give a significantly different result than displacing the coordinate in the direction of the east vector.  At the pole itself, changing the longitude coordinate makes no difference to the location at all.
 
 [[image-near-pole-east-displacement]]
 image::near_pole_east_displacement.png[title="Comparison of vector and angular displacement near a pole",width=200,scalewidth=7cm,align="right"]
 
-This is only a significant issue very close to a geographic pole. It diminishes rapidly moving away from the pole.  For displacement d at a point at distance R from the pole, the difference is approximately d*(1-cos(d/R)), or approximately d^3^/2R^2^. For example, applying 1 m east displacement 1 km from the pole by offsetting the longitude would incur an error of only 5.10^-7^m.
+This is only a significant issue very close to a geographic pole. It diminishes rapidly away from the pole.  For displacement d at a point at distance R from the pole, the difference is approximately d*(1-cos(d/R)), or approximately d^3^/2R^2^. For example, applying 1 m east displacement 1 km from the pole by changing the longitude would incur an error of only 5.10^-7^m.
 
 
 
