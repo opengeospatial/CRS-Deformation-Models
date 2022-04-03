@@ -26,7 +26,7 @@
 :comment: ### Role of the authors; mandatory
 :role: editor
 :comment: ### Comma delimited keywords; mandatory
-:keywords: ogcdoc, OGC document, deformation model, crustal deformation, coordinate transformation, coordinate operation, specification
+:keywords: ogcdoc, OGC document, deformation model, crustal deformation, coordinate transformation, coordinate operation, specification,  time-dependent transformation
 :comment: ### Semicolon-delimited list of the submitting organizations; mandatory
 :submitting-organizations: Land Information New Zealand; ESRI
 :comment: ### Name of the AsciiDoc file; mandatory

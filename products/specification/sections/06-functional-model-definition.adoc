@@ -103,7 +103,7 @@ It may also include:
 
 13. [[funcmod-model-metadata]]The model definition specifies:
 
-* The source CRS (e.g., EPSG:xxxx)
+* The source CRS
 * The target CRS (if the model is implemented as a point motion model this will be the same as the source CRS).
 * The interpolation CRS used to define the spatial function(s)
 * The valid spatial extent of the model (defined in terms of the interpolation CRS)
@@ -118,6 +118,6 @@ It may also include:
 
 It may also include:
 
-* Other metadata required by the implementation, such as discovery metadata and licence information.
+* Other metadata required by the implementation, such as discovery metadata and license information.
 * Other producer metadata, such as model name, model version and publication date.
 --

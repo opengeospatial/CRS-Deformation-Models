@@ -4,6 +4,7 @@
 Some terms used here which possibly should be defined:
 
 * the implementation
+* CRS abbreviation
 * source CRS
 * target CRS
 * interpolation CRS

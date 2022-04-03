@@ -47,6 +47,7 @@ This specification allows producers of deformation models, such as national geod
 h| Submitter h| Affiliation
 | Chris Crook | Land Information New Zealand
 | Kevin Kelly | Esri
+| Richard Stanaway | University of New South Wales
 | ...   | ...
 |===
 
@@ -69,7 +70,7 @@ Other types of deformation model not encompassed by this specification include:
 
 * rigid body transformation between reference frames such as time dependent Helmert or Bursa-Wolf transformations, 
 * trajectory models for individual points, such as ITRF reference station coordinate models, 
-* static distortion models used to represent the deformation between two datums,
+* static distortion models used to represent the difference between two datums,
 * global plate tectonic models,
 * three dimensional geophysical models of deformation in terms of dislocations on fault surfaces such as elastic half space or finite element models. 
 
