@@ -3,7 +3,7 @@ CRS-Deformation-Models
 
 This repository holds the artefacts and workings of the "Deformation model functional model" project team established by the CRS DWG at the Montreal virtual meeting on 15 June 2020.
 
-The next virtual meeting of this project team will be at 4pm EDT (20:00 UTC) on 11 April 2022 (<https://www4.gotomeeting.com/join/463903845>).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
+The next virtual meeting of this project team will be at 4pm EDT (20:00 UTC) on 9 May 2022 (<https://www4.gotomeeting.com/join/145698317>).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
 
 <!--
 2020-09-07  https://www4.gotomeeting.com/join/494053021
@@ -32,12 +32,18 @@ Note: EDT ends Nov 1
 2022-02-14 https://www4.gotomeeting.com/join/606539877
 2022-03-14 https://www4.gotomeeting.com/join/616024989 20:00 UTC
 2022-04-11 https://www4.gotomeeting.com/join/463903845
-
+2022-05-09 https://www4.gotomeeting.com/join/145698317
+2022-06-06 https://www4.gotomeeting.com/join/763520589
+2022-07-04 https://www4.gotomeeting.com/join/662256749
+ 
 GGXF 2022-01-10 https://www4.gotomeeting.com/join/178306341
 GGXF 2022-01-31 https://www4.gotomeeting.com/join/426755581
 GGXF 2022-02-28 https://www4.gotomeeting.com/join/950826069
 GGXF 2022-03-28 https://www4.gotomeeting.com/join/477678237
 GGXF 2022-04-25 https://www4.gotomeeting.com/join/237877533
+GGXF 2022-05-23 https://www4.gotomeeting.com/join/630612269
+GGXF 2022-06-20 https://www4.gotomeeting.com/join/808850197
+GGXF 2022-07-18 https://www4.gotomeeting.com/join/492974173
 
 -->
 
@@ -51,7 +57,7 @@ The document is open for comment and editing as a [Google document](https://docs
 
 Other work done by this team is held in this repository, in particular the asciidoc source code for the abstract specification is in the [products/specification](https://github.com/opengeospatial/CRS-Deformation-Models/tree/master/products/specification) folder.  The [github issues](https://github.com/opengeospatial/CRS-Deformation-Models/issues?q=is%3Aissue) also contain a body of discussion.
 
-As an initial investigation this team undertook a survey of deformation models either planned or in use. Responses can be viewed at in at [Google spreadsheet](https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us).  While the survey is formally closed, the [questionnaire](https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0) is still available.  New information or updates are always welcome.
+As an initial investigation this team undertook a survey of deformation models either planned or in use. Responses can be viewed at in a [Google spreadsheet](https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us).  While the survey is formally closed, the [questionnaire](https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0) is still available.  New information or updates are always welcome.
 
 ## Project overview
 
