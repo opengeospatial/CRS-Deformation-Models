@@ -18,7 +18,7 @@ Alternatively, the deformation model may be based directly on observations of di
 [[discuss-continuous-invertible]]
 === Requirement for the model to be continuous and invertible
 
-Deformation models described in this specification are intended for use in coordinate operations - either to define time dependent transformations between different coordinate systems or to track the motion of objects between different epochs within a single coordinate system.  
+Deformation models described in this specification are intended for use in coordinate operations - either to define time dependent transformations between different CRSs or to track the motion of objects between different epochs within a single CRS.  
 
 Generally, the user expectation of such operations is that they are invertible.  If a coordinate is transformed from the source CRS to the target CRS, and then the resulting coordinate is transformed back to the source CRS, the final coordinate will be the same as the original coordinate.  Similarly, if the model is used as a point motion model, transforming a coordinate from one epoch to another, and then transforming the resulting coordinate back to the original epoch, will result in the original coordinate.  
 
@@ -26,7 +26,7 @@ To support this expectation, this specification requires that the spatial functi
 
 Within a single grid the spatial function must be continuous - that is ensured by the use of bilinear interpolation. 
 
-If a spatial function uses more than one grid, requirement for continuity places two constraints on deformation model producers. 
+If a spatial function uses more than one grid, the requirement for continuity places two constraints on deformation model producers. 
 
 . Where an element does not cover the full extent of the deformation model then the deformation at the edge of the element must be zero.  For example, an element might represent coseismic deformation from an earthquake.  The deformation caused by the earthquake may not be significant over the full extent of the model so the element would only cover a subset of that area.  To ensure continuity, the displacements at the edge of the element should be set to zero, even though the actual displacements will be slightly different from zero. 
 
@@ -64,18 +64,30 @@ image::no_data.png[title=Influence of "no data" values, width=400,scalewidth=9cm
 
 The gray area, where displacement is undefined, might include coastal regions where the deformation of the seabed is not measured, or it may cross a jurisdictional boundary. Since the grid is rectangular, it may include regions where the deformation is not known, which are represented in the model by a “no data” value.
 
+[[discuss-interpolation-method]]
+=== Alternative interpolation methods
+
+This specification only supports the bilinear interpolation.  A producer may choose to use, and an implementation may support, other methods, such as bicubic or biquadratic interpolation.  However they are not defined in this specification.  The calculation of displacements by a specific implementation may differ from that expected by the producer.
+
+The reasons the specification is restricted to bilinear interpolation are:
+* there are few implementation choices in using bilinear interpolation
+* it is easier to ensure continuity in a nested grid structure if bilinear interpolation is used
+
+There are few implementation choices because calculating the displacement at a point only uses the values from the four nodes of the grid cell in which the point lies.
+
+The more sophisticated bilinear and bicubic interpolation use values from the nodes of cells adjacent to the grid cell in which the calculation point lies.  Where the point lies in a cell on the edge of the grid some of these adjacent cells do not exist.  There is more than one way that implementation can be written handle this situation, and there is no "right way" to do it.  Different choices may give different results. 
 
 [[discuss-deformation-near-poles]]
 === Deformation models near poles
 
-The formulae defined in this specification are not suitable for transforming geographic (longitude and latitude) coordinates in near polar regions. Both the means of interpolating within a grid cell, and the formulae for applying the displacement to a coordinate, may yield unintended results.  The simplest way to represent deformation in such cases is to use a suitable projected (easting and northing) coordinate system.  Future versions of this specification may add support for geographic coordinate systems in polar regions.
+The formulae defined in this specification are not suitable for transforming geographic (latitude and longitude) coordinates in near polar regions. Both the means of interpolating within a grid cell, and the formulae for applying the displacement to a coordinate, may yield unintended results as described below.  The simplest way to represent deformation in such cases is to use a suitable projected (easting and northing) CRS.  Future versions of this specification may offer better support for geographic CRSs in polar regions by offering alternative methods for  interpolating displacements and adding displacements to coordinates.
 
 Near the poles, grid cells may span a large longitude range. Consequently, the east and north components of a vector at adjacent grid nodes may lie in quite different directions, as illustrated in <<image-near-pole-axes>>.  Interpolating east and north components independently as described in <<formula-bilinear-interpolation>> fails to account for this. For example, if the grid cell spans 1° of longitude and the displacement is 1m then bilinear interpolation may give rise to an error of up to about 2cm (the length of the displacement vector multiplied by the cosine of the longitude range of the grid cell).  This can be mitigated by using a finer longitude grid spacing.
 
 [[image-near-pole-axes]]
 image::geocentric_bilinear_interpolation.png[title="Different directions of east and north components at grid nodes and a calculation point", width=200,scalewidth=7cm. align="right"]
 
-Where the source and target coordinate systems are geographic, then adding east and north offsets to the longitude and latitude coordinates may not be appropriate.  This is illustrated in <<image-near-pole-east-displacement>> where the gray vector shows the result of adding an east displacement to the longitude coordinate, and the black vector shows the result applying the same east displacement in the direction of the east vector component. Close to the pole, applying an east displacement by changing the longitude coordinate, as defined by the formulae in <<formula-apply-displacement>>,  may give a significantly different result than displacing the coordinate in the direction of the east vector.  At the pole itself, changing the longitude coordinate makes no difference to the location at all.
+Where the source and target CRSs are geographic, then adding east north offsets to the longitude may not be appropriate.  This is illustrated in <<image-near-pole-east-displacement>> where the gray vector shows the result of adding an east displacement to the longitude coordinate, and the black vector shows the result applying the same east displacement in the direction of the east vector component. Close to the pole, applying an east displacement by changing the longitude coordinate, as defined by the formulae in <<formula-apply-displacement>>,  may give a significantly different result than displacing the coordinate in the direction of the east vector.  At the pole itself, changing the longitude coordinate makes no difference to the location at all.
 
 [[image-near-pole-east-displacement]]
 image::near_pole_east_displacement.png[title="Comparison of vector and angular displacement near a pole",width=200,scalewidth=7cm,align="right"]
@@ -117,7 +129,7 @@ The base function shows an event building in magnitude from 0.0 to 1.0. This mig
 
 The start and end epochs can be used to remove any change before the start epoch or after the end epoch. Setting a start epoch (graph B) applies the base function value at that epoch to any time before the start epoch. Similarly, setting an end epoch (graph C) applies the base function value at that epoch to any time after the end epoch.  A consequence of this is that the start and end values are no longer 0 and 1.   Generally a deformation model producer would use a function reference epoch as well as a start epoch, as described below, so that the time function is zero before the start date.
 
-Using start and end epochs has practical value for deformation model producers managing a coordinate system. In particular using the start epoch means that displacements calculated before that epoch do not change.  This may be more realistic. Although the mathematical model does not define it, there is a time at which the slow slip event starts, and before which it is causing no deformation.
+Using start and end epochs has practical value for deformation model producers managing a CRS. In particular, using the start epoch means that displacements calculated before that epoch do not change.  This may be more realistic. Although the mathematical model does not define it, there is a time at which the slow slip event starts, and before which it is causing no deformation.
 
 The function reference epoch t~0~ is an epoch at which the function is forced to be zero, and therefore when the calculated displacement for the event will be zero. A constant offset is added to the function to force it to be zero at this epoch.  In graph D the value -0.8 is added to the time functions so that it is zero at the function reference epoch 2014.2.
 

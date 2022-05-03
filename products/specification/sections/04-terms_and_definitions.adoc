@@ -1,20 +1,20 @@
 
 == Terms and Definitions
 
-Some terms used here which possibly should be defined:
+=== Terms
 
-* the implementation
-* CRS abbreviation
-* source CRS
-* target CRS
-* interpolation CRS
-* continuous spatial function
-* producer
+producer:: An agency compiling a deformation model for publication
+carrier:: A specific format used to encode a deformation model. The carrier defines how the attributes of the deformation model are encoded. 
+implementation:: A software that uses an encoded deformation model to calculate displacements and apply coordinate operations.  The implementation encodes the formulae defined in this specification or numerically equivalent formulae.
+
+=== Abbreviations
+
+CRS:: Coordinate reference system 
 
 ////
-=== accessible coordinate system
+=== accessible CRS
 
-A coordinate system within which positions can be measured directly?!
+A CRS within which positions can be measured directly?!
 
 [.source]
 <<ogc07036>>
@@ -22,11 +22,11 @@ A coordinate system within which positions can be measured directly?!
 NOTE: Need a meaningful definition here.  Need to track this one down to its source.
 
 [example]
-The position used to calculate the spatial model is not defined in an currently accessible coordinate system
+The position used to calculate the spatial model is not defined in an currently accessible CRS
 
-Geographic coordinate system
+Geographic CRS
 
-Projection coordinate system
+Projection CRS
 ////
 
 

@@ -1,9 +1,9 @@
 
 == Calculation formulae
 
-The formulae below define the expected behavior of software implementations of the deformation model.  A compliant software may use different formulae provided that for every location and time within the extents of the model it gives results that are practically identical with these formulae.
+The formulae below define the expected behavior of software implementations of the deformation model.  A compliant software may use different formulae provided that for every location and time within the extents of a "realistic" deformation model the displacement calculated by the software is "practically identical" to that calculated from these formulae.  The terms "realistic" and "practically identical" are imprecise.  Within the context of deformation model usage, displacement differing by less than 0.1mm can be considered "practically identical".  
 
-Grids can be defined either in terms of a geographic (longitude/latitude) or projected (easting/northing) coordinate system. Horizontal displacements and uncertainties are expressed as linear distances or, if the source and target coordinate systems are geographic, an angular measure.  Vertical displacements are expressed in linear units.
+Grids can be defined either in terms of a geographic (latitude/longitude) or projected (easting/northing) CRS. Horizontal displacements and uncertainties are expressed as linear distances or, if the source and target CRSs are geographic, an angular measure.  Vertical displacements are expressed in linear units.
 
 [[formula-spatial-interpolation]]
 === Spatial interpolation
@@ -13,7 +13,7 @@ This specification defines spatial functions by bilinear interpolation on a grid
 [[formula-nested-grid-selection]]
 ==== Selection of spatial function grid
 
-Spatial functions use a set of one or more grids. At a given location only one grid is used to calculate the spatial function displacement or uncertainty.  For each location within the valid extents of the model, the implementation must uniquely identify which grid, if any, applies. If no grid applies then the displacement and uncertainty of the element at that location are both zero.
+Spatial functions use a set of one or more grids. At a given location only one grid is used to calculate the spatial function displacement or uncertainty.  For each location within the valid extents of the model, the implementation must uniquely identify which grid, if any, applies. If no grid applies, then the displacement and uncertainty of the element at that location are both zero.
 
 [[formula-bilinear-interpolation]]
 ==== Bilinear grid interpolation
@@ -25,7 +25,7 @@ y~j~ = y~o~ + j.y~s~
 
 // Note - this is less general than GGXF
 
-where  x~o~, y~o~ are the coordinates of a reference point of the grid,  x~s~ and y~s~ are the grid spacing along the x and y axes respectively, and i and j are the column and row number of the grid node.  Note that the x and y grid spacing need not be equal.  For example, in a geographic interpolation coordinate system where x is longitude and y is latitude, it may be preferable that x~s~ is approximately equal to y~s~/cos(y~m~), where y~m~ is the latitude of the middle of the grid, as this makes the grid cells approximately square (except at polar latitudes).
+where  x~o~, y~o~ are the coordinates of a reference point of the grid,  x~s~ and y~s~ are the grid spacing along the x and y axes respectively, and i and j are the column and row number of the grid node.  Note that the x and y grid spacing need not be equal.  For example, in a geographic  CRS where y is latitude and x is longitude, it may be preferable that x~s~ is approximately equal to y~s~/cos(y~m~), where y~m~ is the latitude of the middle of the grid, as this makes the grid cells approximately square.
 
 Model components are calculated using bilinear interpolation with respect to x and y between the nodes at the corners of the grid cell within which the calculation point lies, as shown in <<image_bilinear_interpolation>>.  Each component of the displacement is calculated independently.
 
@@ -79,7 +79,7 @@ Each base function is one of the types listed in the following <<table-time-func
 | velocity | Defines a scale factor that is linear with time.  When multiplied by the spatial function, it defines a constant velocity field, typically used to represent secular tectonic velocity.
 | acceleration | Defines a rate of change of the velocity function.  This is sometimes used to model glacial isostatic adjustment.
 | step | Defines an instantaneous displacement, typically used to model coseismic earthquake deformation.
-| ramp | Defines displacement accumulating at a linear rate over a fixed period of time.  This can be used to represent post-seismic deformation or slow slip events.  Combining several ramp functions creates a piecewise linear time function that can emulate any time behavior to an arbitrary level of accuracy.
+| ramp | Defines displacement accumulating at a linear rate over a fixed period.  This can be used to represent post-seismic deformation or slow slip events.  Combining several ramp functions creates a piecewise linear time function that can emulate any time behavior to an arbitrary level of accuracy.
 | exponential | Defines a displacement accumulating at an exponentially decaying rate after an event.  This is commonly used to approximate post-seismic deformation.  Often used in conjunction with a logarithmic model.
 | logarithmic | Defines a displacement accumulating proportionally to the logarithm of elapsed time since an event.  This is commonly used to approximate post-seismic deformation.  It is often used in conjunction with an exponential model.
 | hyperbolic tangent | Approximates time behavior observed in slow slip events.
@@ -95,7 +95,7 @@ The following table lists the reference formulae for each type of time function.
 [cols="2,5a,5a"]
 [options="header"]
 |===
-|Time function type|Parameters|Formula (t~i,min~ &#8804; _t_ < t~i,max~)
+|Time function type|Function parameters|Formula (t~i,min~ &#8804; _t_ < t~i,max~)
 |velocity| Function reference epoch t~0~ | f~r~(_t_) = (_t_ - t~0~)
 
 |acceleration|Function reference epoch t~0~ |f~r~(_t_)= (_t_ - t~0~)^2^
@@ -156,7 +156,7 @@ f(_t_) = s.f~2~(_t_) if s is defined +
 f(_t_) = f~2~(_t_) otherwise.
 --
 
-In these formulae all epochs _t_ are defined as a decimal year. 
+In these formulae all epochs _t_ are defined as a decimal year in the Proleptic Gregorian calendar. 
 
 A date/time _yyyy_-_mm_-__dd__T__HH__:__MM__:__SS__  is converted to a decimal year as follows. The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year. The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01T00:00:00Z and the date/time by the total number of seconds in the year (i.e. the number of seconds between _yyyy_-01-01T00:00:00Z and _yyy1_-01-01T00:00:00Z, where _yyy1_ is __yyyy__+1).  An implementation is considered compliant whether or not it accounts for leap seconds.
 
@@ -181,29 +181,29 @@ eh = √(f~1~^2^.eh~1~^2^+ f~2~^2^.eh~2~^2^+ … + f~n~^2^.eh~n~^2^)
 // Is there a better way to specify this without specifying units of 
 // displacement and coordinates
 
-The algorithm for applying a displacement to a coordinate depends on the units of the displacement and the source and target coordinate systems. 
+The algorithm for applying a displacement to a coordinate depends on the units of the displacement and the source and target CRSs. 
 
-If the source and target coordinate systems are projected coordinate systems, then the units must be meters and the east and north displacements are simply added to the easting and northing coordinates respectively.
+If the source and target CRSs are projected CRSs, then the units must be meters and the east and north displacements are simply added to the easting and northing coordinates respectively.
 
-If the source and target coordinate systems are geographic coordinate systems and the east and north displacement units are degrees, then the displacements are added to the longitude and latitude coordinates.
+If the source and target CRSs are geographic CRSs and the east and north displacement units are degrees, then the displacements are added to the latitude and longitude coordinates.
 
-If the source and target coordinate systems are geographic and the east and north displacement units are meters, then the displacement components must be converted to degrees before being added to the longitude and latitude coordinates. The conversion from meters to degrees requires the ellipsoid parameters of the geographic coordinate system.
+If the source and target CRSs are geographic and the east and north displacement units are meters, then the displacement components must be converted to degrees before being added to the latitude and longitude coordinates. The conversion from meters to degrees requires the ellipsoid parameters of the geographic CRS.
 
-If a is the ellipsoid semi-major axis (e.g. 6378137.0), f is the flattening (e.g. 1.0/298.25722210), λ is the longitude, and φ is the latitude then corrections to longitude dλ and latitude dφ (in radians) are given by:
+If a is the ellipsoid semi-major axis (e.g. 6378137.0), f is the flattening (e.g. 1.0/298.25722210), φ is the latitude, and λ is the longitude, then the corrections to latitude dφ and longitude dλ (in radians) are given by:
 
 
 b = a.(1-f) +
-dλ = de.√(b^2^sin^2^(φ)+a^2^cos^2^(φ))/a^2^cos(φ) +
-dφ = dn.(b^2^sin^2^(φ)+a^2^cos^2^(φ))^3/2^/a^2^b^2^
+dφ = dn.(b^2^sin^2^(φ)+a^2^cos^2^(φ))^3/2^/a^2^b^2^ +
+dλ = de.√(b^2^sin^2^(φ)+a^2^cos^2^(φ))/a^2^cos(φ)
 
-Note that this formula does not account for the height of a calculation point above the ellipsoidal surface. The deformation model is assumed to represent deformation on the ellipsoidal surface, so the actual east and north offset of a point above or below this surface will be slightly different to that defined in the model.
+Note that these formulae does not account for the height of a point above the ellipsoidal surface. The deformation model is assumed to represent deformation on the ellipsoidal surface, so the actual east and north offset of a point above or below this surface will be slightly different to that defined in the model.
 
 The vertical displacement is always simply added to the height coordinate.
 
 [[formula-iterative-application]]
 === Iterative calculation of inverse transformation
 
-If the interpolation CRS is derived from the target CRS in a transformation, then it is not defined until after the displacement has been applied to the source CRS coordinate to obtain the target CRS coordinate.  In this case an iterative calculation is required starting with an approximation for the interpolation CRS coordinate, and iteratively refining this approximation by calculating the target CRS coordinate.
+If the interpolation CRS is derived from the target CRS in a transformation, then the coordinate of a transformation point is not known until after the displacement has been applied to the source CRS coordinate to obtain the target CRS coordinate.  In this case an iterative calculation is required starting with an approximation for the interpolation CRS coordinate, and iteratively refining this approximation by calculating the target CRS coordinate.
 
 The iterative calculation uses the following steps:
 
@@ -214,7 +214,7 @@ The iterative calculation uses the following steps:
 ** calculate the difference between the current and new estimates of the target CRS coordinate
 ** if this difference is greater than the precision required for the inverse operation then iterate again, otherwise finish
 
-Note that at the edge of the model it may not be possible to calculate the inverse transformation.  The model is undefined outside its spatial extent in the interpolation coordinate system.  If the transformation of a point near the edge of the model moves it to a location outside that extent, then the first step of the iterative calculation will fail.  This step uses the transformed coordinate as a first estimate for the untransformed coordinate.  However, that will be a point outside the model, so calculating the transformation at that point is not possible.  A more sophisticated algorithm could address this, for example using the nearest point within the spatial extent of the model at the first iteration.
+Note that at the edge of the model it may not be possible to calculate the inverse transformation.  The model is undefined outside its spatial extent in the interpolation CRS.  If the transformation of a point near the edge of the model moves it to a location outside that extent, then the first step of the iterative calculation will fail.  This step uses the transformed coordinate as a first estimate for the untransformed coordinate.  However, that will be a point outside the model, so calculating the transformation at that point is not possible.  A more sophisticated algorithm could address this, for example using the nearest point within the spatial extent of the model at the first iteration.
 
 [[formula-conversion-between-epochs]]
 === Calculation of deformation between two epochs

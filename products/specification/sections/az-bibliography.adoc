@@ -1,10 +1,11 @@
-
+////
 
 [appendix]
 [bibliography]
 [[Bibliography]]
 == Bibliography
 
+////
 // Typical reference entry (without auto-fetch)
 ////
 // Reference content will display as written

@@ -5,9 +5,9 @@ This abstract specification defines a functional model used to define deformatio
 
 For the purposes of this document a deformation model is defined as follows:
 ____
-A deformation model is a model of the displacement of the earth’s surface within a defined spatial and temporal extent.  It predicts the location of a point fixed to the surface at any time within the temporal extent in terms of an accessible coordinate system.  The location of the point is represented as a displacement from a reference position for that point.
+A deformation model is a model of the displacement of the earth’s surface within a defined spatial and temporal extent.  It predicts the location of a point fixed to the surface at any time within the temporal extent in terms of an accessible CRS.  The location of the point is represented as a displacement from a reference position for that point.
 ____
 
-In the most abstract sense, a deformation model is a mathematical function of a two dimensional coordinate and a time that defines a one, two, or three dimensional coordinate displacement.  It may also express the uncertainty of the displacement.
+In the most abstract sense, a deformation model is a mathematical function of a two-dimensional coordinate and a time that defines a one-, two-, or three-dimensional coordinate displacement.  It may also express the uncertainty of the displacement.
 
 This specification provides a framework for  representing a deformation model using a set of parameters and gridded data. It specifies how the displacement is calculated from these data and how it is used in a  coordinate operation. It also specifies metadata that should accompany the encoded model to allow users to understand its applicability and limitations.
