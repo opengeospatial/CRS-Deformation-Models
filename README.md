@@ -3,7 +3,7 @@ CRS-Deformation-Models
 
 This repository holds the artefacts and workings of the "Deformation model functional model" project team established by the CRS DWG at the Montreal virtual meeting on 15 June 2020.
 
-The next virtual meeting of this project team will be at 4pm EDT (20:00 UTC) on 9 May 2022 (<https://www4.gotomeeting.com/join/145698317>).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
+The next virtual meeting of this project team will be at 4pm EDT (20:00 UTC) on 6 June 2022 (<https://www4.gotomeeting.com/join/763520589>).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
 
 <!--
 2020-09-07  https://www4.gotomeeting.com/join/494053021
@@ -53,11 +53,11 @@ This work is closely aligned with the work of the [GGXF (Geodetic Gridded data e
 
 The project team is now working on compiling the abstract specification document that will be the main product of this teams work.
 
-The document is open for comment and editing as a [Google document](https://docs.google.com/document/d/1k81YM5d6R0YPgNhEM6Xvo2_awYK-EpA1uzzN-IDoYzs/edit?usp=sharing).  This link can be used to submit comments on the document (select some text and then click the + icon to add a comment on the text).  
+The current version of the draft abstract specification document is available as a [PDF document](https://github.com/opengeospatial/CRS-Deformation-Models/raw/master/products/specification/abstract-specification-deformation-model-functional-model.pdf). To comment on this document please raise  a [github issue](https://github.com/opengeospatial/CRS-Deformation-Models/issues). (Note: this requires you to have or create a github login).
 
-Other work done by this team is held in this repository, in particular the asciidoc source code for the abstract specification is in the [products/specification](https://github.com/opengeospatial/CRS-Deformation-Models/tree/master/products/specification) folder.  The [github issues](https://github.com/opengeospatial/CRS-Deformation-Models/issues?q=is%3Aissue) also contain a body of discussion.
+The asciidoc source code for the abstract specification is in the [products/specification](https://github.com/opengeospatial/CRS-Deformation-Models/tree/master/products/specification) folder.  The [github issue log](https://github.com/opengeospatial/CRS-Deformation-Models/issues?q=is%3Aissue) also contain a body of discussion.
 
-As an initial investigation this team undertook a survey of deformation models either planned or in use. Responses can be viewed at in a [Google spreadsheet](https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us).  While the survey is formally closed, the [questionnaire](https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0) is still available.  New information or updates are always welcome.
+In the early stages of this project the team undertook a survey of deformation models either planned or in use. Responses can be viewed at in a [Google spreadsheet](https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us).  While the survey is formally closed, the [questionnaire](https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0) is still available.  New information or updates are always welcome.
 
 ## Project overview
 
