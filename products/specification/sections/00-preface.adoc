@@ -48,8 +48,9 @@ This specification allows producers of deformation models, such as national geod
 h| Submitter h| Affiliation
 | Chris Crook | Land Information New Zealand
 | Kevin Kelly | Esri
+| Chris Pearson   | Trimble Inc
+| Keith Ryden | Esri
 | Richard Stanaway | University of New South Wales
-| ...   | ...
 |===
 
 

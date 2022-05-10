@@ -1,4 +1,4 @@
-= Abstract specification topic for OGC Deformation Model Functional Model
+= Deformation Model Functional Model
 :comment: ### Document type; mandatory. Visit: https://www.metanorma.com/author/ogc/authoring/ for permitted types
 :doctype: abstract-specification-topic
 :comment: ### Language of the document; mandatory. Specified in two-letter code: "en" for English, "fr" for French
@@ -10,13 +10,13 @@
 :comment: ### Version number; optional. Dot-delimited, preferably with this structure <version number>.<minor version number>
 :edition: 1.0
 :comment: ### Internal reference number; mandatory
-:docnumber: 21-999r1
+:docnumber: 22-010r1
 :comment: ### Date on which the standard was updated; mandatory
-:received-date: 2021-08-27
+:received-date: 2022-05-10
 :comment: ### Date on which the standard was approved by the issuing authority; mandatory
-:issued-date: 2099-01-01
+:issued-date:
 :comment: ### Date on which the standard was published; mandatory
-:published-date: 2099-01-01
+:published-date:
 :comment: ### External link referencing the document; optional. If not provided, a default value is created following this structure: "http://www.opengis.net/doc/{abbrevation of doctype}/{abbrev}/{version}"
 :external-id: https://github.com/opengeospatial/CRS-Deformation-Models/tree/master/products/specification
 :comment: ### Identifier embedded into a document type-specific external URL

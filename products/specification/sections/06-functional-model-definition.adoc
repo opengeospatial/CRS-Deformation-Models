@@ -19,13 +19,13 @@ image::structure.png[title="Functional decomposition of a deformation model",wid
 . [[funcmod-spatial-function]]The spatial function is represented by displacement vectors at the nodes of a grid or set of grids. 
 
 +
---
 If a set of grids is given, then only one of the grids will be used to evaluate the function at a specific location.  The implementation must unambiguously define which grid (if any) is to be used at a specific location.
 
-. [[funcmod-spatial-interpolation]]The spatial function displacement components at a location are calculated from the selected grid using a specified interpolation method.  The only interpolation method supported is bilinear interpolation, as described in  <<formula-spatial-interpolation>>.  
+. [[funcmod-spatial-interpolation]]The spatial function displacement components at a location are calculated from the selected grid using a specified interpolation method.  The only interpolation method explicitly supported is bilinear interpolation, as described in  <<formula-spatial-interpolation>>.  
 
++
 A producer may specify other formulae supported by implementations, but this specification provides no assurance of the displacements an implementation will calculate from such a model.
---
+
 
 . [[funcmod-spatial-params]]The spatial function can define displacement and uncertainty components.  This set of components must be defined at every node of every grid of the function.  Different spatial functions may have different components.  For example, the spatial function of one element might define horizontal displacement, and the spatial function of another may define vertical displacement.
 

@@ -70,8 +70,8 @@ The gray area, where displacement is undefined, might include coastal regions wh
 This specification only supports the bilinear interpolation.  A producer may choose to use, and an implementation may support, other methods, such as bicubic or biquadratic interpolation.  However they are not defined in this specification.  The calculation of displacements by a specific implementation may differ from that expected by the producer.
 
 The reasons the specification is restricted to bilinear interpolation are:
-* there are few implementation choices in using bilinear interpolation
-* it is easier to ensure continuity in a nested grid structure if bilinear interpolation is used
+* there are few implementation choices, and hence less ambiguity, in using bilinear interpolation, and
+* it is easier to ensure continuity in a nested grid structure if bilinear interpolation is used.
 
 There are few implementation choices because calculating the displacement at a point only uses the values from the four nodes of the grid cell in which the point lies.
 
