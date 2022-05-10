@@ -46,6 +46,7 @@ This specification allows producers of deformation models, such as national geod
 .List of submitters
 |===
 h| Submitter h| Affiliation
+| Maciej Bazanowski | Geographic Information Services, Department of Service Nova Scotia and Internal Services
 | Chris Crook | Land Information New Zealand
 | Kevin Kelly | Esri
 | Chris Pearson   | Trimble Inc
