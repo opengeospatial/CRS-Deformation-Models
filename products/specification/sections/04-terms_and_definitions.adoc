@@ -3,13 +3,21 @@
 
 === Terms
 
-producer:: An agency compiling a deformation model for publication
-carrier:: A specific format used to encode a deformation model. The carrier defines how the attributes of the deformation model are encoded. 
-implementation:: A software that uses an encoded deformation model to calculate displacements and apply coordinate operations.  The implementation encodes the formulae defined in this specification or numerically equivalent formulae.
+==== producer
+
+agency compiling a deformation model for publication
+
+==== carrier
+
+specific format used to encode a deformation model. The carrier defines how the attributes of the deformation model are encoded. 
+
+==== implementation
+
+software that uses an encoded deformation model to calculate displacements and apply coordinate operations.  The implementation encodes the formulae defined in this specification or numerically equivalent formulae.
 
 === Abbreviations
 
-CRS:: Coordinate reference system 
+CRS:: coordinate reference system 
 
 ////
 === accessible CRS

@@ -10,7 +10,7 @@
 :comment: ### Version number; optional. Dot-delimited, preferably with this structure <version number>.<minor version number>
 :edition: 1.0
 :comment: ### Internal reference number; mandatory
-:docnumber: 22-010r1
+:docnumber: 22-010
 :comment: ### Date on which the standard was updated; mandatory
 :received-date: 2022-05-10
 :comment: ### Date on which the standard was approved by the issuing authority; mandatory

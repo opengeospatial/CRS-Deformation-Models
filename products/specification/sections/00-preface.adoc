@@ -47,8 +47,11 @@ This specification allows producers of deformation models, such as national geod
 |===
 h| Submitter h| Affiliation
 | Maciej Bazanowski | Geographic Information Services, Department of Service Nova Scotia and Internal Services
+| Dana Caccamise | NOAA
 | Chris Crook | Land Information New Zealand
+| Muzaffer Kahveci | Konya Technical University
 | Kevin Kelly | Esri
+| Roger Lott | IOGP
 | Chris Pearson   | Trimble Inc
 | Keith Ryden | Esri
 | Richard Stanaway | University of New South Wales
@@ -72,9 +75,9 @@ Other types of deformation model not encompassed by this specification include:
 * global plate tectonic models,
 * three dimensional geophysical models of deformation in terms of dislocations on fault surfaces such as elastic half space or finite element models. 
 
-Also, this specification does not describe how the parameters and metadata of a deformation model should be encoded into a digital file.
+This specification defines a set of parameters and metadata that define the deformation model, and how they are used to apply that model in coordinate transformations.  It does not prescribe how they should be encoded into a digital file.  
 
-The intention of this specification is to allow deformation model producers, such as national geodetic agencies, to be confident that the models they provide are being used as they intended.  It defines the parameters that must be encoded to define a deformation model, and the formulae that must be used by software to calculate and apply the deformation to coordinates.  
+The intention of this specification is to allow deformation model producers, such as national geodetic agencies, to publish models, and consumers to use them, with confidence that the model is being correctly interpreted and used.  
 
 ////
 [.preface]
