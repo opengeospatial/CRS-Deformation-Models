@@ -9,11 +9,13 @@ agency compiling a deformation model for publication
 
 ==== carrier
 
-specific format used to encode a deformation model. The carrier defines how the attributes of the deformation model are encoded. 
+specific format used to encode a deformation model. +
+Note 1 to entry: The carrier defines how the attributes of the deformation model are encoded. 
 
 ==== implementation
 
-software that uses an encoded deformation model to calculate displacements and apply coordinate operations.  The implementation encodes the formulae defined in this specification or numerically equivalent formulae.
+software that uses an encoded deformation model to calculate displacements and apply coordinate operations. +
+Note 1 to entry: The implementation encodes the formulae defined in this specification or numerically equivalent formulae.
 
 === Abbreviations
 
