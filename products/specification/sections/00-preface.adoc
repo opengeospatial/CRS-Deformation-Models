@@ -50,9 +50,11 @@ h| Submitter h| Affiliation
 | Dana Caccamise | NOAA
 | Chris Crook | Land Information New Zealand
 | Muzaffer Kahveci | Konya Technical University
-| Kevin Kelly | Esri
+| Kevin M. Kelly | Esri
 | Roger Lott | IOGP
+| José Antonio Tarrío Mosquera | University of Santiago de Chile
 | Chris Pearson   | Trimble Inc
+| Craig Roberts | University of New South Wales
 | Keith Ryden | Esri
 | Richard Stanaway | University of New South Wales
 |===
