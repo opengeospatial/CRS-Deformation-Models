@@ -52,6 +52,7 @@ h| Submitter h| Affiliation
 | Chris Crook | Land Information New Zealand
 | Muzaffer Kahveci | Konya Technical University
 | Kevin M. Kelly | Esri
+| Thomas Knudsen | The Danish Agency for Data Supply and Efficiency
 | Roger Lott | IOGP
 | José Antonio Tarrío Mosquera | University of Santiago de Chile
 | Chris Pearson   | Trimble Inc
