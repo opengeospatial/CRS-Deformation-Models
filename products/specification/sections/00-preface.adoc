@@ -48,6 +48,7 @@ This specification allows producers of deformation models, such as national geod
 h| Submitter h| Affiliation
 | Maciej Bazanowski | Geographic Information Services, Department of Service Nova Scotia and Internal Services
 | Dana Caccamise | NOAA
+| Michael Craymer | Canadian Geodetic Survey, Natural Resources Canada
 | Chris Crook | Land Information New Zealand
 | Muzaffer Kahveci | Konya Technical University
 | Kevin M. Kelly | Esri
