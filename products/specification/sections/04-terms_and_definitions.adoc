@@ -3,10 +3,6 @@
 
 === Terms
 
-==== producer
-
-agency compiling a deformation model for publication
-
 ==== carrier
 
 specific format used to encode a deformation model. +
@@ -16,6 +12,10 @@ Note 1 to entry: The carrier defines how the attributes of the deformation model
 
 software that uses an encoded deformation model to calculate displacements and apply coordinate operations. +
 Note 1 to entry: The implementation encodes the formulae defined in this specification or numerically equivalent formulae.
+
+==== producer
+
+agency compiling a deformation model for publication
 
 === Abbreviations
 
