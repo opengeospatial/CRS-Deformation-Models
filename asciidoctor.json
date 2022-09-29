@@ -1,0 +1,17 @@
+{
+        "0":  {
+                "OGC_doc_number": "22-010",
+                "urn":"http://www.opengis.net/doc/AS/Topic-24/1.0",
+                "title":"Deformation Model Functional Model",
+                "path":"products/specification/abstract-specification-deformation-model-functional-model.adoc",
+                "options": ["--trace"],
+                "a":[
+                        "data-uri",
+                        "stylesdir=./resources/stylesheets",
+                        "dot=/usr/bin/dot"
+                ],
+                "r":[
+                        "asciidoctor-diagram"
+                ]
+        }
+}
