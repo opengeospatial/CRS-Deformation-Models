@@ -48,6 +48,7 @@ This specification allows producers of deformation models, such as national geod
 h| Submitter h| Affiliation
 | Wan Anom Wan Aris | UTM-GnG, Universiti Teknologi Malaysia
 | Maciej Bazanowski | Geographic Information Services, Department of Service Nova Scotia and Internal Services
+| Elmar Brockman | Swiss Federal Office of Topography
 | Dana Caccamise | NOAA
 | Michael Craymer | Canadian Geodetic Survey, Natural Resources Canada
 | Chris Crook | Land Information New Zealand
