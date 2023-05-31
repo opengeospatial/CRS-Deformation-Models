@@ -201,7 +201,7 @@ Note that these formulae do not account for the height of a point above the elli
 The vertical displacement is always simply added to the height coordinate.
 
 [[formula-iterative-application]]
-=== Iterative calculation of inverse transformation
+=== Iterative calculation of inverse transformspecification1ation
 
 If the interpolation CRS is derived from the target CRS in a transformation, then the coordinate of a transformation point is not known until after the displacement has been applied to the source CRS coordinate to obtain the target CRS coordinate.  In this case an iterative calculation is required starting with an approximation for the interpolation CRS coordinate, and iteratively refining this approximation by calculating the target CRS coordinate.
 
@@ -219,8 +219,8 @@ Note that at the edge of the model it may not be possible to calculate the inver
 [[formula-conversion-between-epochs]]
 === Calculation of deformation between two epochs
 
-The displacements de, dn and du used to transform a coordinate between two epochs are calculated by replacing the time function values f~i~ used in <<formula-elements>> with the difference between the time function for the two epochs.  That is, to calculate the displacement from epoch t~0~ to epoch t~1~ the time function for the i^th^ element is calculated as:
+The displacements de, dn and du used to transform a coordinate between two epochs are calculated by replacing the time function values f~i~ used in <<formula-elements>> with the difference between the time function for the two epochs.  That is, to calculate the displacement from epoch t~1~ to epoch t~2~ the time function for the i^th^ element is calculated as:
 
-f~i,t1-t0~ = f~i~(t~1~) - f~i~(t~0~)
+f~i,t2-t1~ = f~i~(t~2~) - f~i~(t~1~)
 
 When calculating displacement components this gives the same result as taking the difference between the displacement components calculated individually for each epoch.  However, the method described here must be used to give the correct value of the uncertainty of the displacement between two epochs.
