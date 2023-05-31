@@ -24,28 +24,28 @@ If a set of grids is given, then only one of the grids will be used to evaluate 
 . [[funcmod-spatial-interpolation]]The spatial function displacement components at a location are calculated from the selected grid using a specified interpolation method.  The only interpolation method explicitly supported is bilinear interpolation, as described in  <<formula-spatial-interpolation>>.  
 
 +
-A producer may specify other formulae supported by implementations, but this specification provides no assurance of the displacements an implementation will calculate from such a model.
+A producer may specify other formulae supported by implementations, but this AS provides no assurance of the displacements an implementation will calculate from such a model.
 
 
 . [[funcmod-spatial-params]]The spatial function can define displacement and uncertainty components.  This set of components must be defined at every node of every grid of the function.  Different spatial functions may have different components.  For example, the spatial function of one element might define horizontal displacement, and the spatial function of another may define vertical displacement.
 
 . [[funcmod-spatial-params-displacement]]Displacement components of the spatial function may include:
-* horizontal displacement - the east and north displacement in meters or degrees
-* vertical displacement - the upwards vertical displacement in meters.
+* Horizontal displacement - the east and north displacement in meters or degrees
+* Vertical displacement - the upwards vertical displacement in meters.
 
 +
 Displacement components not defined by the spatial function are assumed to be zero.
 
 . [[funcmod-spatial-params-uncertainty]]Uncertainty components of the spatial function may include:
 
-* horizontal uncertainty specified as one of:
+* Horizontal uncertainty specified as one of:
 ** horizontal circular uncertainty e~h~
 ** east and north uncertainty e~e~, e~n~
-* vertical uncertainty  e~v~
+* Vertical uncertainty  e~v~
 
 +
 --
-The set of components used to represent uncertainty are defined in the model metadata and must be used for all spatial functions which have uncertainty components.  For example, the deformation metadata could specify that the model uses horizontal circular uncertainty and vertical uncertainty.  A particular spatial component could define just horizontal circular uncertainty.  Another could define vertical uncertainty.  But it would not be valid for an element to define east and north uncertainty.
+The set of components used to represent uncertainty are defined in the model metadata and must be used for all spatial functions which have uncertainty components.  For example, the deformation metadata could specify that the model uses horizontal circular uncertainty and vertical uncertainty.  A particular spatial component could define just horizontal circular uncertainty.  Another could define vertical uncertainty.  However, it would not be valid for one element to define east and north uncertainty and another to define horizontal circular uncertainty.
 
 // * horizontal and vertical uncertainty
 // ** horizontal covariance matrix components c~ee~ , c~en~, c~nn~.
@@ -86,7 +86,7 @@ These base time functions are defined in <<formula-time-function>>.
 +
 --
 // * The type of spatial function (grid).  This may be specified by implication if the carrier only supports grid format. 
-It may also include:
+An element may may also specify:
 
 * The default uncertainty that applies if the spatial function does not explicitly define uncertainty.
 * Other metadata required by the implementation
@@ -112,7 +112,7 @@ It may also include:
 +
 --
 
-It may also include:
+The model definition may also specify:
 
 * Other metadata required by the implementation, such as discovery metadata and license information.
 * Other producer metadata, such as model name, model version and publication date.
