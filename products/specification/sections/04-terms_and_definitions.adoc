@@ -1,6 +1,10 @@
 
 == Terms and Definitions
 
+////
+TODO: Add missing terms 
+////
+
 === Terms
 
 ==== carrier
@@ -22,11 +26,16 @@ To be added
 
 coseismic (editor)
 displacement (pr)
+deformation (editor)
 //// 
 
 === Abbreviations
 
+AS:: OGC Abstract Specification
+
 CRS:: coordinate reference system 
+
+GNSS:: global navigation satellite system
 
 ////
 === accessible CRS
