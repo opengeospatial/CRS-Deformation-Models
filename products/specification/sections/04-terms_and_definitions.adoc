@@ -3,6 +3,12 @@
 
 ////
 TODO: Add missing terms 
+
+Comments from OGC editor:
+
+Should probably reference OGC Abstract Specification Topic 2: Referencing by coordinates (ISO 19111:2019) as a dependency for CRS related T&Ds
+
+
 ////
 
 === Terms
@@ -27,6 +33,7 @@ To be added
 coseismic (editor)
 displacement (pr)
 deformation (editor)
+geographic CRS (editor)
 //// 
 
 === Abbreviations
@@ -36,6 +43,8 @@ AS:: OGC Abstract Specification
 CRS:: coordinate reference system 
 
 GNSS:: global navigation satellite system
+
+UTC:: universal time coordinated
 
 ////
 === accessible CRS

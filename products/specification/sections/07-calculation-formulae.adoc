@@ -1,14 +1,14 @@
 
 == Calculation formulae
 
-The formulae below define the expected behavior of software implementations of the deformation model.  A compliant software may use different formulae provided that for every location and time within the extents of a "realistic" deformation model the displacement calculated by the software is "practically identical" to that calculated from these formulae.  The terms "realistic" and "practically identical" are imprecise.  Within the context of deformation model usage, displacement differing by less than 0.1mm can be considered "practically identical".  
+The formulae specified below define the expected behavior of software implementations of the deformation model.  A compliant software may use different formulae provided that for every location and time within the extents of a "realistic" deformation model the displacement calculated by the software is "practically identical" to that calculated from these formulae.  The terms "realistic" and "practically identical" are imprecise.  Within the context of deformation model usage, displacement differing by less than 0.1mm can be considered "practically identical".  
 
 Grids can be defined either in terms of a geographic (latitude/longitude) or projected (easting/northing) CRS. Horizontal displacements and uncertainties are expressed as linear distances or, if the source and target CRSs are geographic, an angular measure.  Vertical displacements are expressed in linear units.
 
 [[formula-spatial-interpolation]]
 === Spatial interpolation
 
-This specification defines spatial functions by bilinear interpolation on a grid or set of grids.  In the future other interpolation methods or spatial representations may be supported.
+This AS defines spatial functions by bilinear interpolation on a grid or set of grids.  In the future other interpolation methods or spatial representations may be supported.
 
 [[formula-nested-grid-selection]]
 ==== Selection of spatial function grid
@@ -158,9 +158,9 @@ f(_t_) = f~2~(_t_) otherwise.
 
 In these formulae all epochs _t_ are defined as a decimal year in the Proleptic Gregorian calendar. 
 
-A date/time _yyyy_-_mm_-__dd__T__HH__:__MM__:__SS__  is converted to a decimal year as follows. The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year. The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01T00:00:00Z and the date/time by the total number of seconds in the year (i.e. the number of seconds between _yyyy_-01-01T00:00:00Z and _yyy1_-01-01T00:00:00Z, where _yyy1_ is __yyyy__+1).  An implementation is considered compliant whether or not it accounts for leap seconds.
+A UTC calendar date/time _yyyy_-_mm_-__dd__ __HH__:__MM__:__SS__  is converted to a decimal year as follows. The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year. The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01 00:00:00 and the date/time by the total number of seconds in the year (i.e. the number of seconds between _yyyy_-01-01 00:00:00 and _yyy1_-01-01 00:00:00, where _yyy1_ is __yyyy__+1).  An implementation is considered compliant whether or not it accounts for leap seconds.
 
-Future versions of this specification may add new base time functions.
+Future versions of this AS may add new base time functions.
 
 [[formula-elements]]
 === Combination of elements
@@ -196,7 +196,7 @@ b = a.(1-f) +
 dφ = dn.(b^2^sin^2^(φ)+a^2^cos^2^(φ))^3/2^/a^2^b^2^ +
 dλ = de.√(b^2^sin^2^(φ)+a^2^cos^2^(φ))/a^2^cos(φ)
 
-Note that these formulae does not account for the height of a point above the ellipsoidal surface. The deformation model is assumed to represent deformation on the ellipsoidal surface, so the actual east and north offset of a point above or below this surface will be slightly different to that defined in the model.
+Note that these formulae do not account for the height of a point above the ellipsoidal surface. The deformation model is assumed to represent deformation on the ellipsoidal surface, so the actual east and north offset of a point above or below this surface will be slightly different to that defined in the model.
 
 The vertical displacement is always simply added to the height coordinate.
 
@@ -207,12 +207,12 @@ If the interpolation CRS is derived from the target CRS in a transformation, the
 
 The iterative calculation uses the following steps:
 
-* use the source CRS coordinate as an initial estimate for the target CRS coordinate
-* at each iteration:
-** use the current estimate of the target CRS coordinate to determine the displacement that applies
-** apply this displacement to the source CRS coordinate to obtain a new estimate for the target CRS coordinate
-** calculate the difference between the current and new estimates of the target CRS coordinate
-** if this difference is greater than the precision required for the inverse operation then iterate again, otherwise finish
+* Use the source CRS coordinate as an initial estimate for the target CRS coordinate
+* At each iteration:
+** Use the current estimate of the target CRS coordinate to determine the displacement that applies
+** Apply this displacement to the source CRS coordinate to obtain a new estimate for the target CRS coordinate
+** Calculate the difference between the current and new estimates of the target CRS coordinate
+** If this difference is greater than the precision required for the inverse operation then iterate again, otherwise finish
 
 Note that at the edge of the model it may not be possible to calculate the inverse transformation.  The model is undefined outside its spatial extent in the interpolation CRS.  If the transformation of a point near the edge of the model moves it to a location outside that extent, then the first step of the iterative calculation will fail.  This step uses the transformed coordinate as a first estimate for the untransformed coordinate.  However, that will be a point outside the model, so calculating the transformation at that point is not possible.  A more sophisticated algorithm could address this, for example using the nearest point within the spatial extent of the model at the first iteration.
 
