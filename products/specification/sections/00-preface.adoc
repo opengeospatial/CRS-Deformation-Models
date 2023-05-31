@@ -2,8 +2,6 @@
 
 .Preface
 
-<Insert Preface text here.>
-
 
 [NOTE]
 ====
@@ -18,26 +16,34 @@ If the Preface contains subclauses, it needs to be encoded as a full preface cla
 
 ////
 
+[.preface]
+== Preface
+
+This OGC Abstract Specification has been developed by the OGC Coordinate Reference System (CRS) domain working group (DWG) in conjunction with the CRS DWG project team developing the "Gridded Geodetic Exchange Format (GGXF)" and with the International Association of Geodesy (IAG) Working group 1.3.1 on "Time-dependent transformations between reference frames in deforming regions".
+
+
 [abstract]
 == Abstract
 
-All objects on the surface of the earth are moving. Apparently fixed features such as buildings are moving with the earth's crust, being subject to ongoing plate tectonic movement and episodic deformation events such as earthquakes. Increasingly, we rely on Global Navigation Satellite Systems (GNSS) which can precisely determine the coordinates of features - coordinates we then store and use in Geographic Information Systems (GIS) and other spatial databases. However, the coordinates from GNSS are referenced to global reference frames and coordinate reference systems (CRSs).  In these reference frames ubiquitous movement of fixed objects means that the observed coordinates of these features are continually changing. 
+This OGC Abstract Specification (AS) defines a general parameterization of deformation models. 
 
-This creates a challenge for the geospatial and positioning community: how to account for this movement when comparing data sets observed at different times, or how to locate an object observed in the past.
+All objects on the surface of the earth are moving. Apparently fixed features such as buildings are moving with the earth's crust, being subject to ongoing plate tectonic movement and episodic deformation events such as earthquakes. Increasingly, applications and users rely on Global Navigation Satellite Systems (GNSS) toprecisely determine the coordinates of features.  The resulting coordinates are then stored in databases and used in a wide range of applications, such as Geographic Information Systems (GIS). However, the coordinates from GNSS are referenced to global reference frames and coordinate reference systems (CRSs).  In these reference frames ubiquitous movement of fixed objects means that the observed coordinates of these features are continually changing. 
 
-One solution to this challenge is to use a deformation model - a mathematical model of the deformation of the crust. It allows the coordinates of a fixed object to be propagated to different times so that they track the object's location.
+This creates a challenge for the geospatial and positioning community: How to account for this movement when comparing data sets observed at different times, or how to locate an object observed in the past.
+
+One solution to this challenge is to use a deformation model - a mathematical model of the deformation of the crust. This solution allows the coordinates of a fixed object to be propagated to different times so that the object's location can be tracked.
 
 Common uses  of a deformation model include:
 
-* determining the current location of an object based on historic measurement of its location, 
-* transformation of the current observed location of an object to the reference epoch of a static CRS,
-* determining the spatial relationship of data sets observed at different times,
-* predicting the location of an object at some future time.
+* Determining the current location of an object based on historic measurement of its location, 
+* Transformation of the current observed location of an object to the reference epoch of a static CRS,
+* Determining the spatial relationship of data sets observed at different times,
+* Predicting the location of an object at some future time.
 
 Currently, many national geodetic agencies constructed or are planning for deformation models. However, these current models generally use customized formats and are typically only used in software developed by the agency.
 
-This specification defines a framework for describing a deformation model. We call this framework a functional model.  It describes a way of parameterizing deformation such that it can be encoded into a data set and incorporated into software for use in coordinate operations. It also defines how to calculate the displacement of a point between two different epochs.
-This specification allows producers of deformation models, such as national geodetic agencies, to publish these models in a consistent way. Users of software that performs coordinate operations, such as coordinate transformations, can be confident that the model is being applied as intended by the producers.
+This AS defines a framework for describing a deformation model. This framework is called a functional model.  The model describes a way of parameterizing deformation such that it can be encoded into a data set and incorporated into software for use in coordinate operations. The model also defines how to calculate the displacement of a point between two different epochs.
+This AS enables producers of deformation models, such as national geodetic agencies, to publish these models in a consistent way. Users of software that performs coordinate operations, such as coordinate transformations, can be confident that the model is being applied as intended by the producers.
 
 [.preface]
 == Submitters
@@ -67,23 +73,21 @@ h| Submitter h| Affiliation
 [.preface]
 == Introduction
 
-This specification has been developed by the OGC Coordinate Reference System (CRS) domain working group (DWG) in conjunction with the CRS DWG project team developing the "Gridded Geodetic Exchange Format (GGXF)" and with the International Association of Geodesy (IAG) Working group 1.3.1 on "Time-dependent transformations between reference frames in deforming regions".
-
-This specification defines a general parameterization of deformation models (illustrated in <<image_structure>>).  The total deformation is decomposed into a set of elements, each of which is defined by a spatial function and a time function.  The spatial function defines the displacement that applies at a given location, and the time function defines a scalar function that applies for the element at a given time.  The displacement due to the element is the spatial function displacement multiplied by the time function scale factor.  The total displacement at the location and time is the sum of the displacements from each element.  This model is described in detail in <<section-model-definition>>.
+This OGC Abstract Specification (AS) defines a general parameterization of deformation models (illustrated in <<image_structure>>).  The total deformation is decomposed into a set of elements, each of which is defined by a spatial function and a time function.  The spatial function defines the displacement that applies at a given location, and the time function defines a scalar function that applies for the element at a given time.  The displacement due to the element is the spatial function displacement multiplied by the time function scale factor.  The total displacement at the location and time is the sum of the displacements from each element.  This model is described in detail in <<section-model-definition>>.
 
 Commonly, elements represent the effects of geophysical events, such as coseismic deformation due to an earthquake. However, an element could equally represent some measured displacement for which no physical cause has been ascribed. Also, several elements may represent different aspects of a single geophysical event.  For example, the horizontal deformation due to an earthquake may be represented by one element, and the vertical deformation by another.
 
-Other types of deformation model not encompassed by this specification include:
+Other types of deformation model not encompassed by this AS include:
 
-* rigid body transformation between reference frames such as time dependent Helmert or Bursa-Wolf transformations, 
-* trajectory models for individual points, such as ITRF reference station coordinate models, 
-* static distortion models used to represent the difference between two datums,
-* global plate tectonic models,
-* three dimensional geophysical models of deformation in terms of dislocations on fault surfaces such as elastic half space or finite element models. 
+* Rigid body transformation between reference frames such as time dependent Helmert or Bursa-Wolf transformations, 
+* Trajectory models for individual points, such as ITRF reference station coordinate models, 
+* Static distortion models used to represent the difference between two datums,
+* Global plate tectonic models,
+* Three dimensional geophysical models of deformation in terms of dislocations on fault surfaces such as elastic half space or finite element models. 
 
-This specification defines a set of parameters and metadata that define the deformation model, and how they are used to apply that model in coordinate transformations.  It does not prescribe how they should be encoded into a digital file.  
+This AS specifies a set of parameters and metadata that define the deformation model, and how they are used to apply that model in coordinate transformations.  The AS does not prescribe how they should be encoded into a digital file.  
 
-The intention of this specification is to allow deformation model producers, such as national geodetic agencies, to publish models, and consumers to use them, with confidence that the model is being correctly interpreted and used.  
+The intention of this AS is to enable deformation model producers, such as national geodetic agencies, to publish models, and consumers to use them, with confidence that the model is being correctly interpreted and used.  
 
 ////
 [.preface]

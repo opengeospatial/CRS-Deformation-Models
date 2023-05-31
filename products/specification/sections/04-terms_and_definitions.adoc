@@ -17,6 +17,13 @@ Note 1 to entry: The implementation encodes the formulae defined in this specifi
 
 agency compiling a deformation model for publication
 
+////  
+To be added
+
+coseismic (editor)
+displacement (pr)
+//// 
+
 === Abbreviations
 
 CRS:: coordinate reference system 

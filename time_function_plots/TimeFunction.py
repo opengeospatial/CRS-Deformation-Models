@@ -136,7 +136,7 @@ class VelocityTimeFunction(BaseTimeFunction):
         return epoch - self._refEpoch
 
 
-class AccelerationTimeFunction:
+class AccelerationTimeFunction( BaseTimeFunction ):
     Params = (TIME_PARAM_FUNCTION_REFERENCE_EPOCH,)
 
     def __init__(self, definition):
@@ -251,10 +251,10 @@ class CyclicTimeFunction(BaseTimeFunction):
             self.Params,
         )
         self._refEpoch = self._params[TIME_PARAM_FUNCTION_REFERENCE_EPOCH]
-        self._frequency = self.param[TIME_PARAM_FREQUENCY]
+        self._frequency = self._params[TIME_PARAM_FREQUENCY]
 
     def refFunc(self, epoch):
-        return math.sin(self._frequency * (epoch - self._refEpoch) / (2.0 * math.pi))
+        return math.sin(self._frequency * (epoch - self._refEpoch) * (2.0 * math.pi))
 
 
 class HyperbolicTangentTimeFunction(BaseTimeFunction):
@@ -274,7 +274,7 @@ class HyperbolicTangentTimeFunction(BaseTimeFunction):
         self._timeFactor = self._params[TIME_PARAM_TIME_CONSTANT]
 
     def refFunc(self, epoch):
-        return (1+math.tanh((epoch - self._epoch) / self._timeFactor))/2.0
+        return (1.0+math.tanh((epoch - self._epoch) / self._timeFactor))/2.0
 
 
 class CompoundTimeFunction:
