@@ -4,11 +4,11 @@
 [[discuss-elements]]
 === Decomposition into elements
 
-This specification assumes that the deformation can be partitioned into one or more elements each of which is characterized by a time function.  There are many other ways deformation can be modeled.  For example, in geophysical research it is often modeled using uniform dislocation on rectangular fault surfaces in a uniform elastic half space.  While such models may be used to research and develop deformation models, common practice in publishing them for coordinate operations is to convert the model to a set of grids defining the surface displacement.  
+This OGC Abstract Specification (AS) assumes that the deformation can be partitioned into one or more elements each of which is characterized by a time function.  There are many other ways deformation can be modeled.  For example, in geophysical research it is often modeled using uniform dislocation on rectangular fault surfaces in a uniform elastic half space.  While such models may be used to research and develop deformation models, common practice in publishing them for coordinate operations is to convert the model to a set of grids defining the surface displacement.  
 
-Deformation is caused by a number of geophysical phenomena, each of which may be represented by one or more elements in a deformation model.  
+Deformation is caused by a variety of geophysical phenomena, each of which may be represented by one or more elements in a deformation model.  
 
-Typically, there is a secular velocity element representing the long-term tectonic deformation - this is a single element with a velocity time function.  
+Typically, there is a velocity element representing the long-term tectonic deformation - this is a single element with a velocity time function.  
 
 Overlaid on this there may be deformation due to earthquakes.  The coseismic deformation will be represented by an element with a step time function.  Postseismic deformation following the earthquake may be represented by several elements depending on the complexity of the deformation and the quality of information available.  Typically, these will use exponential and logarithmic time functions.  Several versions of a deformation model may be published after an earthquake as the ongoing postseismic deformation evolves and as measurements and modeling of deformation are refined.
 
@@ -18,13 +18,13 @@ Alternatively, the deformation model may be based directly on observations of di
 [[discuss-continuous-invertible]]
 === Requirement for the model to be continuous and invertible
 
-Deformation models described in this specification are intended for use in coordinate operations - either to define time dependent transformations between different CRSs or to track the motion of objects between different epochs within a single CRS.  
+Deformation models described in this AS are intended for use in coordinate operations - either to define time dependent transformations between different CRSs or to track the motion of objects between different epochs within a single CRS.  
 
 Generally, the user expectation of such operations is that they are invertible.  If a coordinate is transformed from the source CRS to the target CRS, and then the resulting coordinate is transformed back to the source CRS, the final coordinate will be the same as the original coordinate.  Similarly, if the model is used as a point motion model, transforming a coordinate from one epoch to another, and then transforming the resulting coordinate back to the original epoch, will result in the original coordinate.  
 
-To support this expectation, this specification requires that the spatial function of each element of the deformation model is continuous.  This does not guarantee that the resulting coordinate operation is invertible.  It is possible to define deformation models that are continuous but are not invertible.  However, these are not realistic models.  Ensuring that a spatial function is continuous is much easier than ensuring that the resulting coordinate operation is invertible.  Continuity is used as a practical substitute for invertibility.
+To support this expectation, this AS requires that the spatial function of each element of the deformation model is continuous.  This does not guarantee that the resulting coordinate operation is invertible.  It is possible to define deformation models that are continuous but are not invertible.  However, these are not realistic models.  Ensuring that a spatial function is continuous is much easier than ensuring that the resulting coordinate operation is invertible.  Continuity is used as a practical substitute for invertibility.
 
-Within a single grid the spatial function must be continuous - that is ensured by the use of bilinear interpolation. 
+Within a single grid the spatial function is continuous - that is a consquence of the formulae such as bilinear interpolation used to interpolate between the displacements at the grid nodes. 
 
 If a spatial function uses more than one grid, the requirement for continuity places two constraints on deformation model producers. 
 
@@ -36,7 +36,7 @@ In practice the second of these constraints means that parent and child grids mu
 
 These constraints, and indeed the use of a gridded model, mean that the model cannot represent the true deformation exactly. For example, where there is surface faulting, the actual deformation may not be continuous across a fault line. The deformation also may not be invertible (at least as a function of horizontal position) in areas of thrust faulting where points originally on opposite sides of the fault may be moved to the same horizontal position (though at different heights).
 
-For model producers, this can create a tension between the scientific desire to represent deformation as accurately as possible, and the practical constraints of a deformation model suitable for coordinate operations.  This specification is framed within the context of coordinate operations - it does not purport to model deformation for scientific use.
+For model producers, this can create a tension between the scientific desire to represent deformation as accurately as possible, and the practical constraints of a deformation model suitable for coordinate operations.  This AS is framed within the context of coordinate operations - it does not purport to model deformation for scientific use.
 
 The challenge for model producers is to decide the extent to which the deformation can be usefully modeled to best support the geospatial community.
 
@@ -67,20 +67,20 @@ The gray area, where displacement is undefined, might include coastal regions wh
 [[discuss-interpolation-method]]
 === Alternative interpolation methods
 
-This specification only supports the bilinear interpolation.  A producer may choose to use, and an implementation may support, other methods, such as bicubic or biquadratic interpolation.  However they are not defined in this specification.  The calculation of displacements by a specific implementation may differ from that expected by the producer.
+This AS only specifies bilinear interpolation.  A producer may choose to use, and an implementation may support, other methods, such as bicubic or biquadratic interpolation.  However they are not defined in this AS.  The calculation of displacements by a specific implementation may differ from that expected by the producer.
 
-The reasons the specification is restricted to bilinear interpolation are:
+The reasons this AS only specifies bilinear interpolation are:
 * there are few implementation choices, and hence less ambiguity, in using bilinear interpolation, and
 * it is easier to ensure continuity in a nested grid structure if bilinear interpolation is used.
 
-There are few implementation choices because calculating the displacement at a point only uses the values from the four nodes of the grid cell in which the point lies.
+There are few implementation choices for bilinear interpolation because calculating the displacement at a point only uses the values from the four nodes of the grid cell in which the point lies.  
 
-The more sophisticated bilinear and bicubic interpolation use values from the nodes of cells adjacent to the grid cell in which the calculation point lies.  Where the point lies in a cell on the edge of the grid some of these adjacent cells do not exist.  There is more than one way that implementation can be written handle this situation, and there is no "right way" to do it.  Different choices may give different results. 
+The more sophisticated biquadratic and bicubic interpolation use values from the nodes of cells adjacent to the grid cell in which the calculation point lies.  Where the point lies in a cell on the edge of the grid some of these adjacent cells do not exist.  There is more than one way that implementation can be written handle this situation, and there is no "right way" to do it.  Different choices may give different results. 
 
 [[discuss-deformation-near-poles]]
 === Deformation models near poles
 
-The formulae defined in this specification are not suitable for transforming geographic (latitude and longitude) coordinates in near polar regions. Both the means of interpolating within a grid cell, and the formulae for applying the displacement to a coordinate, may yield unintended results as described below.  The simplest way to represent deformation in such cases is to use a suitable projected (easting and northing) CRS.  Future versions of this specification may offer better support for geographic CRSs in polar regions by offering alternative methods for  interpolating displacements and adding displacements to coordinates.
+The formulae defined in this AS are not suitable for transforming geographic (latitude and longitude) coordinates close to the north and south poles. Both the means of interpolating within a grid cell, and the formulae for applying the displacement to a coordinate, may yield unintended results as described below.  The simplest way to represent deformation in such cases is to use a suitable projected (easting and northing) CRS.  Future versions of this AS may offer better support for geographic CRSs in polar regions by offering alternative methods for interpolating displacements and adding displacements to coordinates.
 
 Near the poles, grid cells may span a large longitude range. Consequently, the east and north components of a vector at adjacent grid nodes may lie in quite different directions, as illustrated in <<image-near-pole-axes>>.  Interpolating east and north components independently as described in <<formula-bilinear-interpolation>> fails to account for this. For example, if the grid cell spans 1° of longitude and the displacement is 1m then bilinear interpolation may give rise to an error of up to about 2cm (the length of the displacement vector multiplied by the cosine of the longitude range of the grid cell).  This can be mitigated by using a finer longitude grid spacing.
 
@@ -92,7 +92,7 @@ Where the source and target CRSs are geographic, then adding east north offsets 
 [[image-near-pole-east-displacement]]
 image::near_pole_east_displacement.png[title="Comparison of vector and angular displacement near a pole",width=200,scalewidth=7cm,align="right"]
 
-This is only a significant issue very close to a geographic pole. It diminishes rapidly away from the pole.  For displacement d at a point at distance R from the pole, the difference is approximately d*(1-cos(d/R)), or approximately d^3^/2R^2^. For example, applying 1 m east displacement 1 km from the pole by changing the longitude would incur an error of only 5.10^-7^m.
+This is only a significant issue very close to a geographic pole. The impact of this issue diminishes rapidly away from the pole.  For displacement d at a point at distance R from the pole, the difference is approximately d*(1-cos(d/R)), or approximately d^3^/2R^2^. For example, applying 1 m east displacement 1 km from the pole by changing the longitude would incur an error of only 5.10^-7^m.
 
 
 
@@ -125,11 +125,11 @@ The <<formula-time-function, time functions>> used for deformation model element
 [[image-hyperbolic-epoch-modification]]
 image::hyperbolic_epoch_modification.png[title="The effects of adding a start epoch (t~s~), end epoch (t~e~), and function reference epoch (t~0~) to a base hyperbolic tangent function"]
 
-The base function shows an event building in magnitude from 0.0 to 1.0. This might represent, for example, a slow slip event. However, it is never exactly 0 or 1, even though it appears to be in the graph.  It approaches 0 exponentially as the epoch moves further into the past, and approaches 1 asymptotically as the epoch moves further into the future. The rate of change becomes infinitesimally small more than a few years from the event date. 
+The base function shows an event building in magnitude from 0.0 to 1.0. This might represent, for example, a slow slip event. However, the function is never exactly 0 or 1, even though it appears to be in the graph.  The approaches 0 exponentially as the epoch moves further into the past, and approaches 1 asymptotically as the epoch moves further into the future. The rate of change becomes infinitesimally small more than a few years from the event date. 
 
 The start and end epochs can be used to remove any change before the start epoch or after the end epoch. Setting a start epoch (graph B) applies the base function value at that epoch to any time before the start epoch. Similarly, setting an end epoch (graph C) applies the base function value at that epoch to any time after the end epoch.  A consequence of this is that the start and end values are no longer 0 and 1.   Generally a deformation model producer would use a function reference epoch as well as a start epoch, as described below, so that the time function is zero before the start date.
 
-Using start and end epochs has practical value for deformation model producers managing a CRS. In particular, using the start epoch means that displacements calculated before that epoch do not change.  This may be more realistic. Although the mathematical model does not define it, there is a time at which the slow slip event starts, and before which it is causing no deformation.
+Using start and end epochs has practical value for deformation model producers managing a CRS. Using the start epoch means that displacements calculated before that epoch do not change.  This may be more realistic. In reality there is at time at which the slow slip event starts, and before which it is causing no deformation, even though this does not exist in the base function without specifying a start epoch.
 
 The function reference epoch t~0~ is an epoch at which the function is forced to be zero, and therefore when the calculated displacement for the event will be zero. A constant offset is added to the function to force it to be zero at this epoch.  In graph D the value -0.8 is added to the time functions so that it is zero at the function reference epoch 2014.2.
 
