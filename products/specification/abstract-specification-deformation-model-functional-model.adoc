@@ -8,7 +8,7 @@
 :comment: ### Relevant committee; mandatory. The permitted types are: technical, planning, and strategic-member-advisory
 :committee: technical
 :comment: ### Version number; optional. Dot-delimited, preferably with this structure <version number>.<minor version number>
-:edition: 1.0
+:edition: 1.0 (amended: 2023-06-01)
 :comment: ### Internal reference number; mandatory
 :docnumber: 22-010
 :comment: ### Date on which the standard was updated; mandatory
