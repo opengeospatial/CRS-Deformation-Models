@@ -156,6 +156,8 @@ f(_t_) = s.f~2~(_t_) if s is defined +
 f(_t_) = f~2~(_t_) otherwise.
 --
 
+Note that the logarithmic function uses a natural logarithm (base _e_).  A base 10 logarithmic function can be emulated by using a scale factor of 1.0/ln(10.0) &#8776; 0.434294.
+
 In these formulae all epochs _t_ are defined as a decimal year in the Proleptic Gregorian calendar. 
 
 A UTC calendar date/time _yyyy_-_mm_-__dd__ __HH__:__MM__:__SS__  is converted to a decimal year as follows. The year number _yyyy_ of the UTC epoch forms the integer part of the decimal year. The fractional part of the decimal year is determined by dividing the number of seconds between the beginning of the year _yyyy_-01-01 00:00:00 and the date/time by the total number of seconds in the year (i.e. the number of seconds between _yyyy_-01-01 00:00:00 and _yyy1_-01-01 00:00:00, where _yyy1_ is __yyyy__+1).  An implementation is considered compliant whether or not it accounts for leap seconds.
