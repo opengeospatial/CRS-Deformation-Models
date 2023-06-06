@@ -14,9 +14,9 @@ The deformation model is characterized as follows.
 image::structure.png[title="Functional decomposition of a deformation model",width=600,pdfwidth=15cm]
 --
 
-. [[funcmod-spatial-extent]]The spatial function may be defined over a subset of the total extent of the model. Where the spatial function is not defined within the extent of the model it is assumed to be zero.  This allows an element to represent a deformation event that does not affect the full extent of the model.
+. [[funcmod-spatial-extent]]The spatial function of an element may be defined over a subset of the total extent of the model. Where the spatial function is not defined within the extent of the model it is assumed to be zero.  This allows an element to represent a deformation event that does not affect the full extent of the model.
 
-. [[funcmod-spatial-function]]The spatial function is represented by displacement vectors at the nodes of a grid or set of grids. 
+. [[funcmod-spatial-function]]The spatial function of an element is represented by displacement vectors at the nodes of a grid or set of grids. 
 
 +
 If a set of grids is given, then only one of the grids will be used to evaluate the function at a specific location.  The implementation must unambiguously define which grid (if any) is to be used at a specific location.

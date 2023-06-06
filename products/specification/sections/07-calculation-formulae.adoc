@@ -8,12 +8,14 @@ Grids can be defined either in terms of a geographic (latitude/longitude) or pro
 [[formula-spatial-interpolation]]
 === Spatial interpolation
 
+A spatial function defines the displacements for an element of the deformation model.  The spatial function may be defined for just a subset of the extents of the deformation model, in which case the displacement due to the element is assumed to be zero over the remaining exent of the deformation model.  Outside the extent of the deformation model the displacement is undefined. 
+
 This AS defines spatial functions by bilinear interpolation on a grid or set of grids.  In the future other interpolation methods or spatial representations may be supported.
 
 [[formula-nested-grid-selection]]
 ==== Selection of spatial function grid
 
-Spatial functions use a set of one or more grids. At a given location only one grid is used to calculate the spatial function displacement or uncertainty.  For each location within the valid extents of the model, the implementation must uniquely identify which grid, if any, applies. If no grid applies, then the displacement and uncertainty of the element at that location are both zero.
+Spatial functions use a set of one or more grids. At a given location only one grid is used to calculate the spatial function displacement or uncertainty.  For each location within the valid extents of the deformation model, the implementation must uniquely identify which grid, if any, applies. If no grid applies, then the displacement and uncertainty of the element at that location are both zero.
 
 [[formula-bilinear-interpolation]]
 ==== Bilinear grid interpolation
