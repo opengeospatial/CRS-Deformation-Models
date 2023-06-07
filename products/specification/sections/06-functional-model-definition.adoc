@@ -78,7 +78,7 @@ This is not necessarily enforced by the mathematical formulation of a model. It 
 +
 These base time functions are defined in <<formula-time-function>>.
 
-. [[funcmod-element-metadata]]Each element definition specifies:
+. [[funcmod-element-metadata]]Each element definition must specify:
 
 * The spatial interpolation method to be used (currently only bilinear is supported)
 * The quantities it defines (displacement components, uncertainty components)
@@ -87,7 +87,7 @@ These base time functions are defined in <<formula-time-function>>.
 +
 --
 // * The type of spatial function (grid).  This may be specified by implication if the carrier only supports grid format. 
-An element may may also specify:
+An element definition may also specify:
 
 * The default uncertainty that applies if the spatial function does not explicitly define uncertainty.
 * Other metadata required by the implementation
@@ -98,7 +98,7 @@ An element may may also specify:
 ////
 --
 
-. [[funcmod-model-metadata]]The model definition specifies:
+. [[funcmod-model-metadata]]The model definition must specify:
 
 * The source CRS
 * The target CRS (if the model is implemented as a point motion model this will be the same as the source CRS).
@@ -109,6 +109,7 @@ An element may may also specify:
 * The units of vertical displacement
 * The parameters used to represent uncertainty, for example, horizontal 95% circular confidence, vertical 95% confidence level.
 * The default uncertainty for each element of the model, used if the element does not explicitly define uncertainty
+* A unique identifier for the model including its version
 
 +
 --
@@ -116,5 +117,5 @@ An element may may also specify:
 The model definition may also specify:
 
 * Other metadata required by the implementation, such as discovery metadata and license information.
-* Other producer metadata, such as model name, model version and publication date.
+* Other producer metadata, such as model name and publication date.
 --
