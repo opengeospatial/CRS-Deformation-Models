@@ -2,7 +2,7 @@
 
 The deformation model is characterized as follows.
 
-. [[funcmod-extents]] The model defines deformation within a specified spatial and temporal extent. Beyond these extents it is undefined and cannot be evaluated.
+. [[funcmod-extents]] The model defines deformation within a specified spatial and temporal extent. Beyond these extents it is undefined and cannot be evaluated.  These extents may exceed the extents of the observations used to compile the deformation model.  For example, the temporal extent will generally allow extrapolation to a future date.
 
 . [[funcmod-decomposition]]The model partitions deformation into one or more elements. The total displacement at a specific time and position is calculated by summing the contribution from each element at that time and position, as described in <<formula-elements>>.
 
