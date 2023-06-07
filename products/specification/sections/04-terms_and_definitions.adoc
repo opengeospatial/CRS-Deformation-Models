@@ -31,6 +31,7 @@ agency compiling a deformation model for publication
 To be added
 
 coseismic (editor)
+slow slip event (author)
 displacement (pr)
 deformation (editor)
 geographic CRS (editor)
