@@ -36,14 +36,14 @@ One solution to this challenge is to use a deformation model - a mathematical mo
 Common uses  of a deformation model include:
 
 * Determining the current location of an object based on historic measurement of its location, 
-* Transformation of the current observed location of an object to the reference epoch of a static CRS,
+* Propogation of the current observed location of an object to the reference epoch of a static CRS,
 * Determining the spatial relationship of data sets observed at different times,
 * Predicting the location of an object at some future time.
 
 Currently, many national geodetic agencies constructed or are planning for deformation models. However, these current models generally use customized formats and are typically only used in software developed by the agency.
 
 This AS defines a framework for describing a deformation model. This framework is called a functional model.  The model describes a way of parameterizing deformation such that it can be encoded into a data set and incorporated into software for use in coordinate operations. The model also defines how to calculate the displacement of a point between two different epochs.
-This AS enables producers of deformation models, such as national geodetic agencies, to publish these models in a consistent way. Users of software that performs coordinate operations, such as coordinate transformations, can be confident that the model is being applied as intended by the producers.
+This AS enables producers of deformation models, such as national geodetic agencies, to publish these models in a consistent way. Users of software that performs coordinate operations can be confident that the model is being applied as intended by the producers.
 
 [.preface]
 == Submitters
@@ -85,7 +85,7 @@ Other types of deformation model not encompassed by this AS include:
 * Global plate tectonic models,
 * Three dimensional geophysical models of deformation in terms of dislocations on fault surfaces such as elastic half space or finite element models. 
 
-This AS specifies a set of parameters and metadata that define the deformation model, and how they are used to apply that model in coordinate transformations.  The AS does not prescribe how they should be encoded into a digital file.  
+This AS specifies a set of parameters and metadata that define the deformation model, and how they are used to apply that model in coordinate operations.  The AS does not prescribe how they should be encoded into a digital file.  
 
 The intention of this AS is to enable deformation model producers, such as national geodetic agencies, to publish models, and consumers to use them, with confidence that the model is being correctly interpreted and used.  
 

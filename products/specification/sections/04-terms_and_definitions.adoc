@@ -35,6 +35,7 @@ slow slip event (author)
 displacement (pr)
 deformation (editor)
 geographic CRS (editor)
+coordinate operation (author) (specify PMM and transformation)
 //// 
 
 === Abbreviations

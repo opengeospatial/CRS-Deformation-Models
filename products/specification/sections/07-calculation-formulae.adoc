@@ -205,20 +205,21 @@ Note that these formulae do not account for the height of a point above the elli
 The vertical displacement is always simply added to the height coordinate.
 
 [[formula-iterative-application]]
-=== Iterative calculation of inverse transformspecification1ation
+=== Iterative calculation of inverse operation
 
-If the interpolation CRS is derived from the target CRS in a transformation, then the coordinate of a transformation point is not known until after the displacement has been applied to the source CRS coordinate to obtain the target CRS coordinate.  In this case an iterative calculation is required starting with an approximation for the interpolation CRS coordinate, and iteratively refining this approximation by calculating the target CRS coordinate.
+Transforming a coordinate from the target CRS to the source CRS may require an iterative solution if the interpolation CRS coordinate of the point being transformed is defined by the source CRS.  In that case the interpolation CRS coordinate is not known until the after displacement has been applied to the target CRS coordinate.  The recommended approach is to use an iterative calculation starting with an approximation for the unknown source CRS coordinate, and iteratively refining this approximation.
 
 The iterative calculation uses the following steps:
 
-* Use the source CRS coordinate as an initial estimate for the target CRS coordinate
+* Use the target CRS coordinate as an initial estimate for the source CRS coordinate
 * At each iteration:
-** Use the current estimate of the target CRS coordinate to determine the displacement that applies
-** Apply this displacement to the source CRS coordinate to obtain a new estimate for the target CRS coordinate
-** Calculate the difference between the current and new estimates of the target CRS coordinate
-** If this difference is greater than the precision required for the inverse operation then iterate again, otherwise finish
+** Use the current estimate of the source CRS coordinate to determine the displacement that applies
+** Apply this displacement to the current estimate of source CRS coordinate to obtain an estimate for the target CRS coordinate
+** Calculate the difference between the estimated and actual target CRS coordinate
+** If this difference is less than the precision required for the inverse operation then stop iterating and use the last estimate source CRS coordinate iterate again
+** Otherwise subtract this difference from the current estimate of the source CRS coordinate and iterate again
 
-Note that at the edge of the model it may not be possible to calculate the inverse transformation.  The model is undefined outside its spatial extent in the interpolation CRS.  If the transformation of a point near the edge of the model moves it to a location outside that extent, then the first step of the iterative calculation will fail.  This step uses the transformed coordinate as a first estimate for the untransformed coordinate.  However, that will be a point outside the model, so calculating the transformation at that point is not possible.  A more sophisticated algorithm could address this, for example using the nearest point within the spatial extent of the model at the first iteration.
+Note that at the edge of the model it may not be possible to calculate the inverse displacement.  The model is undefined outside its spatial extent in the interpolation CRS.  If the calculation at  a point near the edge of the model moves the estimated source CRS coordinate to a location outside that extent, then the first step of the iterative calculation will fail. 
 
 [[formula-conversion-between-epochs]]
 === Calculation of deformation between two epochs
