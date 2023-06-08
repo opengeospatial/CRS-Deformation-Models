@@ -19,7 +19,10 @@ To be added
 * displacement (pr)
 * deformation (editor)
 geographic CRS (editor)
-* coordinate operation (author) (specify PMM and transformation)
+carrier - plus question on the use of the verb "carry" (public review)
+grid reference coordinates, grid spacing (public review)
+
+* coordinate operation (author) (?specify PMM and transformation)
 //// 
 
 === Terms
@@ -86,7 +89,9 @@ agency compiling a deformation model for publication
 
 AS:: OGC Abstract Specification
 
-CRS:: coordinate reference system 
+CRS:: coordinate reference system
+
+GIS:: geographic information systems
 
 GNSS:: global navigation satellite system
 

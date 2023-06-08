@@ -25,25 +25,35 @@ This OGC Abstract Specification has been developed by the OGC Coordinate Referen
 [abstract]
 == Abstract
 
-This OGC Abstract Specification (AS) defines a general parameterization of deformation models. 
+This OGC Abstract Specification (AS) defines a general parameterization of surface deformation models. 
 
-All objects on the surface of the earth are moving. Apparently fixed features such as buildings are moving with the earth's crust, being subject to ongoing plate tectonic movement and episodic deformation events such as earthquakes. Increasingly, applications and users rely on Global Navigation Satellite Systems (GNSS) toprecisely determine the coordinates of features.  The resulting coordinates are then stored in databases and used in a wide range of applications, such as Geographic Information Systems (GIS). However, the coordinates from GNSS are referenced to global reference frames and coordinate reference systems (CRSs).  In these reference frames ubiquitous movement of fixed objects means that the observed coordinates of these features are continually changing. 
+All objects on the surface of the earth are moving. Apparently fixed features such as buildings are moving with the earth's crust, being subject to ongoing plate tectonic movement and episodic deformation events such as earthquakes. 
+
+Increasingly, applications and users rely on global positioning methods, such as Global Navigation Satellite Systems (GNSS) observations, to precisely determine the coordinates of features.  The resulting coordinates are then stored in databases and used in a wide range of applications, such as Geographic Information Systems (GIS). However, the coordinates from GNSS are referenced to global reference frames and coordinate reference systems (CRSs).  In these reference frames the coordinates of apparently fixed objects are continually changing. 
 
 This creates a challenge for the geospatial and positioning community: How to account for this movement when comparing data sets observed at different times, or how to locate an object observed in the past.
 
-One solution to this challenge is to use a deformation model - a mathematical model of the deformation of the crust. This solution allows the coordinates of a fixed object to be propagated to different times so that the object's location can be tracked.
+This problem is generally addressed in one of two ways:
 
-Common uses  of a deformation model include:
+* Defining a reference epoch for the CRS of coordinates held in the GIS, often by defining a CRS with a reference epoch, or
+* Using a CRS which is fixed relative to the surface of the earth
+
+In practice there is little difference between these two approaches.  Neither the position at a reference epoch, nor the coordinates in a static CRS, can be be directly measured by global positioning methods.  
+
+Propogating the observed coordinates to a reference epoch, or transforming to a static CRS, requires a deformation model - a mathematical model of the deformation of the earth's surface.
+
+Common uses of a deformation model include:
 
 * Determining the current location of an object based on historic measurement of its location, 
 * Propogation of the current observed location of an object to the reference epoch of a static CRS,
 * Determining the spatial relationship of data sets observed at different times,
 * Predicting the location of an object at some future time.
 
-Currently, many national geodetic agencies constructed or are planning for deformation models. However, these current models generally use customized formats and are typically only used in software developed by the agency.
+Currently, many national geodetic agencies have developed or are planning to develop regional deformation models. However, the current models generally use customized formats and software developed by each agency.
 
-This AS defines a framework for describing a deformation model. This framework is called a functional model.  The model describes a way of parameterizing deformation such that it can be encoded into a data set and incorporated into software for use in coordinate operations. The model also defines how to calculate the displacement of a point between two different epochs.
-This AS enables producers of deformation models, such as national geodetic agencies, to publish these models in a consistent way. Users of software that performs coordinate operations can be confident that the model is being applied as intended by the producers.
+This AS describes a way of parameterizing a deformation model such that it can be encoded into a data set and used in software for coordinate operations. The AS defines how to calculate the displacement of a point between two different epochs.  It provides a common understanding between producers of deformation models and developers of software about what the deformation is and how it will be used.
+
+This AS will allow users of compliant software applying a compliant deformation model to be confident that the model is being used as intended by its producers.
 
 [.preface]
 == Submitters
@@ -84,6 +94,8 @@ Other types of deformation model not encompassed by this AS include:
 * Static distortion models used to represent the difference between two datums,
 * Global plate tectonic models,
 * Three dimensional geophysical models of deformation in terms of dislocations on fault surfaces such as elastic half space or finite element models. 
+
+Although these models are not explicitly supported by this AS, the surface deformation that they predict can be represented using the parameterization specified in this AS.
 
 This AS specifies a set of parameters and metadata that define the deformation model, and how they are used to apply that model in coordinate operations.  The AS does not prescribe how they should be encoded into a digital file.  
 
