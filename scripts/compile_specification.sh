@@ -7,6 +7,8 @@
 # Note that the docker image does not run (or I have not yet figured how to run) as a non root user, so 
 # for the moment the ownership of output files is fixed after the script has completed.
 #
+# image=metanorma/mn
+image=metanorma/metanorma
 scriptfile="$(realpath "$0")"
 scriptdir="$(dirname "$scriptfile")"
 cd "$scriptdir/.."
@@ -15,5 +17,5 @@ if [ "$0" = "/metanorma/scripts/$(basename "$0")" ]; then
     metanorma compile --agree-to-terms -t ogc -x xml,pdf,html,doc products/specification/abstract-specification-deformation-model-functional-model.adoc
     exit
 fi
-docker run --rm -v "$(pwd)":/metanorma -v "$(pwd)/.fontist/fonts/":/config/fonts metanorma/mn "/metanorma/scripts/$(basename "$0")"
+docker run --rm -v "$(pwd)":/metanorma -v "$(pwd)/.fontist/fonts/":/config/fonts "$image" "/metanorma/scripts/$(basename "$0")"
 sudo chown -R "$(id -u):$(id -g)" .
