@@ -11,6 +11,17 @@ Should probably reference OGC Abstract Specification Topic 2: Referencing by coo
 
 ////
 
+////  
+To be added
+
+* coseismic (editor)
+* slow slip event (author)
+* displacement (pr)
+* deformation (editor)
+geographic CRS (editor)
+* coordinate operation (author) (specify PMM and transformation)
+//// 
+
 === Terms
 
 ==== carrier
@@ -18,25 +29,58 @@ Should probably reference OGC Abstract Specification Topic 2: Referencing by coo
 specific format used to encode a deformation model. +
 Note 1 to entry: The carrier defines how the attributes of the deformation model are encoded. 
 
+==== coordinate operation
+
+process using a mathematical model, based on a one-to-one relationship, that changes coordinates in
+a source coordinate reference system to coordinates in a target coordinate reference system, or that
+changes coordinates at a source coordinate epoch to coordinates at a target coordinate epoch within
+the same coordinate reference system
+
+[.source]
+<<ISO19111,3.1.8>>
+
+==== coseismic deformation
+
+deformation caused by an earthquake and occurring within minutes of the earthquake.  
+
+
+==== deformation
+
+change in shape of the earth's crust due to stress changes within crust.  
+
+NOTE: This specification is specifically concerned with the manifestion of deformation on the surface of the earth and the consequent displacement of features fixed to the surface of the earth
+
+==== displacement
+
+change in the coordinates of a point due to deformation
+
+==== geographic coordinate reference system
+
+coordinate reference system that has a geodetic reference frame and an ellipsoidal coordinate
+system
+
+[.source]
+<<ISO19111,3.1.35>>
+
+
 ==== implementation
 
 software that uses an encoded deformation model to calculate displacements and apply coordinate operations. +
-Note 1 to entry: The implementation encodes the formulae defined in this specification or numerically equivalent formulae.
+
+NOTE:  The implementation encodes the formulae defined in this specification or numerically equivalent formulae.
+
+==== post-seismic deformation
+
+deformation over months or years following an earthquake due to the change in the stresses in the earth's crust caused by the earthquake
+
+==== slow slip event
+
+A release of stress in the earth's crust due to gradual slipping fault surfaces over a period of months or years - a slow earthquake.
 
 ==== producer
 
 agency compiling a deformation model for publication
 
-////  
-To be added
-
-coseismic (editor)
-slow slip event (author)
-displacement (pr)
-deformation (editor)
-geographic CRS (editor)
-coordinate operation (author) (specify PMM and transformation)
-//// 
 
 === Abbreviations
 
@@ -45,6 +89,10 @@ AS:: OGC Abstract Specification
 CRS:: coordinate reference system 
 
 GNSS:: global navigation satellite system
+
+ISO:: International Organisation for Standardisation
+
+OGC:: Open Geospatial Consortium
 
 UTC:: universal time coordinated
 
