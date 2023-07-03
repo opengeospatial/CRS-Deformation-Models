@@ -3,50 +3,11 @@ CRS-Deformation-Models
 
 This repository holds the artefacts and workings of the "Deformation model functional model" project team established by the CRS DWG at the Montreal virtual meeting on 15 June 2020.
 
-The next virtual meeting of this project team will be after the draft deformation model specification has been submitted to the OGC Technical meeting in June. 
+This work is conducted by the OGC CRS Standards Working Group (SWG) on Deformation model functional model.  The next meeting of this group is on [10th July 2023 at 14:00 EDT (18:00 UTC)](https://www4.gotomeeting.com/join/141939477).
 
 <!--
-4pm EDT (20:00 UTC) on 6 June 2022 (<https://www4.gotomeeting.com/join/763520589>).  Meetings happen every four weeks. Details for joining the meeting will be posted here once they are available.
-
-2020-09-07  https://www4.gotomeeting.com/join/494053021
-2020-10-05 https://www4.gotomeeting.com/join/516068053
-Note: EDT ends Nov 1
-2020-11-02  https://www4.gotomeeting.com/join/882484381
-
-2020-11-30  https://www4.gotomeeting.com/join/270784501
-2020-12-28  https://www4.gotomeeting.com/join/437263613
-2021-01-25  https://www4.gotomeeting.com/join/150445909
-2021-02-22  https://www4.gotomeeting.com/join/577891581
-2021-03-15  https://www4.gotomeeting.com/join/118008085
-2021-04-12  https://www4.gotomeeting.com/join/694181949 20:00 UTC
-2021-05-10	https://www4.gotomeeting.com/join/381926869
-2021-06-07	https://www4.gotomeeting.com/join/792144133
-2021-07-05	https://www4.gotomeeting.com/join/517573469
-2021-08-02	https://www4.gotomeeting.com/join/403879845
-2021-08-30	https://www4.gotomeeting.com/join/938424573
-
-2021-09-27	https://www4.gotomeeting.com/join/449738333
-2021-10-25      https://www4.gotomeeting.com/join/114555821
-2021-11-22      https://www4.gotomeeting.com/join/864247981 21:00 UTC
-2021-12-20      https://www4.gotomeeting.com/join/207460949
-
-2022-01-17 https://www4.gotomeeting.com/join/544346533
-2022-02-14 https://www4.gotomeeting.com/join/606539877
-2022-03-14 https://www4.gotomeeting.com/join/616024989 20:00 UTC
-2022-04-11 https://www4.gotomeeting.com/join/463903845
-2022-05-09 https://www4.gotomeeting.com/join/145698317
-2022-06-06 https://www4.gotomeeting.com/join/763520589
-2022-07-04 https://www4.gotomeeting.com/join/662256749
- 
-GGXF 2022-01-10 https://www4.gotomeeting.com/join/178306341
-GGXF 2022-01-31 https://www4.gotomeeting.com/join/426755581
-GGXF 2022-02-28 https://www4.gotomeeting.com/join/950826069
-GGXF 2022-03-28 https://www4.gotomeeting.com/join/477678237
-GGXF 2022-04-25 https://www4.gotomeeting.com/join/237877533
-GGXF 2022-05-23 https://www4.gotomeeting.com/join/630612269
-GGXF 2022-06-20 https://www4.gotomeeting.com/join/808850197
-GGXF 2022-07-18 https://www4.gotomeeting.com/join/492974173
-
+Mon Jul 10th 2:00 PM EDT      https://www4.gotomeeting.com/join/141939477 
+Mon Jul 24th 2:00 PM EDT      https://www4.gotomeeting.com/join/753747421 
 -->
 
 This work is closely aligned with the work of the [GGXF (Geodetic Gridded data exchange format)](https://github.com/opengeospatial/CRS-Gridded-Geodetic-data-eXchange-Format) team.
