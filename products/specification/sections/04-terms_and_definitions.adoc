@@ -40,7 +40,7 @@ changes coordinates at a source coordinate epoch to coordinates at a target coor
 the same coordinate reference system
 
 [.source]
-<<ISO19111,3.1.8>>
+<<ISO19111,clause 3.1.8>>
 
 ==== coseismic deformation
 
@@ -63,7 +63,7 @@ coordinate reference system that has a geodetic reference frame and an ellipsoid
 system
 
 [.source]
-<<ISO19111,3.1.35>>
+<<ISO19111,clause 3.1.35>>
 
 
 ==== implementation
