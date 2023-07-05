@@ -21,7 +21,7 @@ image::structure.png[title="Functional decomposition of a deformation model",wid
 --
 
 [[funcmod-spatial-function]]
-=== Spatial function
+=== Spatial function of an element
 
 [[funcmod-spatial-extent]]
 ==== Spatial function extents

@@ -29,8 +29,9 @@ grid reference coordinates, grid spacing (public review)
 
 ==== carrier
 
-specific format used to encode a deformation model. +
-Note 1 to entry: The carrier defines how the attributes of the deformation model are encoded. 
+specific format used to encode a deformation model.
+
+NOTE: The carrier defines how the attributes of the deformation model are encoded. 
 
 ==== coordinate operation
 
