@@ -29,7 +29,7 @@ grid reference coordinates, grid spacing (public review)
 
 ==== carrier
 
-specific format used to encode a deformation model.
+specific format used to encode a deformation model
 
 NOTE: The carrier defines how the attributes of the deformation model are encoded. 
 
@@ -45,14 +45,13 @@ the same coordinate reference system
 
 ==== coseismic deformation
 
-deformation caused by an earthquake and occurring within minutes of the earthquake.  
-
+deformation caused by an earthquake and occurring within minutes of the earthquake
 
 ==== deformation
 
-change in shape of the earth's crust due to stress changes within crust.  
+change in shape of the earth's crust due to stress changes within crust
 
-NOTE: This specification is specifically concerned with the manifestion of deformation on the surface of the earth and the consequent displacement of features fixed to the surface of the earth
+NOTE: This specification is specifically concerned with the manifestion of deformation on the surface of the earth and the consequent displacement of features fixed to the surface of the earth.
 
 ==== displacement
 
@@ -60,26 +59,24 @@ change in the coordinates of a point due to deformation
 
 ==== geographic coordinate reference system
 
-coordinate reference system that has a geodetic reference frame and an ellipsoidal coordinate
-system
+coordinate reference system that has a geodetic reference frame and an ellipsoidal coordinate system
 
 [.source]
 <<ISO19111,clause 3.1.35>>
 
-
 ==== implementation
 
-software that uses an encoded deformation model to calculate displacements and apply coordinate operations. +
+software that uses an encoded deformation model to calculate displacements or to apply displacements in coordinate operations
 
 NOTE:  The implementation encodes the formulae defined in this specification or numerically equivalent formulae.
 
 ==== post-seismic deformation
 
-deformation over months or years following an earthquake due to the change in the stresses in the earth's crust caused by the earthquake
+deformation over months or years following an earthquake due to the ongoing change in the stresses in the earth's crust following an earthquake or series of earthquakes
 
 ==== slow slip event
 
-A release of stress in the earth's crust due to gradual slipping fault surfaces over a period of months or years - a slow earthquake.
+release of stress in the earth's crust due to gradual slipping fault surfaces over a period of months or years - a slow earthquake
 
 ==== producer
 
@@ -96,11 +93,11 @@ GIS:: geographic information systems
 
 GNSS:: global navigation satellite system
 
-ISO:: International Organisation for Standardisation
+ISO:: International Organization for Standardisation
 
 OGC:: Open Geospatial Consortium
 
-UTC:: universal time coordinated
+UTC:: Coordinated Universal Time
 
 ////
 === accessible CRS
