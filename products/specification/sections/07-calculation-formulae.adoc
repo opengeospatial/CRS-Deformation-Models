@@ -97,7 +97,7 @@ The following table lists the reference formulae for each type of time function.
 [cols="2,5a,5a"]
 [options="header"]
 |===
-|Time function type|Function parameters|Formula (t~i,min~ &#8804; _t_ < t~i,max~)
+|Time function type|Function parameters|Formula
 |velocity| Function reference epoch t~0~ | f~r~(_t_) = (_t_ - t~0~)
 
 |acceleration|Function reference epoch t~0~ |f~r~(_t_)= (_t_ - t~0~)^2^
@@ -114,7 +114,7 @@ f~r~(_t_) = 1.0 for _t_ &#8805; t~e~
 Time constant &#964; | f~r~(_t_) = 0   for _t_ < t~v~ +
 f~r~(_t_) = (1 - exp(-(_t_-t~v~)/&#964;)     for _t_ &#8805; t~v~
 
-|logarithmic|Event epoch t~v~ +
+|logarithmic footnote:log10[The logarithmic function uses a natural logarithm (base _e_).  A base 10 logarithmic function can be emulated by using a scale factor s = 1.0/ln(10.0) &#8776; 0.434294]|Event epoch t~v~ +
 Time constant &#964; | f~r~(_t_) = 0 for _t_ < t~v~ +
 f~r~(_t_) = ln(1 + (_t_-t~v~)/&#964;) for  _t_ &#8805; t~v~
 
@@ -157,8 +157,6 @@ f~2~(_t_) = f~1~(_t_) otherwise
 f(_t_) = s.f~2~(_t_) if s is defined +
 f(_t_) = f~2~(_t_) otherwise.
 --
-
-Note that the logarithmic function uses a natural logarithm (base _e_).  A base 10 logarithmic function can be emulated by using a scale factor of 1.0/ln(10.0) &#8776; 0.434294.
 
 In these formulae all epochs _t_ are defined as a decimal year in the Proleptic Gregorian calendar. 
 
