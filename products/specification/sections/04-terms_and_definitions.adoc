@@ -93,7 +93,7 @@ GIS:: geographic information systems
 
 GNSS:: global navigation satellite system
 
-ISO:: International Organization for Standardisation
+ISO:: International Organization for Standardization
 
 OGC:: Open Geospatial Consortium
 
