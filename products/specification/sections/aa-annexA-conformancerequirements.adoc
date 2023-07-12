@@ -1,0 +1,75 @@
+[appendix,obligation="normative"]
+== Conformance requirements
+
+=== Core requirements
+
+The core requirements  defined in the table below shall be satisfied by a deformation model which is compliant with this Abstract Specification (AS).  
+The attributes of entities specified in this section shall be unambiguously identified in an encoding of a deformation model.  A specific
+encoding may use different names for the entities provided that the encoding specification defines how the attributes specified below are named.
+
+[[table-core-conformance-requirements]]
+.Core conformance requirements
+[options="header"]
+[valign="top"]
+|=== 
+|Conformance class | Requirement
+
+|req/core/parameters a|
+
+|req/core/crs a|
+[upperalpha]
+. A deformation model shall define an interpolation coordinate reference system (CRS)
+. A deformation model shall define a source CRS.
+. A deformation model shall define a target CRS.
+. A deformation model shall either:
+.. if the source and target CRS are different, define the displacement to be applied to a coordinate in terms of the source CRS to determine the coordinate of a point in terms of the target CRS at a location in terms of the interpolation CRS and a time.
+.. if the source and target CRS are the same, define the displacement to apply to a coordinate of a point in terms of the source CRS to apply at one time in order to determine the coordinate of the same point at a different time. 
+
+|req/core/extents a|
+[upperalpha]
+. A deformation model shall define a spatial extent in terms of the interpolation CRS  within which the deformation model is applicable.
+. A deformation model shall specify a temporal extent within which the deformation model is applicable.
+
+|req/core/decomposition a| 
+[upperalpha]
+. A deformation model shall comprise one or more elements.
+. Each element shall comprise a spatial model and a time function.
+
+|===
+
+
+
+=== Implementation requirements
+
+The implementation requirements defined in the table below shall be satisified by 
+software using the deformation model to calculate and apply deformation in a coordinate
+operation
+
+
+[[table-implementation-conformance-requirements]]
+.Implementation conformance requirements
+[options="header"]
+[valign="top"]
+|=== 
+|Conformance class | Requirement 
+
+|req/implementation/extents a|
+[upperalpha]
+. A software shall not permit applying deformation at locations outside the spatial extent of the deformation model or at a time outside the temporal extent of the model.
+
+|req/implementation/combiningElements a| 
+[upperalpha]
+. A software shall calculate the deformation of an element at a time and location as the 
+deformation calculated from the spatial model of the element at that location multiplied by the scalar 
+value of the time function of the element at that time.
+. A software shall calculate the deformation at a time and location as the sum of the deformation calculated for each element of the model at that time and location, as defined in <<formula-elements>>.
+. A software shall calculate the uncertaint of an element at a time and loction as the uncertainty calculated from the spatial model of the element multiplied by the scalar value of the time function of the element at that time
+. A software shall calculate the uncertainty at a time and location as the root sum of squares of the uncertainty calculated for each element of the model at that time and location, as defined in <<formula-elements>>
+
+
+|req/implementation/elementDeformation a|
+[upperalpha]
+. A compliant software 
+
+
+|===
