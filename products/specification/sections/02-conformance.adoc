@@ -9,8 +9,8 @@ A data set or software that is compliant with this Deformation Model Functional 
 [valign="top"]
 |=== 
 |Conformance class | Usage
-|data |Required for a compliant data set, assumed by compliant software
-|implementation |Required of compliant software
+|data |Requirements for a compliant data set, assumed by compliant software
+|implementation |Implementation requirements for compliant software
 |===
 
 The normative provisions in this AS are denoted by the URI http://www.opengis.net/spec/deformation-model/1.0.

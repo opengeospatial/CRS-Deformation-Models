@@ -61,9 +61,9 @@ Displacement components not defined by a spatial function are assumed to be zero
 [[funcmod-spatial-params-uncertainty]]Uncertainty components of the spatial function may include:
 
 * Horizontal uncertainty specified as one of:
-** horizontal circular uncertainty e~h~
-** east and north uncertainty e~e~, e~n~
-* Vertical uncertainty  e~v~
+** Horizontal circular uncertainty e~h~,
+** East and north uncertainty e~e~, e~n~,
+* Vertical uncertainty  e~v~.
 // The following options have been discarded from the list of uncertainty representation
 // * horizontal and vertical uncertainty
 // ** horizontal covariance matrix components c~ee~ , c~en~, c~nn~.
