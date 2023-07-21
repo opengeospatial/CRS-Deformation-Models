@@ -1,7 +1,7 @@
 
 == Conformance
 
-A data set or software that is compliant with this Deformation Model Functional Model Abstract Specification (AS) shall satisfy the conformance requirements in <<annex-conformance-requirements>>.  Conformance classes are shown in <<table-conformance-classes>>.
+A data set or software that is compliant with this Deformation Model Functional Model Abstract Specification (AS) shall satisfy the conformance requirements in <<annex-conformance-requirements>>.  
 
 [[table-conformance-classes]]
 .Conformance classes for the Deformation Model Abstract Specification
@@ -9,8 +9,8 @@ A data set or software that is compliant with this Deformation Model Functional 
 [valign="top"]
 |=== 
 |Conformance class | Usage
-|data |Requirements for a compliant data set, assumed by compliant software
-|implementation |Implementation requirements for compliant software
+|data |Requirements for a compliant data set, assumed by compliant software (<<table-data-conformance-requirements>>)
+|implementation |Implementation requirements for compliant software (<<table-implementation-conformance-requirements>>)
 |===
 
 The normative provisions in this AS are denoted by the URI http://www.opengis.net/spec/deformation-model/1.0.

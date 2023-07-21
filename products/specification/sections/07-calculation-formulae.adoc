@@ -1,9 +1,10 @@
 
+[[formula-general]]
 == Calculation formulae
 
 The formulae specified below define the expected behavior of software implementations of the deformation model.  A compliant software may use different formulae provided that for every location and time within the extents of a "realistic" deformation model the displacement calculated by the software is "practically identical" to that calculated from these formulae.  The terms "realistic" and "practically identical" are imprecise.  Within the context of deformation model usage, displacement differing by less than 0.1mm can be considered "practically identical".  
 
-Grids can be defined either in terms of a geographic (latitude/longitude) or projected (easting/northing) CRS. Horizontal displacements and uncertainties are expressed as linear distances or, if the source and target CRSs are geographic, an angular measure.  Vertical displacements are expressed in linear units.
+Grids can be defined either in terms of a geographic (latitude/longitude) or projected (easting/northing) interpolation CRS. Horizontal displacements and uncertainties are expressed as linear distances or, if the source and target CRSs are geographic, an angular measure.  Vertical displacements are expressed in linear units.
 
 [[formula-spatial-interpolation]]
 === Spatial interpolation

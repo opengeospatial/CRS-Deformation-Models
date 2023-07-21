@@ -7,12 +7,11 @@ The deformation model is characterized as follows.
 
 A deformation model defines deformation within a specified spatial and temporal extent. Beyond these extents it is undefined and cannot be evaluated.  These extents may exceed the extents of the observations used to compile the deformation model.  For example, the temporal extent will generally allow extrapolation to a future date.
 
+[[funcmod-decomposition]]
 === Decomposition into elements
 
-[[funcmod-decomposition]]
 The model partitions deformation into one or more elements. The total displacement at a specific time and position is calculated by summing the contribution from each element at that time and position, as described in <<formula-elements>>.
 
-[[funcmod-element]]
 Each element of the model comprises a spatial function and a time function. The spatial function evaluates displacement components as a function of position. The time function evaluates a scale factor as a function of time. The deformation contribution for the element at a given position and time is obtained by multiplying the displacement components from the spatial function by the scale factor from the time function.  This structure is illustrated in <<image_structure>>.
 
 --
@@ -32,6 +31,7 @@ If the spatial function is only defined over a subset of the deformation model e
 
 The deformation components of the spatial function are undefined at any location outside the deformation model extents.
 
+[[funcmod-spatial-grids]]
 ==== Spatial function grids
 
 The spatial function of an element is represented by displacement components at the nodes of a grid or a set of grids. 

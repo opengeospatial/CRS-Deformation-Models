@@ -70,6 +70,10 @@ software that uses an encoded deformation model to calculate displacements or to
 
 NOTE:  The implementation encodes the formulae defined in this specification or numerically equivalent formulae.
 
+==== linear unit
+
+a quantity that can be related to the SI base unit for length – the metre – by a scalar value
+
 ==== post-seismic deformation
 
 deformation over months or years following an earthquake due to the ongoing change in the stresses in the earth's crust following an earthquake or series of earthquakes

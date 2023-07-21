@@ -2,21 +2,21 @@
 [[annex-conformance-requirements]]
 == Conformance requirements
 
-=== Core requirements
+=== Data requirements
 
-The core requirements  defined in the table below shall be satisfied by a deformation model which is compliant with this Abstract Specification (AS).  
+The data requirements  defined in the <<table-data-conformance-requirements>> shall be satisfied by a deformation model which is compliant with this Abstract Specification (AS).  
 The attributes of entities specified in this section shall be unambiguously identified in an encoding of a deformation model.  A specific
 encoding may use different names for the entities provided that the encoding specification defines how the attributes specified below are named.
 
-[[table-conformance-requirements]]
-.Conformance requirements
+[[table-data-conformance-requirements]]
+.Data requirements
 [options="header"]
 [valign="top"]
 |=== 
 |Conformance class | Requirement
 
 |req/data/metadata a|
-A deformation model shall define the following metadata:
+A deformation model shall define the following metadata (<<funcmod-model-metadata>>):
 [upperalpha]
 . A unique identifier for the model including its version,
 . Identification of the source CRS,
@@ -39,21 +39,19 @@ NOTE: This is implied by the use of horizontal and vertical in this specificatio
 
 |req/data/parameters a|
 [upperalpha]
-. A deformation model shall define displacements in the directions of the axes of the source CRS.
-. The horizontal displacement units shall be a linear unit or, if the source CRS is a geographic CRS an angular unit.
-. The vertical displacement units shall be a linear unit.
-. A deformation model shall define uncertainty in terms of the horizontal and vertical uncertainty.
-. The horizontal and vertical uncertainty units shall be a linear unit.
-
-NOTE: What is a linear unit
+. A deformation model shall define displacements in the directions of the axes of the source CRS (<<funcmod-spatial-params>>).
+. The horizontal displacement units shall be either a linear unit or, if the source CRS is a geographic CRS, an angular unit (<<funcmod-spatial-params-displacement>>).
+. The vertical displacement units shall be a linear unit (<<funcmod-spatial-params-displacement>>).
+. A deformation model shall define uncertainty in terms of the horizontal and vertical uncertainty (<<funcmod-spatial-params-uncertainty>>).
+. The horizontal and vertical uncertainty units shall be a linear unit (<<funcmod-spatial-params-uncertainty>>).
 
 |req/data/elements a| 
 [upperalpha]
-. A deformation model shall comprise one or more elements.
-. Each element shall comprise a spatial function and a time function.
+. A deformation model shall comprise one or more elements (<<funcmod-decomposition>>).
+. Each element shall comprise a spatial function and a time function (<<funcmod-decomposition>>).
 
 |req/data/elementMetadata a|
-An element shall define the following metadata:
+An element shall define the following metadata (<<funcmod-element-metadata>>):
 [upperalpha]
 . The spatial extent of the spatial function defined in terms of the interpolation CRS that may be a subset of the model extent,
 . The spatial interpolation method used by the spatial function,
@@ -61,47 +59,68 @@ An element shall define the following metadata:
 
 |req/data/elementMetadataOptional a|
 [upperalpha]
-. (Conditional) An element may define a default the horizontal uncertainty.
-. (Conditional) An element may define a vertical uncertainty.
+. (Conditional) An element may define a default horizontal uncertainty (<<funcmod-element-metadata>>).
+. (Conditional) An element may define a vertical uncertainty (<<funcmod-element-metadata>>).
 
 NOTE: What is the correct way to define optional attributes that are used by other requirements (ie calculation)
 
 |req/data/spatialFunctionGrids a| 
 [upperalpha]
-. The spatial function shall be defined by parameter values at the nodes of one or more regular grids defined in terms of the interpolation CRS.
+. The spatial function shall be defined by parameter values at the nodes of one or more regular grids defined in terms of the interpolation CRS (<<funcmod-spatial-params>>).
 
 |req/data/spatialFunctionGridsOrder a|
 [upperalpha]
-. (Conditional) If two or more grids of a spatial function overlap then the spatial function shall define a explicit or implicit heirarchy of the grids such that one grid is ranked higher than the other.
+. An implict or explicit preference shall be defined between any two grids of a spatial function that overlap (<<funcmod-spatial-grids>>).
 
 |req/data/spatialFunctionNoData a|
 [upperalpha]
-. (Conditional) The parameter values at the nodes of a grid may be assigned a special _no-data_ value meaning that the paramter is undefined at that node.
+. A parameter shall be assigned a _no-data_ value at a location at which it is not defined (<<funcmod-nodata>>).
 
 |req/data/timeFunction a|
 [upperalpha]
-. The time function of an element shall be defined by a set of one or more base time functions.
+. The time function of an element shall be defined by a set of one or more base time functions (<<funcmod-time-function>>).
 
-|req/data/baseTimeFunctionMetadata a|
+|req/data/baseTimeFunctionType a|
 [upperalpha]
-. The type of a base time function shall be defined as  as one of: _velocity_, _step_, _ramp_, _exponential_, _logarithmic_, _acceleration_, _hyperbolicTangent_, _cyclic_
+. A base time function shall define its type as one of: _velocity_, _step_, _ramp_, _exponential_, _logarithmic_, _acceleration_, _hyperbolicTangent_, _cyclic_ (<<funcmod-time-function>>).
 
-|req/data/baseTimeFunctionMetadataOptional a|
+|req/data/baseTimeFunctionParameters a|
 [upperalpha]
-. (Conditional) The base time function may define a start epoch.
-. (Conditional) The base time function may define an end epoch.
-. (Conditional) The base time function may define a function reference epoch.
-. (Conditional) If the base time function type is _velocity_, _acceleration_, _cyclic_ the base time function shall define a function reference epoch.
-. (Conditional) If the base time function type is _step_, _exponential_, _logarithmic_, or _hyperbolicTangent_ the base time function shall define an event epoch.
-. (Conditional) If the base time function type is _exponential_, _logarithmic_, or _hyperbolicTangent_ the base time function shall define a time constant in years.
-. (Conditional) If the base time function type is _cyclic_ the base time function shall define a frequency in cycles per year.
+. A _velocity_, _acceleration_, _cyclic_ base time function shall define a function reference epoch (<<formula-time-function>>).
+. A _ramp_ base time function shall define a start epoch and an end epoch  (<<formula-time-function>>).
+. A_step_, _exponential_, _logarithmic_, or _hyperbolicTangent_ base time function shall define an event epoch (<<formula-time-function>>).
+. A _exponential_, _logarithmic_, or _hyperbolicTangent_ base time function shall define a time constant in years (<<formula-time-function>>).
+. A _cyclic_ base time function shall define a frequency in cycles per year (<<formula-time-function>>).
+
+|req/data/baseTimeFunctionModifiers a|
+[upperalpha]
+. (Conditional) A base time function may define a start epoch (<<formula-time-function>>).
+. (Conditional) A base time function may define an end epoch (<<formula-time-function>>).
+. (Conditional) A base time function may define a function reference epoch (<<formula-time-function>>).
+. (Conditional) A base time function may define a scale factor (<<formula-time-function>>).
+
+NOTE: How should these be included - not a requirement, not a conditional requirement
+
+|===
+
+=== Implementation requirements
+
+The implementation requirements defined in <<table-implementation-conformance-requirements>> shall be met by a software implementation calculating and applying deformation model which is compliant with this Abstract Specification (AS).  
+Note that, as described in <<formula-general>>, this does not prescribe the specific formulae that a software should use, but does require that the calculations by the software should obtain results that are practically identical to those defined by the these formulae.
+
+[[table-implementation-conformance-requirements]]
+.Implementation requirements
+[options="header"]
+[valign="top"]
+|=== 
+|Conformance class | Requirement
 
 |req/implementation/extents a|
 [upperalpha]
-. (Conditional) the deformation shall be undefined at locations outside the spatial extent of the deformation model or at a time outside the temporal extent of the model.
+. the deformation shall be undefined at locations outside the spatial extent of the deformation model or at a time outside the temporal extent of the model (<<formula-spatial-interpolation>>).
 
 |req/implementation/combiningElements a| 
-(Conditional) At locations within the extents of the deformation model:
+At locations within the extents of the deformation model:
 [upperalpha]
 . the displacement at a time and location shall calculated as the sum of the displacement calculated from the spatial function at that location multiplied by the scalar value of the 
  of time function at that time for all the elements as defined by the formulae in <<formula-elements>>,
@@ -109,40 +128,39 @@ NOTE: What is the correct way to define optional attributes that are used by oth
 
 |req/implementation/spatialFunctionExtents a|
 [upperalpha]
-. (Conditional) At locations within the deformation model extents and outside the extents of an element the displacement and uncertainty of the element are zero. 
+. (Conditional) At locations within the deformation model extents and outside the extents of an element the displacement and uncertainty of the element are zero  (<<formula-spatial-interpolation>>). 
 
 |req/implementation/spatialFunctionGrid a|
-(Conditional) At a location within the deformation model extents:
 [upperalpha]
-. (Conditional) At a location that is within one or more of the grids of a spatial function the spatial function shall be calculated using the highest ranked of the grids which include that location,
-. (Conditional) If the spatial model interpolation method is _bilinear_ then the spatial function parameters shall be calculated from the using the selected grid as defined by the formulae in <<formula-bilinear-interpolation>>,
-. (Conditional) If any of the grid node values of a parameter used to calculate that parameter at a location are _no-data_, then the value of the parameter shall be undefined at that location,
-. (Conditional) At a location that is not within any of the grids of a spatial model the deformation and uncertainty of the spatial model shall be zero.
+. At a location that is within one or more of the grids of a spatial function the spatial function shall be interpolated using the uniquely identified preferred grid which include that location (<<formula-nested-grid-selection>>),
+. The parameters of spatial function using a _bilinear_ interpolation method shall be interpolated on the preferred grid as defined by the formulae in <<formula-bilinear-interpolation>>,
+. The spatial function shall be undefined at any location at which interpolating the function requires using a grid node parameter that has a _no-data_ value.
+. The parameter values of a spatial function  shall be calculated as zero at any location that is not within any of the grids of the spatial function  and is within the extents of the deformation model (<<formula-spatial-interpolation>>).
 
 |req/implementation/spatialFunctionDefaultDisplacement a| 
 [upperalpha]
-. (Conditional) If the spatial function parameters do not define horizontal displacement the horizontal displacement of a grid be zero.
-. (Conditional) If the spatial function parameters do not define vertical displacement the vertical displacement of a grid shall be zero.
+. The horizontal displacement calculated for a spatial function shall be zero if the spatial function does not define horizontal displacement parameters at the grid nodes (<<formula-nested-grid-selection>>).
+. The vertical displacement calculated for a spatial function shall be zero if the spatial function does not define vertical displacement parameters at the grid nodes (<<formula-nested-grid-selection>>).
 
 |req/implementation/spatialFunctionDefaultUncertainty a| 
 [upperalpha]
-. (Conditional) If the spatial function parameters do not define horizontal uncertainty, the horizontal uncertainty of a grid shall be the default horizontal uncertainty defined for the model if it is defined, or, if that is not defined, the default horizontal uncertainty for the deformation model.
-. (Conditional) If the spatial function parameters do not define vertical uncertainty, the vertical uncertainty of a grid shall be the default vertical uncertainty defined for the model if it is defined, or, if that is not defined, the default vertical uncertainty for the deformation model.
+. The horizontal uncertainty of a spatial function shall be interpolated from the grid node values if horizontal uncertainty is defined at the grid nodes, otherwise by the default horizontal uncertainty for the spatial function element if that is defined, otherwise by the deformation model default element horizontal uncertainty (<<funcmod-spatial-params>>).
+. The vertical uncertainty of a spatial function shall be interpolated from the grid node values if vertical uncertainty is defined at the grid nodes, otherwise by the default vertical uncertainty for the spatial function element if that is defined, otherwise by the deformation model default element vertical uncertainty (<<funcmod-spatial-params>>).
 
 |req/implementation/timeFunction a|
 [upperalpha]
-. (Conditional) For any time within the time extents of the deformation model, the calculated value of a time function shall be the sum of the values of its constituent base time functions at that time.
+. The calculated value of a time function shall be the sum of the values of its constituent base time functions at that time (<<formula-time-function>>).
 
 |req/implementation/baseTimeFunction a|
 [upperalpha]
-. (Conditional) For any time within the time extents of the deformation model, the caculated value of a base time function shall be as defined by the formulae in <<formula-time-function>>.
+. The cacculated value of a base time function shall be as defined by the formulae in <<formula-time-function>> for any time within the time extents of the deformation model.
 
 |req/implementation/pointMotion a|
 [upperalpha]
-. (Conditional) When the model is used as a point motion model to propogate a coordinate between two different epochs, the calculated of displacement between the epochs and the uncertainty of the displacement shall be as defined by the formulae in <<formula-conversion-between-epochs>>.
+. The calculated of displacement and its uncertainty between two epochs shall be as defined by the formulae in <<formula-conversion-between-epochs>>.
 
 |req/implementation/applyDisplacement a|
 [upperalpha]
-. (Conditional) When a target CRS coordinate is calculated by applying a calculated displacement to a source CRS coordinate, the target CRS coordinate shall be as defined by the formulae in <<formula-apply-displacement>>.
+. A target CRS coordinate shall be calculated by applying a calculated displacement to a source CRS coordinate as defined by the formulae in <<formula-apply-displacement>>.
 
 |===
