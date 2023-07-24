@@ -9,8 +9,13 @@ A data set or software that is compliant with this Deformation Model Functional 
 [valign="top"]
 |=== 
 |Conformance class | Usage
-|data |Requirements for a compliant data set, assumed by compliant software (<<table-data-conformance-requirements>>)
-|implementation |Implementation requirements for compliant software (<<table-implementation-conformance-requirements>>)
+|model a|
+To be conformant with this Abstract Specification a deformation model shall satisfy the the requirements of <<table-model-conformance-requirements>>.  
+The attributes of entities specified in the requiremements shall be unambiguously identified in an encoding of a deformation model.  A specific
+encoding may use different names or structurefor the entities provided that the encoding specification defines how the deformation model attributes are identified.
+
+|implementation a|
+To be conformant with this Abstract Specification a software implementation shall satisfy the requirements of <<table-implementation-conformance-requirements>>.  Note that, as described in <<formula-general>>, this does not prescribe the specific formulae that a software should use, but does require that the calculations by the software should obtain results that are practically identical to those defined by the these formulae.
 |===
 
 The normative provisions in this AS are denoted by the URI http://www.opengis.net/spec/deformation-model/1.0.

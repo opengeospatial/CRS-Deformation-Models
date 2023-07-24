@@ -83,9 +83,10 @@ Each base function is one of the types listed in the following <<table-time-func
 | acceleration | Defines a rate of change of the velocity function.  This is sometimes used to model glacial isostatic adjustment.
 | step | Defines an instantaneous displacement, typically used to model coseismic earthquake deformation.
 | ramp | Defines displacement accumulating at a linear rate over a fixed period.  This can be used to represent post-seismic deformation or slow slip events.  Combining several ramp functions creates a piecewise linear time function that can emulate any time behavior to an arbitrary level of accuracy.
-| exponential | Defines a displacement accumulating at an exponentially decaying rate after an event.  This is commonly used to approximate post-seismic deformation.  Often used in conjunction with a logarithmic model.
-| logarithmic | Defines a displacement accumulating proportionally to the logarithm of elapsed time since an event.  This is commonly used to approximate post-seismic deformation.  It is often used in conjunction with an exponential model.
-| hyperbolic tangent | Approximates time behavior observed in slow slip events.
+| exponential | Defines a displacement accumulating at an exponentially decaying rate after an event.  This is commonly used to approximate post-seismic deformation.  Often used in conjunction with a logBaseE model.
+| logBaseE | Defines a displacement accumulating proportionally to the natural (base e) logarithm of elapsed time since an event.  This is commonly used to approximate post-seismic deformation.  It is often used in conjunction with an exponential model.
+| logBase10 | Defines a displacement accumulating proportionally to the base 10 logarithm of elapsed time since an event.  
+| hyperbolicTangent | Approximates time behavior observed in slow slip events.
 | cyclic | Represents cyclic behavior, such as deformation due to seasonal hydrological loading.
 
 |===
@@ -95,7 +96,7 @@ The following table lists the reference formulae for each type of time function.
 
 [[table-time-functions]]
 .Time function reference formulae
-[cols="2,5a,5a"]
+[cols="<.<2,<.<5a,<.<5a"]
 [options="header"]
 |===
 |Time function type|Function parameters|Formula
@@ -111,24 +112,40 @@ End epoch t~e~ | f~r~(_t_) =0 for _t_ < t~s~ +
 f~r~(_t_) = (_t_-t~s~)/(t~e~-t~s~) for t~s~ &#8804; _t_ < t~e~ +
 f~r~(_t_) = 1.0 for _t_ &#8805; t~e~
 
-|exponential|Event epoch t~v~ +
+|exponential |Event epoch t~v~ +
 Time constant &#964; | f~r~(_t_) = 0   for _t_ < t~v~ +
 f~r~(_t_) = (1 - exp(-(_t_-t~v~)/&#964;)     for _t_ &#8805; t~v~
 
-|logarithmic footnote:log10[The logarithmic function uses a natural logarithm (base _e_).  A base 10 logarithmic function can be emulated by using a scale factor s = 1.0/ln(10.0) &#8776; 0.434294]|Event epoch t~v~ +
-Time constant &#964; | f~r~(_t_) = 0 for _t_ < t~v~ +
+|logBaseE |
+Event epoch t~v~ +
+Time constant &#964; 
+|
+f~r~(_t_) = 0 for _t_ < t~v~ +
 f~r~(_t_) = ln(1 + (_t_-t~v~)/&#964;) for  _t_ &#8805; t~v~
 
-|hyperbolic tangent|Event epoch t~v~ +
-Time constant &#964; | f~r~(_t_) = (1 + tanh( (_t_ - t~v~)/&#964;))/2 +
+|logBase10 |
+Event epoch t~v~ +
+Time constant &#964;
+| 
+f~r~(_t_) = 0 for _t_ < t~v~ +
+f~r~(_t_) = ln(1 + (_t_-t~v~)/&#964;)/ln(10.0) for  _t_ &#8805; t~v~
+
+|hyperbolicTangent
+|
+Event epoch t~v~ +
+Time constant &#964; 
+|
+f~r~(_t_) = (1 + tanh( (_t_ - t~v~)/&#964;))/2 +
 where tanh(x) = (e^x^ - e^-x^)/(e^x^ + e^-x^)
 
-|cyclic|Frequency _f_ (cycles per year) +
-Function reference epoch t~0~ |
-f~r~(_t_) = sin(_f_(_t_ - t~0~)/2&#120587;)
+|cyclic
+|
+Frequency _f_ (cycles per year) +
+Function reference epoch t~0~
+|
+f~r~(_t_) = sin(2&#120587;__f___(_t_ - t~0~))
 
 |===
-
 
 Each base time function is computed using the reference formula f~r~(_t_) as in <<table-time-functions>>.  The result can be modified by three epoch parameters, start epoch t~s~, end epoch t~e~, and function reference epoch t~0~, and a scale factor s.  (Note that the ramp function explicitly uses the start and end epoch; the velocity, acceleration, and cyclic functions explicitly use the function reference epoch.)
 

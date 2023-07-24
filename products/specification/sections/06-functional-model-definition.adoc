@@ -96,12 +96,13 @@ This is not necessarily enforced by the mathematical formulation of a model. It 
 The time function of an element is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
 
  * a velocity function
+ * an acceleration function
  * a step function
  * a ramp function
  * an exponential decay function
- * a logarithmic function
- * an acceleration function
- * a hyperbolic tangent function
+ * a logBaseE function
+ * a logBase10 function
+ * a hyperbolicTangent function
  * a cyclic function
 
 These base time functions are defined in <<formula-time-function>>.
@@ -117,7 +118,7 @@ The model definition must specify:
 * The target CRS (if the model is implemented as a point motion model this will be the same as the source CRS).
 * The interpolation CRS used to define the spatial function(s)
 * The valid spatial extent of the model (defined in terms of the interpolation CRS)
-* The valid time extent of the model
+* The valid temporal extent of the model
 * The units of horizontal displacement
 * The units of vertical displacement
 * The parameters used to represent uncertainty, for example, horizontal 95% circular confidence, vertical 95% confidence level.

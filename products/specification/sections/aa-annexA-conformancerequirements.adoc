@@ -1,112 +1,122 @@
-[appendix,obligation="normative"]
 [[annex-conformance-requirements]]
+[appendix,obligation="normative"]
 == Conformance requirements
 
-=== Data requirements
+=== Model requirements
 
-The data requirements  defined in the <<table-data-conformance-requirements>> shall be satisfied by a deformation model which is compliant with this Abstract Specification (AS).  
-The attributes of entities specified in this section shall be unambiguously identified in an encoding of a deformation model.  A specific
-encoding may use different names for the entities provided that the encoding specification defines how the attributes specified below are named.
-
-[[table-data-conformance-requirements]]
+[[table-model-conformance-requirements]]
 .Data requirements
 [options="header"]
 [valign="top"]
 |=== 
 |Conformance class | Requirement
 
-|req/data/metadata a|
-A deformation model shall define the following metadata (<<funcmod-model-metadata>>):
+|req/model/metadata a|
+A deformation model (DM) shall define the following metadata (<<funcmod-model-metadata>>):
 [upperalpha]
 . A unique identifier for the model including its version,
-. Identification of the source CRS,
-. Identification of the target CRS,
-. Identification of the interpolation CRS used to define the spatial function(s),
-. The valid spatial extent of the model defined in terms of the interpolation CRS (<<funcmod-extents>>),
-. The valid time extent of the model,
-. The units of horizontal displacement,
-. The units of vertical displacement, 
-. The parameters used to represent horizontal and vertical uncertainty (<<funcmod-spatial-params>>),
-. The default horizontal and vertical uncertainty for each element of the model  (<<funcmod-spatial-params>>).
+. The measure of horizontal uncertainty, e.g. "95% confidence" (<<funcmod-spatial-params>>),
+. The measure of vertical uncertainty (<<funcmod-spatial-params>>),
+. The _no-data_ value used to represent undefined parameter values (<<funcmod-nodata>>).
 
-|req/data/crs a|
+|req/model/crs a|
 [upperalpha]
-. The source CRS of a deformation model shall be a CRS with horizontal and/or vertical axes.
-. The target CRS of a deformation model shall be a CRS with the same axes as the source CRS.
-. The interpolation CRS shall be a two dimensional CRS.
+. The DM shall define a source CRS which shall be a CRS with horizontal and/or vertical axes.
+. The DM shall define a target CRS which shall be a CRS with the same axes as the source CRS, although the order of the axes may differ.
+. The DM shall define an interpolation CRS which shall be a two dimensional CRS.
 
-NOTE: This is implied by the use of horizontal and vertical in this specification.
-
-|req/data/parameters a|
+// NOTE: This is implied by the use of horizontal and vertical in this specification. 
+|req/model/extent a|
 [upperalpha]
-. A deformation model shall define displacements in the directions of the axes of the source CRS (<<funcmod-spatial-params>>).
-. The horizontal displacement units shall be either a linear unit or, if the source CRS is a geographic CRS, an angular unit (<<funcmod-spatial-params-displacement>>).
-. The vertical displacement units shall be a linear unit (<<funcmod-spatial-params-displacement>>).
-. A deformation model shall define uncertainty in terms of the horizontal and vertical uncertainty (<<funcmod-spatial-params-uncertainty>>).
-. The horizontal and vertical uncertainty units shall be a linear unit (<<funcmod-spatial-params-uncertainty>>).
+. The DM shall define the valid spatial extent of the model in terms of the interpolation CRS (<<funcmod-extents>>).
+. The DM shall specify the valid temporal extent of the model (<<funcmod-extents>>).
 
-|req/data/elements a| 
+|req/model/parameters a|
+[upperalpha]
+. A DM shall define displacements in the directions of the axes of the source CRS (<<funcmod-spatial-params>>).
+. A DM shall define the units of horizontal displacement that shall be a linear unit or, if the source CRS is a geographic CRS, a linear unit or an angular unit (<<funcmod-spatial-params-displacement>>).
+. A DM shall define the units of vertical displacement that shall be a linear unit (<<funcmod-spatial-params-displacement>>).
+. A DM shall define uncertainty in terms of horizontal and vertical uncertainty (<<funcmod-spatial-params-uncertainty>>).
+. A DM shall define the measure used for horizontal uncertainty that shall be one of:
+* Horizontal uncertainty,
+* East and north uncertainty e~e~, e~n~.
+. A DM shall define units of horizontal and vertical uncertainty that shall be linear units (<<funcmod-spatial-params-uncertainty>>). 
+. A DM shall define a default horizontal uncertainty for an element (<<funcmod-spatial-params-uncertainty>>).
+. A DM shall define a default vertical uncertainty for an element (<<funcmod-spatial-params-uncertainty>>).
+
+
+|req/model/elements a| 
 [upperalpha]
 . A deformation model shall comprise one or more elements (<<funcmod-decomposition>>).
 . Each element shall comprise a spatial function and a time function (<<funcmod-decomposition>>).
 
-|req/data/elementMetadata a|
-An element shall define the following metadata (<<funcmod-element-metadata>>):
+|req/model/element/metadata/optional a|
 [upperalpha]
-. The spatial extent of the spatial function defined in terms of the interpolation CRS that may be a subset of the model extent,
-. The spatial interpolation method used by the spatial function,
-. The parameters defined in the spatial function which is a subset or all of the displacement and uncertainty parameters defined in the model metadata.
+. An element may define a default horizontal uncertainty (<<funcmod-element-metadata>>).
+. An element may define a vertical uncertainty (<<funcmod-element-metadata>>).
 
-|req/data/elementMetadataOptional a|
+EDITOR: What is the correct way to define optional attributes that are used by other requirements (ie calculation)
+
+|req/model/element/interpolationMethod a|
 [upperalpha]
-. (Conditional) An element may define a default horizontal uncertainty (<<funcmod-element-metadata>>).
-. (Conditional) An element may define a vertical uncertainty (<<funcmod-element-metadata>>).
+. An element shall define the spatial interpolation method used by the spatial function (<<funcmod-spatial-interpolation>>).
 
-NOTE: What is the correct way to define optional attributes that are used by other requirements (ie calculation)
-
-|req/data/spatialFunctionGrids a| 
+|req/model/element/parameters a|
 [upperalpha]
-. The spatial function shall be defined by parameter values at the nodes of one or more regular grids defined in terms of the interpolation CRS (<<funcmod-spatial-params>>).
+. An element shall specify the parameters defined by its spatial function which shall be a subset or all of the displacement and uncertainty parameters defined by the model (<<funcmod-spatial-params>>).
 
-|req/data/spatialFunctionGridsOrder a|
+|req/model/element/spatial/grids a| 
 [upperalpha]
-. An implict or explicit preference shall be defined between any two grids of a spatial function that overlap (<<funcmod-spatial-grids>>).
+. The spatial function shall be defined by parameter values at the nodes of one or more regular grids which defined in terms of the interpolation CRS (<<funcmod-spatial-params>>).
 
-|req/data/spatialFunctionNoData a|
+|req/model/element/spatial/grids/order a|
 [upperalpha]
-. A parameter shall be assigned a _no-data_ value at a location at which it is not defined (<<funcmod-nodata>>).
+. An element shall specify an implict or explicit preference between any two of its that overlap (<<funcmod-spatial-grids>>).
 
-|req/data/timeFunction a|
+|req/model/element/spatial/grids/noData a|
+[upperalpha]
+. A parameter of an element shall be assigned a _no-data_ value at a grid node at which it is not defined (<<funcmod-nodata>>).
+
+|req/model/element/timeFunction a|
 [upperalpha]
 . The time function of an element shall be defined by a set of one or more base time functions (<<funcmod-time-function>>).
 
-|req/data/baseTimeFunctionType a|
-[upperalpha]
-. A base time function shall define its type as one of: _velocity_, _step_, _ramp_, _exponential_, _logarithmic_, _acceleration_, _hyperbolicTangent_, _cyclic_ (<<funcmod-time-function>>).
+. A base time function shall define its type as one of: _velocity_, _acceleration_, _step_, _ramp_, _exponential_, _logBaseE_, _logBase10_, _hyperbolicTangent_, or  _cyclic_ (<<funcmod-time-function>>).
 
-|req/data/baseTimeFunctionParameters a|
-[upperalpha]
-. A _velocity_, _acceleration_, _cyclic_ base time function shall define a function reference epoch (<<formula-time-function>>).
-. A _ramp_ base time function shall define a start epoch and an end epoch  (<<formula-time-function>>).
-. A_step_, _exponential_, _logarithmic_, or _hyperbolicTangent_ base time function shall define an event epoch (<<formula-time-function>>).
-. A _exponential_, _logarithmic_, or _hyperbolicTangent_ base time function shall define a time constant in years (<<formula-time-function>>).
-. A _cyclic_ base time function shall define a frequency in cycles per year (<<formula-time-function>>).
+. A base time functions shall have the mandatory attributes and may have additional optional attributes as shown in <<table-time-function-attributes>>
 
-|req/data/baseTimeFunctionModifiers a|
-[upperalpha]
-. (Conditional) A base time function may define a start epoch (<<formula-time-function>>).
-. (Conditional) A base time function may define an end epoch (<<formula-time-function>>).
-. (Conditional) A base time function may define a function reference epoch (<<formula-time-function>>).
-. (Conditional) A base time function may define a scale factor (<<formula-time-function>>).
+|===
 
-NOTE: How should these be included - not a requirement, not a conditional requirement
+[[table-time-function-attributes]]
+.Time function mandatory (M) and optional (O) attributes
+[options="header"]
+[valign="top"]
+[cols="<,7^]
+|=== 
+| Function type  7+^h| Attribute
+h| 
+^h| Reference epoch footnote:tfepoch[Epochs may be specified as a date/time or epoch in decimal years] 
+^h| Start epoch footnote:tfepoch[] 
+^h| End epoch footnote:tfepoch[] 
+^h| Event epoch footnote:tfepoch[] 
+^h| Time constant footnote:[A time constant is in  years] 
+^h| Frequency footnote:[A frequency is specified in cycles per year] 
+^h| Scale factor
+
+// Type             ^| Ref ^| Sta ^| End ^| Evt ^| TmC ^| Frq ^| Scl 
+| velocity          ^|  M  ^|  O  ^| O   ^|  -  ^|  -  ^|  -  ^|  O
+| acceleration      ^|  M  ^|  O  ^| O   ^|  -  ^|  -  ^|  -  ^|  O
+| step              ^|  M  ^|  O  ^| O   ^|  -  ^|  -  ^|  -  ^|  O
+| ramp              ^|  O  ^|  M  ^| M   ^|  -  ^|  -  ^|  -  ^|  O
+| exponential       ^|  O  ^|  O  ^| O   ^|  M  ^|  M  ^|  -  ^|  O
+| logBaseE          ^|  O  ^|  O  ^| O   ^|  M  ^|  M  ^|  -  ^|  O
+| logBase10         ^|  O  ^|  O  ^| O   ^|  M  ^|  M  ^|  -  ^|  O
+| hyperbolicTangent ^|  O  ^|  O  ^| O   ^|  M  ^|  M  ^|  -  ^|  O
+| cyclic            ^|  M  ^|  O  ^| O   ^|  -  ^|  -  ^|  M  ^|  O
 
 |===
 
 === Implementation requirements
-
-The implementation requirements defined in <<table-implementation-conformance-requirements>> shall be met by a software implementation calculating and applying deformation model which is compliant with this Abstract Specification (AS).  
-Note that, as described in <<formula-general>>, this does not prescribe the specific formulae that a software should use, but does require that the calculations by the software should obtain results that are practically identical to those defined by the these formulae.
 
 [[table-implementation-conformance-requirements]]
 .Implementation requirements
@@ -117,50 +127,37 @@ Note that, as described in <<formula-general>>, this does not prescribe the spec
 
 |req/implementation/extents a|
 [upperalpha]
-. the deformation shall be undefined at locations outside the spatial extent of the deformation model or at a time outside the temporal extent of the model (<<formula-spatial-interpolation>>).
+. The deformation shall be undefined at locations outside the spatial extent of the deformation model (DM) or at a time outside the temporal extent of the model (<<formula-spatial-interpolation>>).
 
-|req/implementation/combiningElements a| 
-At locations within the extents of the deformation model:
+|req/implementation/element/spatialModel a|
 [upperalpha]
-. the displacement at a time and location shall calculated as the sum of the displacement calculated from the spatial function at that location multiplied by the scalar value of the 
- of time function at that time for all the elements as defined by the formulae in <<formula-elements>>,
-. A software shall calculate the uncertainty at a time and location as the root sum of squares of the uncertainty defined by the spatial function at that location multiplied by the time function at that time for all the elements as defined by the formulae in <<formula-elements>>.
-
-|req/implementation/spatialFunctionExtents a|
-[upperalpha]
-. (Conditional) At locations within the deformation model extents and outside the extents of an element the displacement and uncertainty of the element are zero  (<<formula-spatial-interpolation>>). 
-
-|req/implementation/spatialFunctionGrid a|
-[upperalpha]
-. At a location that is within one or more of the grids of a spatial function the spatial function shall be interpolated using the uniquely identified preferred grid which include that location (<<formula-nested-grid-selection>>),
+. At a location that is within one or more of the grids of a spatial function the spatial function shall be interpolated using the uniquely identified preferred grid which includes that location (<<formula-nested-grid-selection>>),
 . The parameters of spatial function using a _bilinear_ interpolation method shall be interpolated on the preferred grid as defined by the formulae in <<formula-bilinear-interpolation>>,
 . The spatial function shall be undefined at any location at which interpolating the function requires using a grid node parameter that has a _no-data_ value.
-. The parameter values of a spatial function  shall be calculated as zero at any location that is not within any of the grids of the spatial function  and is within the extents of the deformation model (<<formula-spatial-interpolation>>).
+. The parameter values of a spatial function  shall be calculated as zero at any location that is not within any of the grids of the spatial function  and is within the extents of the DM (<<formula-spatial-interpolation>>).
+. The horizontal displacement of a grid which does not include horizontal displacement parameters shall be zero (<<formula-nested-grid-selection>>).
+. The vertical displacement of a grid which does not include a vertical displacement parameter shall be zero (<<formula-nested-grid-selection>>).
+. The horizontal uncertainty of a grid which does not include horizontal uncertainty parameters shall be the default horizontal uncertainty of its element, or, if that is not defined, the default element horizontal uncertainty of the deformation model (<<funcmod-spatial-params>>).
+. The vertical uncertainty of a grid which does not include a vertical uncertainty parameter shall be the default vertical uncertainty of its element, or, if that is not defined, the default element vertical uncertainty of the deformation model (<<funcmod-spatial-params>>).
 
-|req/implementation/spatialFunctionDefaultDisplacement a| 
-[upperalpha]
-. The horizontal displacement calculated for a spatial function shall be zero if the spatial function does not define horizontal displacement parameters at the grid nodes (<<formula-nested-grid-selection>>).
-. The vertical displacement calculated for a spatial function shall be zero if the spatial function does not define vertical displacement parameters at the grid nodes (<<formula-nested-grid-selection>>).
-
-|req/implementation/spatialFunctionDefaultUncertainty a| 
-[upperalpha]
-. The horizontal uncertainty of a spatial function shall be interpolated from the grid node values if horizontal uncertainty is defined at the grid nodes, otherwise by the default horizontal uncertainty for the spatial function element if that is defined, otherwise by the deformation model default element horizontal uncertainty (<<funcmod-spatial-params>>).
-. The vertical uncertainty of a spatial function shall be interpolated from the grid node values if vertical uncertainty is defined at the grid nodes, otherwise by the default vertical uncertainty for the spatial function element if that is defined, otherwise by the deformation model default element vertical uncertainty (<<funcmod-spatial-params>>).
-
-|req/implementation/timeFunction a|
+|req/implementation/element/timeFunction a|
 [upperalpha]
 . The calculated value of a time function shall be the sum of the values of its constituent base time functions at that time (<<formula-time-function>>).
+. The calculated value of a base time function shall be as defined by the formulae in <<formula-time-function>> for any time within the temporal extents of the DM.
 
-|req/implementation/baseTimeFunction a|
+|req/implementation/combiningElements a| 
+At locations within the extents of the DM:
 [upperalpha]
-. The cacculated value of a base time function shall be as defined by the formulae in <<formula-time-function>> for any time within the time extents of the deformation model.
+. the displacement at a time and location shall calculated as the sum, for all elements, of the displacement calculated from the spatial function at that location multiplied by the scalar value of the 
+ of time function at that time, as defined by the formulae in <<formula-elements>>,
+. the uncertainty at a time and location shall be calculated as the root sum of squares, for all elements, of the uncertainty defined by the spatial function at that location multiplied by the time function at that time, as defined by the formulae in <<formula-elements>>.
+
+|req/implementation/displacement a|
+[upperalpha]
+. A target CRS coordinate shall be calculated by applying a calculated displacement to a source CRS coordinate as defined by the formulae in <<formula-apply-displacement>>.
 
 |req/implementation/pointMotion a|
 [upperalpha]
 . The calculated of displacement and its uncertainty between two epochs shall be as defined by the formulae in <<formula-conversion-between-epochs>>.
-
-|req/implementation/applyDisplacement a|
-[upperalpha]
-. A target CRS coordinate shall be calculated by applying a calculated displacement to a source CRS coordinate as defined by the formulae in <<formula-apply-displacement>>.
 
 |===

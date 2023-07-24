@@ -10,7 +10,7 @@ Deformation is caused by a variety of geophysical phenomena, each of which may b
 
 Typically, there is a velocity element representing the long-term tectonic deformation - this is a single element with a velocity time function.  
 
-Overlaid on this there may be deformation due to earthquakes.  The coseismic deformation will be represented by an element with a step time function.  Postseismic deformation following the earthquake may be represented by several elements depending on the complexity of the deformation and the quality of information available.  Typically, these will use exponential and logarithmic time functions.  Several versions of a deformation model may be published after an earthquake as the ongoing postseismic deformation evolves and as measurements and modeling of deformation are refined.
+Overlaid on this there may be deformation due to earthquakes.  The coseismic deformation will be represented by an element with a step time function.  Postseismic deformation following the earthquake may be represented by several elements depending on the complexity of the deformation and the quality of information available.  Commonly, these will use exponential and logBaseE time functions.  Several versions of a deformation model may be published after an earthquake as the ongoing postseismic deformation evolves and as measurements and modeling of deformation are refined.
 
 Alternatively, the deformation model may be based directly on observations of displacement rather than modelling from geophysical phenomena.  For example, in Japan the dense network of continuous GNSS (cGNSS) stations provides a continuous record of deformation.  Each year a new version of the deformation model is generated based on these measurements. Each of these could be represented by an element with a step time function.
 
@@ -72,12 +72,11 @@ The gray area, where displacement is undefined, might include coastal regions wh
 This AS only specifies bilinear interpolation.  A producer may choose to use, and an implementation may support, other methods, such as bicubic or biquadratic interpolation.  However they are not defined in this AS.  The calculation of displacements by a specific implementation may differ from that expected by the producer.
 
 The reasons this AS only specifies bilinear interpolation are:
-* there are few implementation choices, and hence less ambiguity, in using bilinear interpolation, and
-* it is easier to ensure continuity in a nested grid structure if bilinear interpolation is used.
 
-There are few implementation choices for bilinear interpolation because calculating the displacement at a point only uses the values from the four nodes of the grid cell in which the point lies.  
+* it is easier to ensure continuity in a nested grid structure if bilinear interpolation is used, and
+* there are few implementation choices, and hence less ambiguity, in using bilinear interpolation. 
 
-The more sophisticated biquadratic and bicubic interpolation use values from the nodes of cells adjacent to the grid cell in which the calculation point lies.  Where the point lies in a cell on the edge of the grid some of these adjacent cells do not exist.  There is more than one way that implementation can be written handle this situation, and there is no "right way" to do it.  Different choices may give different results. 
+There are fewer implementation choices for bilinear interpolation because calculating the displacement at a point only uses the values from the four nodes of the grid cell in which the point lies.  However, more sophisticated methods, such as biquadratic and bicubic interpolation, use values from the nodes of cells adjacent to the grid cell in which the calculation point lies.  These nodes may not exist for a point within a cell on the edge of the grid.  There is more than one way that implementation can be written handle this situation, and there is no "right way" to do it.  Different choices may give different results.
 
 [[discuss-deformation-near-poles]]
 === Deformation models near poles
@@ -96,8 +95,6 @@ image::near_pole_east_displacement.png[title="Comparison of vector and angular d
 
 This is only a significant issue very close to a geographic pole. The impact of this issue diminishes rapidly away from the pole.  For displacement d at a point at distance R from the pole, the difference is approximately d*(1-cos(d/R)), or approximately d^3^/2R^2^. For example, applying 1 m east displacement 1 km from the pole by changing the longitude would incur an error of only 5.10^-7^m.
 
-
-
 ////
 The geocentric weighted average method proposed in <<formula-geocentric-bilinear-interpolation>> is intended for use in near polar regions where east and north topocentric vectors at adjacent grid nodes differ significantly in orientation.
 
@@ -107,17 +104,13 @@ image::geocentric_bilinear_interpolation.png[title=geocentric bilinear interpola
 
 To estimate the error that could be incurred using simple bilinear interpolation and not accounting for this directional difference, consider a case where the displacement is 1 meter northwards at point A in <<image-geocentric-bilinear-interpolation>>, and zero meters at point B. Let the longitude grid spacing be λ~s~ radians. If the calculation point P is λ radians past A, then the magnitude of the interpolated displacement will be (λ~s~-λ)/λ~s~. The error of orientation will be λ radians (the difference between north at A and north at the calculation point) and the displacement error will be sin(λ).(λ~s~-λ)/λ~s~. Approximating sin(λ) as λ, the error has a maximum absolute value in the range (0,λ~s~) of λ~s~/2. For example, with a grid longitude spacing of 1° the displacement error is about 2cm.
 
-
 Using the geocentric interpolation method to calculate the horizontal component does cause some leakage of the horizontal deformation into the vertical component, that is:
 
 du = dx.cos(λ).cos(φ) + dy.sin(λ).cos(φ) + dz.sin(φ)
 
 For the interpolation of vertical displacement du this method proposes using the same formulae as the bilinear interpolation method - that is simple bilinear interpolation of the du component.  However this leakage does result in a small loss of magnitude in the horizontal component. The reduction is approximately scaling by the cosine of the angle between the vertical at the calculation point and the vertical at each grid node.  For a grid cell of 1 degree extent this would result in a scale error of 0.2mm for a 1m deformation vector.  (Note that this is a 1 degree extent measured on the globe - not a 1 degree extent of longitude which may be much smaller near the poles).  This can be ignored without significant loss of accuracy.
 
-
 ////
-
-
 
 [[discuss-time-function-epochs]]
 === Time function epochs

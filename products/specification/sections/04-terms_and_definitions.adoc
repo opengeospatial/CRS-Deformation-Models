@@ -72,7 +72,7 @@ NOTE:  The implementation encodes the formulae defined in this specification or 
 
 ==== linear unit
 
-a quantity that can be related to the SI base unit for length – the metre – by a scalar value
+a quantity that can be related to the SI base unit for length - the metre - by a scalar value
 
 ==== post-seismic deformation
 
@@ -92,6 +92,8 @@ agency compiling a deformation model for publication
 AS:: OGC Abstract Specification
 
 CRS:: coordinate reference system
+
+DM:: deformation model
 
 GIS:: geographic information systems
 
