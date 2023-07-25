@@ -1,6 +1,7 @@
-= Deformation Model Functional Model
+= Topic 24 - Deformation Model Functional Model
 :comment: ### Document type; mandatory. Visit: https://www.metanorma.com/author/ogc/authoring/ for permitted types
 :doctype: abstract-specification-topic
+:docsubtype: conceptual-model
 :comment: ### Language of the document; mandatory. Specified in two-letter code: "en" for English, "fr" for French
 :language: en
 :comment: ### Document status/stage; mandatory. Visit: https://www.metanorma.com/author/ogc/authoring/ for permitted types
@@ -8,7 +9,7 @@
 :comment: ### Relevant committee; mandatory. The permitted types are: technical, planning, and strategic-member-advisory
 :committee: technical
 :comment: ### Version number; optional. Dot-delimited, preferably with this structure <version number>.<minor version number>
-:edition: 1.0.1 (amended: 2023-06-01)
+:edition: 1.0.1
 :comment: ### Internal reference number; mandatory
 :docnumber: 22-010r1
 :comment: ### Date on which the standard was updated; mandatory

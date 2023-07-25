@@ -24,7 +24,7 @@ Generally, the user expectation of such operations is that they are invertible. 
 
 To support this expectation, this AS requires that the spatial function of each element of the deformation model is continuous.  This does not guarantee that the resulting coordinate operation is invertible.  It is possible to define deformation models that are continuous but are not invertible.  However, these are not realistic models.  Ensuring that a spatial function is continuous is much easier than ensuring that the resulting coordinate operation is invertible.  Continuity is used as a practical substitute for invertibility.
 
-Within a single grid the spatial function is continuous - that is a consquence of the formulae such as bilinear interpolation used to interpolate between the displacements at the grid nodes. 
+Within a single grid the spatial function is continuous - that is a consequence of the formulas such as bilinear interpolation used to interpolate between the displacements at the grid nodes. 
 
 If a spatial function uses more than one grid, the requirement for continuity places two constraints on deformation model producers. 
 
@@ -57,7 +57,7 @@ The implementation of _no-data_ will be dictated by the format used to carry the
 
 The _no-data_ value for a displacement is different from a zero displacement. A value of zero is used where there is no significant displacement. A _no-data_ value is used where the displacement is unknown.
 
-Instead of using _no-data_ values, a producer may choose to specify a value with a large uncertainty.  This may be preferable to ensure a continuous, interpolable and invertible model, as discussed in <<discuss-continuous-invertible>>.  However not all software will use uncertainty information.
+Instead of using _no-data_ values, a producer may choose to specify a value with a large uncertainty.  This may be preferable to ensure a continuous and invertible model, as discussed in <<discuss-continuous-invertible>>.  However, this will not be recognized by software that does not use uncertainty information.
 
 If any element of the model evaluates to _no-data_ at a given location and time, then the displacement (or uncertainty) at that location is undefined. <<image-no-data>> illustrates the use of _no-data_ values in the model. In this figure the gray area shows the region where displacement is undefined and the square marks the total extent of the model. Outside this area the model cannot be evaluated. Within the gridded spatial function there are a number of nodes at which the displacement is not defined - these are identified with a _no-data_ value. Where these nodes are required to interpolate a displacement, which is any grid cell they are on the boundary of, the displacement cannot be calculated.
 
@@ -81,14 +81,14 @@ There are fewer implementation choices for bilinear interpolation because calcul
 [[discuss-deformation-near-poles]]
 === Deformation models near poles
 
-The formulae defined in this AS are not suitable for transforming geographic (latitude and longitude) coordinates close to the north and south poles. Both the means of interpolating within a grid cell, and the formulae for applying the displacement to a coordinate, may yield unintended results as described below.  The simplest way to represent deformation in such cases is to use a suitable projected (easting and northing) CRS.  Future versions of this AS may offer better support for geographic CRSs in polar regions by offering alternative methods for interpolating displacements and adding displacements to coordinates.
+The formulas defined in this AS are not suitable for transforming geographic (latitude and longitude) coordinates close to the north and south poles. Both the means of interpolating within a grid cell, and the formulas for applying the displacement to a coordinate, may yield unintended results as described below.  The simplest way to represent deformation in such cases is to use a suitable projected (easting and northing) CRS.  Future versions of this AS may offer better support for geographic CRSs in polar regions by offering alternative methods for interpolating displacements and adding displacements to coordinates.
 
 Near the poles, grid cells may span a large longitude range. Consequently, the east and north components of a vector at adjacent grid nodes may lie in quite different directions, as illustrated in <<image-near-pole-axes>>.  Interpolating east and north components independently as described in <<formula-bilinear-interpolation>> fails to account for this. For example, if the grid cell spans 1° of longitude and the displacement is 1m then bilinear interpolation may give rise to an error of up to about 2cm (the length of the displacement vector multiplied by the cosine of the longitude range of the grid cell).  This can be mitigated by using a finer longitude grid spacing.
 
 [[image-near-pole-axes]]
 image::geocentric_bilinear_interpolation.png[title="Different directions of east and north components at grid nodes and a calculation point", width=200,scalewidth=7cm. align="right"]
 
-Where the source and target CRSs are geographic, then adding east north offsets to the longitude may not be appropriate.  This is illustrated in <<image-near-pole-east-displacement>> where the gray vector shows the result of adding an east displacement to the longitude coordinate, and the black vector shows the result applying the same east displacement in the direction of the east vector component. Close to the pole, applying an east displacement by changing the longitude coordinate, as defined by the formulae in <<formula-apply-displacement>>,  may give a significantly different result than displacing the coordinate in the direction of the east vector.  At the pole itself, changing the longitude coordinate makes no difference to the location at all.
+Where the source and target CRSs are geographic, then adding east north offsets to the longitude may not be appropriate.  This is illustrated in <<image-near-pole-east-displacement>> where the gray vector shows the result of adding an east displacement to the longitude coordinate, and the black vector shows the result applying the same east displacement in the direction of the east vector component. Close to the pole, applying an east displacement by changing the longitude coordinate, as defined by the formulas in <<formula-apply-displacement>>,  may give a significantly different result than displacing the coordinate in the direction of the east vector.  At the pole itself, changing the longitude coordinate makes no difference to the location at all.
 
 [[image-near-pole-east-displacement]]
 image::near_pole_east_displacement.png[title="Comparison of vector and angular displacement near a pole",width=200,scalewidth=7cm,align="right"]
@@ -108,7 +108,7 @@ Using the geocentric interpolation method to calculate the horizontal component 
 
 du = dx.cos(λ).cos(φ) + dy.sin(λ).cos(φ) + dz.sin(φ)
 
-For the interpolation of vertical displacement du this method proposes using the same formulae as the bilinear interpolation method - that is simple bilinear interpolation of the du component.  However this leakage does result in a small loss of magnitude in the horizontal component. The reduction is approximately scaling by the cosine of the angle between the vertical at the calculation point and the vertical at each grid node.  For a grid cell of 1 degree extent this would result in a scale error of 0.2mm for a 1m deformation vector.  (Note that this is a 1 degree extent measured on the globe - not a 1 degree extent of longitude which may be much smaller near the poles).  This can be ignored without significant loss of accuracy.
+For the interpolation of vertical displacement du this method proposes using the same formulas as the bilinear interpolation method - that is simple bilinear interpolation of the du component.  However this leakage does result in a small loss of magnitude in the horizontal component. The reduction is approximately scaling by the cosine of the angle between the vertical at the calculation point and the vertical at each grid node.  For a grid cell of 1 degree extent this would result in a scale error of 0.2mm for a 1m deformation vector.  (Note that this is a 1 degree extent measured on the globe - not a 1 degree extent of longitude which may be much smaller near the poles).  This can be ignored without significant loss of accuracy.
 
 ////
 
@@ -124,7 +124,7 @@ The base function shows an event building in magnitude from 0.0 to 1.0. This mig
 
 The start and end epochs can be used to remove any change before the start epoch or after the end epoch. Setting a start epoch (graph B) applies the base function value at that epoch to any time before the start epoch. Similarly, setting an end epoch (graph C) applies the base function value at that epoch to any time after the end epoch.  A consequence of this is that the start and end values are no longer 0 and 1.   Generally a deformation model producer would use a function reference epoch as well as a start epoch, as described below, so that the time function is zero before the start date.
 
-Using start and end epochs has practical value for deformation model producers managing a CRS. Using the start epoch means that displacements calculated before that epoch do not change.  This may be more realistic. In reality there is at time at which the slow slip event starts, and before which it is causing no deformation, even though this does not exist in the base function without specifying a start epoch.
+Using start and end epochs has practical value for deformation model producers managing a CRS. Using the start epoch means that displacements calculated before that epoch do not change.  This may be more realistic, as there is at time at which the slow slip event starts, and before which it is causing no deformation.
 
 The function reference epoch t~0~ is an epoch at which the function is forced to be zero, and therefore when the calculated displacement for the event will be zero. A constant offset is added to the function to force it to be zero at this epoch.  In graph D the value -0.8 is added to the time functions so that it is zero at the function reference epoch 2014.2.
 

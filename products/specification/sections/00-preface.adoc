@@ -38,14 +38,14 @@ This problem is generally addressed in one of two ways:
 * Defining a reference epoch for the CRS of coordinates held in the GIS, often by defining a CRS with a reference epoch, or
 * Using a CRS which is fixed relative to the surface of the earth
 
-In practice there is little difference between these two approaches.  Neither the position at a reference epoch, nor the coordinates in a static CRS, can be be directly measured by global positioning methods.  
+In practice there is little difference between these two approaches.  Neither the position at a reference epoch, nor the coordinates in a static CRS, can be directly measured by global positioning methods.  
 
-Propogating the observed coordinates to a reference epoch, or transforming to a static CRS, requires a deformation model - a mathematical model of the deformation of the earth's surface.
+Propagating the observed coordinates to a reference epoch, or transforming to a static CRS, requires a deformation model - a mathematical model of the deformation of the earth's surface.
 
 Common uses of a deformation model include:
 
 * Determining the current location of an object based on historic measurement of its location, 
-* Propogation of the current observed location of an object to the reference epoch of a static CRS,
+* Propagation of the current observed location of an object to the reference epoch of a static CRS,
 * Determining the spatial relationship of data sets observed at different times,
 * Predicting the location of an object at some future time.
 

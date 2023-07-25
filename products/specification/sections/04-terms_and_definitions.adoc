@@ -51,7 +51,7 @@ deformation caused by an earthquake and occurring within minutes of the earthqua
 
 change in shape of the earth's crust due to stress changes within crust
 
-NOTE: This specification is specifically concerned with the manifestion of deformation on the surface of the earth and the consequent displacement of features fixed to the surface of the earth.
+NOTE: This specification is specifically concerned with the manifestation of deformation on the surface of the earth and the consequent displacement of features fixed to the surface of the earth.
 
 ==== displacement
 
@@ -64,11 +64,15 @@ coordinate reference system that has a geodetic reference frame and an ellipsoid
 [.source]
 <<ISO19111,clause 3.1.35>>
 
+==== horizontal uncertainty
+
+uncertainty of the horizontal component of displacement
+
 ==== implementation
 
 software that uses an encoded deformation model to calculate displacements or to apply displacements in coordinate operations
 
-NOTE:  The implementation encodes the formulae defined in this specification or numerically equivalent formulae.
+NOTE:  The implementation encodes the formulas defined in this specification or numerically equivalent formulas.
 
 ==== linear unit
 
@@ -78,13 +82,17 @@ a quantity that can be related to the SI base unit for length - the metre - by a
 
 deformation over months or years following an earthquake due to the ongoing change in the stresses in the earth's crust following an earthquake or series of earthquakes
 
+==== producer
+
+agency compiling a deformation model for publication
+
 ==== slow slip event
 
 release of stress in the earth's crust due to gradual slipping fault surfaces over a period of months or years - a slow earthquake
 
-==== producer
+==== vertical uncertainty
 
-agency compiling a deformation model for publication
+uncertainty of the vertical component of displacement
 
 
 === Abbreviations
@@ -92,8 +100,6 @@ agency compiling a deformation model for publication
 AS:: OGC Abstract Specification
 
 CRS:: coordinate reference system
-
-DM:: deformation model
 
 GIS:: geographic information systems
 

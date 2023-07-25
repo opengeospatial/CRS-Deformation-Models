@@ -44,7 +44,7 @@ The implementation must unambiguously define which grid (if any) is to be used a
 
 The only interpolation method explicitly supported is bilinear interpolation, as described in  <<formula-spatial-interpolation>>.  
 
-A producer may specify other interpolation formulae that may be supported by specific implementations, but this AS provides no assurance of whether an implementation will be able to calculate the displacement parameters for such a model, or of the formulae it will use to do so.
+A producer may specify other interpolation formulas that may be supported by specific implementations, but this AS provides no assurance of whether an implementation will be able to calculate the displacement parameters for such a model, or of the formulas it will use to do so.
 
 [[funcmod-spatial-params]]
 ==== Parameters defined by a spatial function
@@ -69,11 +69,13 @@ Displacement components not defined by a spatial function are assumed to be zero
 // ** horizontal covariance matrix components c~ee~ , c~en~, c~nn~.
 // * covariance of horizontal and vertical displacement components c~ee~ , c~en~, c~nn~, c~eu~, c~nu~, c~uu~
 
-The set of components used to represent uncertainty are defined in the model metadata and all uncertainty components of all spatial functions must be selected from this set.  For example, the deformation metadata could specify that the model uses horizontal circular uncertainty and vertical uncertainty.  A particular spatial component could define just horizontal circular uncertainty.  Another could define vertical uncertainty.  However, it would not be valid for an element of this model to define east and north uncertainty.
+The set of components used to represent uncertainty are defined as deformation model attributes and all uncertainty components of all spatial functions must be selected from this set.  For example, the attribute could specify that the model uses horizontal circular uncertainty and vertical uncertainty.   Within this model one element might define just horizontal circular uncertainty and another might define vertical uncertainty.  However, it would not be valid for an element of this model to define east and north uncertainty.
 
-The probability level for the uncertainty is defined in the model metadata, e.g., "1 standard error", "95% confidence".
+The measure of uncertainty is defined as a model attribute, e.g., "1 standard error", "95% confidence".
 
-If the uncertainty of an element is not defined at a grid node, then the uncertainty is taken from a default value in the element metadata or, if it is not defined there, from a default value in the model metadata.
+If the uncertainty of an spatial function is not defined as a parameter of its grids, then it may take a default value.  The default value for uncertainty of a spatial function may be defined as an attribute of the element which defines the spatial function, or, if it is not defined there, as an attribute of the deformation model itself.  
+
+Note that a spatial function may define an uncertainty parameter and not define the corresponding displacement parameter.  This allows for a displacement to be defined in one element, and its uncertainty to be defined in a different element.  For example, the horizontal uncertainty of a spatial function may be spatially much simpler than the horizontal displacement itself.  A producer could represent the displacement in a set of dense grids, and represent the uncertainty in a much coarser set of grids. 
 
 // The following quality parameter has been proposed but currently not included due to complexity of implementation and lack of current requirement
 // . [[funcmod-spatial-params-quality]] A spatial function may include a quality parameter at each node providing guidance on the reliability of the spatial function in the vicinity of the node. For example, a quality parameter could indicate surface faulting affecting cells adjacent to the node.
@@ -81,7 +83,7 @@ If the uncertainty of an element is not defined at a grid node, then the uncerta
 [[funcmod-nodata]]
 ==== No-data values for parameters
 
-The displacement and uncertainty components at a node of a spatial function may be assigned a  _no-data_ value meaning that their value is undefined at that node.  A calculated  displacement or uncertainty evaluates to _no-data_ at a specific time and location if calculating its value would require using a _no-data_ value. 
+The displacement and uncertainty components at a node of a spatial function may be assigned a  _no-data_ value meaning that their value is undefined at that node.  A calculated  displacement or uncertainty evaluates to _no-data_ at a specific time and location if calculating its value would require using a _no-data_ value.  The _no-data_ value is defined as an attribute of the deformation model.
 
 
 [[funcmod-continuous-invertible]]
@@ -109,41 +111,42 @@ These base time functions are defined in <<formula-time-function>>.
 
 
 
-[[funcmod-model-metadata]]
-=== Deformation model metadata
+[[funcmod-model-attributes]]
+=== Deformation model attributes
 
 The model definition must specify:
 
+* A unique identifier for the model including its version
 * The source CRS
-* The target CRS (if the model is implemented as a point motion model this will be the same as the source CRS).
+* The target CRS (if the model is implemented as a point motion model this will be the same as the source CRS)
 * The interpolation CRS used to define the spatial function(s)
 * The valid spatial extent of the model (defined in terms of the interpolation CRS)
 * The valid temporal extent of the model
 * The units of horizontal displacement
 * The units of vertical displacement
-* The parameters used to represent uncertainty, for example, horizontal 95% circular confidence, vertical 95% confidence level.
-* The default uncertainty for each element of the model, used if the element does not explicitly define uncertainty
-* A unique identifier for the model including its version
+* The measure used to represent uncertainty, for example, horizontal 95% circular confidence, vertical 95% confidence level.
 
 The model definition may also specify:
 
+* The default horizontal uncertainty for an element which defines a displacement component but does not define a horizontal uncertainty
+* The default vertical uncertainty for an element which defines a vertical component but does not define a vertical uncertainty
 * Other metadata required by the implementation, such as discovery metadata and license information.
 * Other producer metadata, such as model name and publication date.
 
 
-[[funcmod-element-metadata]]
-=== Element metadata
+[[funcmod-element-attributes]]
+=== Element attributes
 
 Each element definition must specify:
 
 * The spatial interpolation method to be used (currently only bilinear is supported)
-* The quantities it defines (displacement components, uncertainty components)
-* A spatial definition of the extent of the spatial function (to determine if it is required at a specific position)
+* Which parameters its spatial function defines at each grid node (displacement components, uncertainty components)
 
 // * The type of spatial function (grid).  This may be specified by implication if the carrier only supports grid format. 
 An element definition may also specify:
 
-* The default uncertainty that applies if the spatial function does not explicitly define uncertainty.
+* A default horizontal uncertainty that applies if the spatial function grid parameters include a horizontal displacement component but not a horizontal uncertainty component
+* A default vertical uncertainty that applies if the spatial function grid parameters include a vertical displacement component but not a vertical uncertainty component
 * Other metadata required by the implementation
 * Other producer metadata
 
