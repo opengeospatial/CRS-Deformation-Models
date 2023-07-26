@@ -1,6 +1,8 @@
 
 [bibliography]
-== References
+== Normative References
+
+* [[[ISO19111,ISO 19111:2019]]] ISO: ISO 19111:2019, Geographic information - Referencing by coordinates. International Organization for Standardization, Geneva (2019). https://www.iso.org/standard/74039.html
 
 ////
 [NOTE]

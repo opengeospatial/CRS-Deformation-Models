@@ -1,6 +1,7 @@
-= Deformation Model Functional Model
+= Topic 24 - Deformation Model Functional Model
 :comment: ### Document type; mandatory. Visit: https://www.metanorma.com/author/ogc/authoring/ for permitted types
 :doctype: abstract-specification-topic
+:docsubtype: conceptual-model
 :comment: ### Language of the document; mandatory. Specified in two-letter code: "en" for English, "fr" for French
 :language: en
 :comment: ### Document status/stage; mandatory. Visit: https://www.metanorma.com/author/ogc/authoring/ for permitted types
@@ -8,15 +9,15 @@
 :comment: ### Relevant committee; mandatory. The permitted types are: technical, planning, and strategic-member-advisory
 :committee: technical
 :comment: ### Version number; optional. Dot-delimited, preferably with this structure <version number>.<minor version number>
-:edition: 1.0
+:edition: 1.0.1
 :comment: ### Internal reference number; mandatory
-:docnumber: 22-010
+:docnumber: 22-010r1
 :comment: ### Date on which the standard was updated; mandatory
-:received-date: 2022-05-10
+:received-date: 2023-07-24
 :comment: ### Date on which the standard was approved by the issuing authority; mandatory
-:issued-date:
+:issued-date: yyyy-mm-dd
 :comment: ### Date on which the standard was published; mandatory
-:published-date:
+:published-date: yyyy-mm-dd
 :comment: ### External link referencing the document; optional. If not provided, a default value is created following this structure: "http://www.opengis.net/doc/{abbrevation of doctype}/{abbrev}/{version}"
 :external-id: https://github.com/opengeospatial/CRS-Deformation-Models/tree/master/products/specification
 :comment: ### Identifier embedded into a document type-specific external URL
@@ -56,8 +57,9 @@ include::sections/06-functional-model-definition.adoc[]
 include::sections/07-calculation-formulae.adoc[]
 
 // Annexes (add annex files as needed)
-include::sections/aa-annexA-producernotes.adoc[]
-include::sections/ab-annexB-futuredevelopment.adoc[]
+include::sections/aa-annexA-conformancerequirements.adoc[]
+include::sections/ab-annexB-producernotes.adoc[]
+include::sections/ac-annexC-futuredevelopment.adoc[]
 
 
 // Bibliography should be the last annex

@@ -1,7 +1,10 @@
 
 == Conformance
 
-[NOTE]
-====
-Provide a short description of the content approached in subsequent sections and the main subject of the document
-====
+A data set or software that is compliant with this Deformation Model Functional Model Abstract Specification (AS) shall satisfy the conformance requirements in <<annex-conformance-requirements>>.  
+
+The normative provisions in this AS are denoted by the URI http://www.opengis.net/spec/deformation-model/1.0.
+
+All requirements that appear in this AS are denoted by partial URIs which are relative to this base URI.
+
+

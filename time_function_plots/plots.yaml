@@ -52,7 +52,7 @@ plots:
       functionReferenceEpoch: 2015.2
 
   hyperbolic_base:
-    title: Base function
+    title: Huperbolic tangent
     time_function:
       functionType: hyperbolicTangent
       # functionReferenceEpoch: 2012.3
@@ -99,3 +99,15 @@ plots:
       endEpoch:  2014.5
       functionReferenceEpoch: 2014.2
     
+  ramp:
+    title: Ramp function
+    time_function:
+      startEpoch: 2013.2
+      endEpoch:  2014.5
+
+  ramp:
+    title: Ramp function
+    time_function:
+      startEpoch: 2013.2
+      endEpoch:  2014.5
+

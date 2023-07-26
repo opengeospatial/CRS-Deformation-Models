@@ -1,0 +1,74 @@
+@startuml
+left to right direction
+
+class TimeFunction
+{
+
+    baseFunctions: BaseTimeFunction[]
+    
+}
+
+abstract class BaseTimeFunction
+{
+    startEpoch: real[0..1]
+    endEpoch: real[0..1]    
+    referenceEpoch: real[0..1]    
+    scaleFactor: real[0..1]    
+}
+TimeFunction "1" o-- "many" BaseTimeFunction
+
+class VelocityTimeFunction
+{
+    referenceEpoch: real
+}
+BaseTimeFunction <|-- VelocityTimeFunction
+
+class AccelerationTimeModel
+{
+    referenceEpoch: real
+}
+BaseTimeFunction <|-- AccelerationTimeModel
+
+class StepTimeFunction
+{
+    eventEpoch: date
+}
+BaseTimeFunction <|-- StepTimeFunction
+
+class RampTimeFunction
+{
+    startEpoch: real
+    endEpoch: real
+}
+BaseTimeFunction <|-- RampTimeFunction
+
+class ExponentialTimeFunction
+{
+    eventEpoch: real
+    timeConstant: real
+}
+BaseTimeFunction <|-- ExponentialTimeFunction
+
+class LogarithmicTimeFunction
+{
+    eventEpoch: real
+    timeConstant: real
+}
+BaseTimeFunction <|-- LogarithmicTimeFunction
+
+class HyperbolicTangentTimeFunction
+{
+    eventEpoch: real
+    timeConstant: real
+}
+BaseTimeFunction <|-- HyperbolicTangentTimeFunction
+
+class CyclicTimeFunction
+{
+    referenceEpoch: real
+    frequency: real
+}
+BaseTimeFunction <|-- CyclicTimeFunction
+
+
+@enduml 

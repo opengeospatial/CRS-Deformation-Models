@@ -2,166 +2,63 @@
 
 class DeformationModel 
 {
+    modelIdentifier: characterString
     sourceCrs: CrsDefinition
     targetCrs: CrsDefinition
     interpolationCrs: CrsDefinition
-
+    spatialExtent: SpatialExtent
+    temporalExtent: TemporalExtent
+    horizontalDisplacementUnits: UnitType[0..1]
+    horizontalUncertaintyMeasure: UncertaintyMeasure[0..1]
+    defaultHorizontalUncertainty: real[0..]
+    verticalDisplacementUnits: UnitType[0..1]
+    verticalUncertaintyMeasure: UncertaintyMeasure[0..1]
+    defaultVerticalUncertainty: real
+    elements: DeformationModelElement[]
 }
-DeformationModel "1" o-- "many" DeformationComponent
-DeformationModel o-- DiscoveryMetadata
-DeformationModel "1" o-- "3" CrsDefinition
+DeformationModel "1" o-- "many" DeformationElement
 
-class DiscoveryMetadata
-{
+note right of DeformationModel::horizontalDisplacementUnits
+    Horizontal and vertical displacement units and 
+    uncertainty definition are required if the 
+    deformation model defines the corresponding
+    displacement or uncertainty
+end note
 
-}
-
-class CrsDefinition
-{
-    name: characterString
-    uri: characterString
-    wkt: characterString
-}
-
-
-class DeformationComponent
+class DeformationElement
 {
     spatialModel: SpatialModel
     timeFunction: TimeFunction
 }
-DeformationComponent o-- SpatialModel
-DeformationComponent o-- TimeFunction
+DeformationElement o-- SpatialModel
+DeformationElement o-- TimeFunction
 
 class SpatialModel
 {
-    spatialModelType: characterString
-    spatialModelExtent: SpatialExtent
-    parameters: characterString[]
-    defaultHorizontalUncertainty: real
-    defaultVerticalUncertainty: real
-}
-
-class GriddedSpatialModel
-{
+    gridParameters: characterString[]
     interpolationMethod: characterString
-
+    gridTransformation: real[]
+    defaultHorizontalUncertainty: real[0..1]
+    defaultVerticalUncertainty: real[0..1]
+    grids: Grid[]
 }
-SpatialModel <|-- GriddedSpatialModel
+
+note right of SpatialModel::gridParameters
+    Defines which displacement and uncertainty parameters
+     are defined by the spatial model.  Each grid must 
+    define this set of parameters at each node.
+end note
 
 class Grid
 {
-    parentGrid: Grid
     iNodeMaximum: integer
     jNodeMaximum: integer
-    gridTransformation: AffineTransformation
-    noDataValue: ?
+    gridTransformation: Transformation
+    noDataValue: real[0..1]
     gridData: real[][][]
+    childGrids: Grid[0..]
 }
-GriddedSpatialModel "1" *-- "many" Grid
-Grid *-- Grid : parent
-
-class AffineTransformation
-{
-    affineCoeffs: real[]
-}
-Grid o-- AffineTransformation
-
-SpatialModel o-- SpatialExtent
-
-class SpatialExtent
-{
-    extentType: characterString
-}
-SpatialExtent <|-- BoundingBoxExtent
-
-class BoundingBoxExtent
-{
-    southBoundLatitude: real
-    westBoundLongitude: real
-    northBoundLatitude: real
-    eastBoundLongitude: real
-}
-
-class TimeFunction
-{
-    baseFunctions: BaseTimeFunction[]
-}
-
-abstract class BaseTimeFunction
-{
-}
-TimeFunction "1" *-- "many" BaseTimeFunction
-
-class VelocityTimeFunction
-{
-    referenceEpoch: date
-}
-BaseTimeFunction <|-- VelocityTimeFunction
-/'
-class StepTimeFunction
-{
-    referenceEpoch: date
-
-}
-BaseTimeFunction <|-- StepTimeFunction
-
-class ReverseStepTimeFunction
-{
-    referenceEpoch: date
-}
-BaseTimeFunction <|-- ReverseStepTimeFunction
-'/
-
-class PiecewiseLinearTimeFunction
-{
-epochMultipliers: EpochMultiplier[]
-
-}
-BaseTimeFunction <|-- PiecewiseLinearTimeFunction
-
-class EpochMultiplier
-{
-    epoch: date
-    multiplier: real
-}
-PiecewiseLinearTimeFunction "1" *-- "many" EpochMultiplier
-
-class ExponentialTimeFunction
-{
-    referenceEpoch: date
-    referenceMultplier: real
-    decayRate: real
-    endEpoch (optional): date
-}
-BaseTimeFunction <|-- ExponentialTimeFunction
-
-class LogarithmicTimeFunction
-{
-    referenceEpoch: date
-    scaleFactor: real
-    timeFactor: real
-    endEpoch (optional): date
-}
-BaseTimeFunction <|-- LogarithmicTimeFunction
-
-class AccelerationTimeModel
-{
-    referenceEpoch: date
-    accelerationMultiplier: real
-    startEpoch (optional): date
-    endEpoch (optional): date
-}
-
-BaseTimeFunction <|-- AccelerationTimeModel
-
-class CyclicTimeFunction
-{
-    referenceEpoch: date
-    frequency: integer?
-    cosineMultiplier: real
-    sineMultiplier: real
-}
-BaseTimeFunction <|-- CyclicTimeFunction
-
+SpatialModel "1" *-- "many" Grid
+Grid "0" *-- "many" Grid : child
 
 @enduml 
