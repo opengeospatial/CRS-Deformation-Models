@@ -126,16 +126,16 @@ To be conformant with this Abstract Specification a software implementation shal
 [upperalpha]
 . The deformation shall be undefined at locations outside the spatial extent of the deformation model (deformation model) or at a time outside the temporal extent of the model (<<formula-spatial-interpolation>>).
 
-|req/implementation/element/spatialModel a|
+|req/implementation/element/spatialFunction a|
 [upperalpha]
 . At a location that is within one or more of the grids of a spatial function the spatial function shall be interpolated using the uniquely identified preferred grid which includes that location (<<formula-nested-grid-selection>>),
 . The parameters of spatial function using a _bilinear_ interpolation method shall be interpolated on the preferred grid as defined by the formulas in <<formula-bilinear-interpolation>>,
 . The spatial function shall be undefined at any location at which interpolating the function requires using a grid node parameter that has a _no-data_ value.
 . The parameter values of a spatial function  shall be calculated as zero at any location that is not within any of the grids of the spatial function  and is within the extents of the deformation model (<<formula-spatial-interpolation>>).
-. The horizontal displacement of a grid which does not include horizontal displacement parameters shall be zero (<<formula-nested-grid-selection>>).
-. The vertical displacement of a grid which does not include a vertical displacement parameter shall be zero (<<formula-nested-grid-selection>>).
-. The horizontal uncertainty of a grid which does not include horizontal uncertainty parameters shall be defined by the default horizontal uncertainty attribute of its element, or, if that is not defined, the default element horizontal uncertainty attribute of the deformation model, or, if that is not defined, shall be zero (<<formula-spatial-default-values>>).
-. The vertical uncertainty of a grid which does not include vertical uncertainty parameters shall be defined by the default vertical uncertainty attribute of its element, or, if that is not defined, the default element vertical uncertainty attribute of the deformation model, or, if that is not defined, shall be zero (<<formula-spatial-default-values>>).
+. The horizontal displacement of a spatial function which does not include horizontal displacement grid parameters shall be zero (<<formula-nested-grid-selection>>).
+. The vertical displacement of a spatial function which does not include a vertical displacement grid parameter shall be zero (<<formula-nested-grid-selection>>).
+. The horizontal uncertainty of a spatial function which does not include horizontal uncertainty grid parameters shall be defined by the horizontal uncertainty attribute of its element, or, if that is not defined, by the default horizontal uncertainty attribute of the deformation model, or, if that is not defined, shall be zero (<<formula-spatial-default-values>>).
+. The vertical uncertainty of a spatial function which does not include a vertical uncertainty grid parameter shall be defined by the vertical uncertainty attribute of its element, or, if that is not defined, by the default vertical uncertainty attribute of the deformation model, or, if that is not defined, shall be zero (<<formula-spatial-default-values>>).
 
 |req/implementation/element/timeFunction a|
 [upperalpha]

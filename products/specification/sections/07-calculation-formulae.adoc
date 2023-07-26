@@ -68,20 +68,21 @@ Uncertainties are interpolated from the grid node values using the same formulas
 [[formula-spatial-default-values]]
 ==== Spatial function default values
 
-The spatial function defines a set of parameters at each grid node which may be a subset of the parameters defined for the deformation model.  For example, one the spatial function of one element define only horizontal displacements and horizontal uncertainties, and that of another element may define vertical displacements and uncertainties.  In order to combine all the elements to calculate to total displacement and uncertainty as described in <<formula-elements>>, spatial function parameter values must be assigned for the parameters that are not defined in the elements grids.
+The spatial function defines a set of parameters at each grid node which may be a subset of the parameters defined for the deformation model.  For example, the spatial function of one element define only horizontal displacements and horizontal uncertainties, and that of another element may define vertical displacements and uncertainties.  In order to combine all the elements to calculate to total displacement and uncertainty as described in <<formula-elements>>, a spatial function must define values for parameters that are not defined in the grids.
 
-Displacement parameters that are not defined as grid parameters are evaluated as zero for the spatial function. 
+A parameter of horizontal or vertical displacement that are not defined as grid parameters are evaluated as zero for the spatial function. 
 
-Each element uncertainty, horizontal and vertical, not defined as grid parameters are evaluated as the first of the following values that is applicable:
+A parameter of horizontal or vertical uncertainty that is not defined as a grid parameter is assigned the first of the following values that is applicable:
 
-. A parameter of the spatial function grids
-. A uncertainty defined as an element attribute
-. A default element uncertainty defined as a deformation model attribute
-. Zero
+. The value of the corresponding (horizontal or vertical) uncertainty attribute of an element if it is defined,
+. The value of the corresponding default uncertainty attribute of the deformation model if it is defined,
+. Zero.
 
-For example, if neither horizontal displacements or horizontal uncertainties are parameters of a spatial function grids, then the horizontal uncertainty is zero.  If the spatial function grids include horizontal displacement parameters but not horizontal uncertainty parameters, and if the element includes a default horizontal uncertainty value attribute, then that will be used as the value of the horizontal uncertainty.
+For example, if the spatial function grids of an element do not include horizontal uncertainty parameters, and if the element has a horizontal uncertainty attribute, then that value will be used as the horizontal uncertainty of the spatial function.
 
-Note that if an element does not define a horizontal displacement and the deformation model includes a default element horizontal uncertainty attribute, then that attribute value will apply to the element.  Usually this is not desired, so the element should include a horizontal displacement uncertainty attribute with value zero.  Similarly, it may be desirable to apply vertical uncertainty attribute of zero to an element that does not include a vertical displacement.
+If an element does not define a horizontal displacement or uncertainty, but the deformation model does specifies a non-zero default horizontal uncertainty attribute, then that value will be used as the horizontal uncertainty of the spatial function.  Usually this is not desired - if there is no horizontal displacement parameter then it takes a default value zero, and its uncertainty is also zero.  This can be avoided by specifying an horizontal uncertainty attribute of the element with value zero.   Similarly, it may be necessary to specify a vertical uncertainty attribute of zero to an element that does not include a vertical displacement.
+
+Note that the default values of uncertainty apply to the spatial function of an element, not to the element itself.  They are multiplied by the time function in the same way as other parameters of the spatial function when the element is evaluated at any particular location and time.
 
 [[formula-time-function]]
 === Time functions
