@@ -3,21 +3,6 @@
 
 A data set or software that is compliant with this Deformation Model Functional Model Abstract Specification (AS) shall satisfy the conformance requirements in <<annex-conformance-requirements>>.  
 
-[[table-conformance-classes]]
-.Conformance classes for the Deformation Model Abstract Specification
-[options="header"]
-[valign="top"]
-|=== 
-|Conformance class | Usage
-|model a|
-To be conformant with this Abstract Specification a deformation model shall satisfy the requirements of <<conformance-requirements-model>>.  
-The attributes of entities specified in the requirements shall be unambiguously identified in an encoding of a deformation model.  A specific
-encoding may use different names or structure for the entities provided that the encoding specification defines how the deformation model attributes are identified.
-
-|implementation a|
-To be conformant with this Abstract Specification a software implementation shall satisfy the requirements of <<conformance-requirements-implementation>>.  Note that, as described in <<formula-general>>, this does not prescribe the specific formulas that a software should use, but does require that the calculations by the software should obtain results that are practically identical to those defined by the these formulas.
-|===
-
 The normative provisions in this AS are denoted by the URI http://www.opengis.net/spec/deformation-model/1.0.
 
 All requirements that appear in this AS are denoted by partial URIs which are relative to this base URI.

@@ -2,10 +2,18 @@
 [appendix,obligation="normative"]
 == Conformance requirements
 
+The normative provisions in this Abstract Specification are denoted by the URI http://www.opengis.net/spec/deformation-model/1.0.
+
+All requirements that appear in this Abstract Specification are denoted by partial URIs which are relative to this base URI.
+
 [[conformance-requirements-model]]
 === Model requirements
 
-[[table-model-conformance-requirements]]
+To be conformant with this Abstract Specification a deformation model shall satisfy the requirements in <<table-conformance-requirements-model>>.  
+The attributes of entities specified in the requirements shall be unambiguously identified in an encoding of a deformation model.  A specific
+encoding may use different names or structure for the entities provided that the encoding specification defines how the deformation model attributes are identified.
+
+[[table-conformance-requirements-model]]
 .Data requirements
 [options="header"]
 [valign="top"]
@@ -81,12 +89,12 @@ A deformation model shall define the following metadata (<<funcmod-model-attribu
 |=== 
 | Function type  7+^h| Attribute
 | 
-^| Reference epoch footnote:tfepoch[Epochs may be specified as a date/time or epoch in decimal years] 
+^| Reference epoch footnote:tfepoch[Epochs shall be specified as a date/time or as an epoch in decimal years] 
 ^| Start epoch footnote:tfepoch[] 
 ^| End epoch footnote:tfepoch[] 
 ^| Event epoch footnote:tfepoch[] 
-^| Time constant footnote:[A time constant is in  years] 
-^| Frequency footnote:[A frequency is specified in cycles per year] 
+^| Time constant footnote:[A time constant shall be specified in  years] 
+^| Frequency footnote:[A frequency shall be specified in cycles per year] 
 ^| Scale factor
 
 // Type             ^| Ref ^| Sta ^| End ^| Evt ^| TmC ^| Frq ^| Scl 
@@ -105,7 +113,9 @@ A deformation model shall define the following metadata (<<funcmod-model-attribu
 [[conformance-requirements-implementation]]
 === Implementation requirements
 
-[[table-implementation-conformance-requirements]]
+To be conformant with this Abstract Specification a software implementation shall satisfy the requirements of <<table-conformance-requirements-implementation>>.  Note that, as described in <<formula-general>>, this does not prescribe the specific formulas that a software should use, but does require that the calculations by the software should obtain results that are practically identical to those defined by the these formulas.
+
+[[table-conformance-requirements-implementation]]
 .Implementation requirements
 [options="header"]
 [valign="top"]
