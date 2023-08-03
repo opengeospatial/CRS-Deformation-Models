@@ -85,28 +85,29 @@ A deformation model shall define the following metadata (<<funcmod-model-attribu
 .Time function mandatory (M) and optional (O) attributes
 [options="header"]
 [valign="top"]
-[cols="<,7^]
+[cols="<,7*^"]
+[headerrows=2]
 |=== 
-| Function type  7+^h| Attribute
+| Function type  7+| Attribute
 | 
-^| Reference epoch footnote:tfepoch[Epochs shall be specified as a date/time or as an epoch in decimal years] 
-^| Start epoch footnote:tfepoch[] 
-^| End epoch footnote:tfepoch[] 
-^| Event epoch footnote:tfepoch[] 
-^| Time constant footnote:[A time constant shall be specified in  years] 
-^| Frequency footnote:[A frequency shall be specified in cycles per year] 
-^| Scale factor
+| Reference epoch footnote:tfepoch[Epochs shall be specified as a date/time or as an epoch in decimal years] 
+| Start epoch footnote:tfepoch[] 
+| End epoch footnote:tfepoch[] 
+| Event epoch footnote:tfepoch[] 
+| Time constant footnote:[A time constant shall be specified in  years] 
+| Frequency footnote:[A frequency shall be specified in cycles per year] 
+| Scale factor
 
-// Type             ^| Ref ^| Sta ^| End ^| Evt ^| TmC ^| Frq ^| Scl 
-| velocity          ^|  M  ^|  O  ^| O   ^|  -  ^|  -  ^|  -  ^|  O
-| acceleration      ^|  M  ^|  O  ^| O   ^|  -  ^|  -  ^|  -  ^|  O
-| step              ^|  M  ^|  O  ^| O   ^|  -  ^|  -  ^|  -  ^|  O
-| ramp              ^|  O  ^|  M  ^| M   ^|  -  ^|  -  ^|  -  ^|  O
-| exponential       ^|  O  ^|  O  ^| O   ^|  M  ^|  M  ^|  -  ^|  O
-| logBaseE          ^|  O  ^|  O  ^| O   ^|  M  ^|  M  ^|  -  ^|  O
-| logBase10         ^|  O  ^|  O  ^| O   ^|  M  ^|  M  ^|  -  ^|  O
-| hyperbolicTangent ^|  O  ^|  O  ^| O   ^|  M  ^|  M  ^|  -  ^|  O
-| cyclic            ^|  M  ^|  O  ^| O   ^|  -  ^|  -  ^|  M  ^|  O
+// Type             | Ref | Sta | End | Evt | TmC | Frq | Scl 
+| velocity          |  M  |  O  | O   |  -  |  -  |  -  |  O
+| acceleration      |  M  |  O  | O   |  -  |  -  |  -  |  O
+| step              |  M  |  O  | O   |  -  |  -  |  -  |  O
+| ramp              |  O  |  M  | M   |  -  |  -  |  -  |  O
+| exponential       |  O  |  O  | O   |  M  |  M  |  -  |  O
+| logBaseE          |  O  |  O  | O   |  M  |  M  |  -  |  O
+| logBase10         |  O  |  O  | O   |  M  |  M  |  -  |  O
+| hyperbolicTangent |  O  |  O  | O   |  M  |  M  |  -  |  O
+| cyclic            |  M  |  O  | O   |  -  |  -  |  M  |  O
 
 |===
 
