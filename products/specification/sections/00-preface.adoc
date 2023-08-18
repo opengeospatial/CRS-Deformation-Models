@@ -27,7 +27,7 @@ This OGC Abstract Specification has been developed by the OGC Coordinate Referen
 
 This OGC Abstract Specification (AS) defines a general parameterization of surface deformation models. 
 
-All objects on the surface of the earth are moving. Apparently fixed features such as buildings are moving with the earth's crust, being subject to ongoing plate tectonic movement and episodic deformation events such as earthquakes. 
+All objects on the surface of the Earth are moving. Apparently fixed features such as buildings are moving with the Earth's crust, being subject to ongoing plate tectonic movement and episodic deformation events such as earthquakes. 
 
 Increasingly, applications and users rely on global positioning methods, such as Global Navigation Satellite Systems (GNSS) observations, to precisely determine the coordinates of features.  The resulting coordinates are then stored in databases and used in a wide range of applications, such as Geographic Information Systems (GIS). However, the coordinates from GNSS are referenced to global reference frames and coordinate reference systems (CRSs).  In these reference frames the coordinates of apparently fixed objects are continually changing. 
 
@@ -36,11 +36,11 @@ This creates a challenge for the geospatial and positioning community: How to ac
 This problem is generally addressed in one of two ways:
 
 * Defining a reference epoch for the CRS of coordinates held in the GIS, often by defining a CRS with a reference epoch, or
-* Using a CRS which is fixed relative to the surface of the earth
+* Using a CRS which is fixed relative to the surface of the Earth
 
 In practice there is little difference between these two approaches.  Neither the position at a reference epoch, nor the coordinates in a static CRS, can be directly measured by global positioning methods.  
 
-Propagating the observed coordinates to a reference epoch, or transforming to a static CRS, requires a deformation model - a mathematical model of the deformation of the earth's surface.
+Propagating the observed coordinates to a reference epoch, or transforming to a static CRS, requires a deformation model - a mathematical model of the deformation of the Earth's surface.
 
 Common uses of a deformation model include:
 

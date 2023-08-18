@@ -1,11 +1,11 @@
 
 == Scope
 
-This OGC Abstract Specification (AS) defines a functional model used to define deformation models - models of the ongoing deformation of the earth's crust - to support their implementation into coordinate operations.
+This OGC Abstract Specification (AS) defines a functional model used to define deformation models - models of the ongoing deformation of the Earth's crust - to support their implementation into coordinate operations.
 
 For the purposes of this document a deformation model is defined as follows:
 ____
-A deformation model is a model of the displacement of the earth’s surface within a defined spatial and temporal extent.  The model predicts the location of a point fixed to the surface at any time within the temporal extent in terms of an accessible CRS.  The location of the point is represented as a displacement from a reference position for that point.
+A deformation model is a model of the displacement of the Earth’s surface within a defined spatial and temporal extent.  The model predicts the location of a point fixed to the surface at any time within the temporal extent in terms of an accessible CRS.  The location of the point is represented as a displacement from a reference position for that point.
 ____
 
 In the most abstract sense, a deformation model is a mathematical function of a two-dimensional coordinate and a time that defines a one-, two-, or three-dimensional coordinate displacement.  It may also express the uncertainty of the displacement.
