@@ -36,4 +36,5 @@ As noted in <<discuss-deformation-near-poles>>, this AS does not recommend the u
 These were removed from the AS for two reasons:
 
 . Currently there is no requirement for this capability, and  
-. Further research should be undertaken before recommending specific methods. 
+. Further research should be undertaken before recommending specific methods.
+

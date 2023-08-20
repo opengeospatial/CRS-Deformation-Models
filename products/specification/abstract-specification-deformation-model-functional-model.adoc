@@ -9,11 +9,11 @@
 :comment: ### Relevant committee; mandatory. The permitted types are: technical, planning, and strategic-member-advisory
 :committee: technical
 :comment: ### Version number; optional. Dot-delimited, preferably with this structure <version number>.<minor version number>
-:edition: 1.0.1
+:edition: 1.0.2
 :comment: ### Internal reference number; mandatory
-:docnumber: 22-010r1
+:docnumber: 22-010r2
 :comment: ### Date on which the standard was updated; mandatory
-:received-date: 2023-07-24
+:received-date: 2023-08-20
 :comment: ### Date on which the standard was approved by the issuing authority; mandatory
 :issued-date: yyyy-mm-dd
 :comment: ### Date on which the standard was published; mandatory
@@ -60,6 +60,7 @@ include::sections/07-calculation-formulae.adoc[]
 include::sections/aa-annexA-conformancerequirements.adoc[]
 include::sections/ab-annexB-producernotes.adoc[]
 include::sections/ac-annexC-futuredevelopment.adoc[]
+include::sections/ad-annexD-revisionhistory.adoc[]
 
 
 // Bibliography should be the last annex
