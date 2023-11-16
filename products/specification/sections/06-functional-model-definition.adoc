@@ -36,7 +36,7 @@ The deformation components of the spatial function are undefined at any location
 
 The spatial function of an element is represented by displacement components at the nodes of a grid or a set of grids. 
 
-If a more than one grid is used, then only one of the grids will be used to evaluate the function at any specific location.  
+If more than one grid is used, then only one of the grids will be used to evaluate the function at any specific location.  
 
 The implementation must unambiguously define which grid (if any) is to be used at any specific location.
 

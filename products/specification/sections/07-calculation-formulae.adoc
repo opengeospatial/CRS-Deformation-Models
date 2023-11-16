@@ -68,9 +68,9 @@ Uncertainties are interpolated from the grid node values using the same formulas
 [[formula-spatial-default-values]]
 ==== Spatial function default values
 
-The spatial function defines a set of parameters at each grid node which may be a subset of the parameters defined for the deformation model.  For example, the spatial function of one element define only horizontal displacements and horizontal uncertainties, and that of another element may define vertical displacements and uncertainties.  In order to combine all the elements to calculate to total displacement and uncertainty as described in <<formula-elements>>, a spatial function must define values for parameters that are not defined in the grids.
+The spatial function defines a set of parameters at each grid node which may be a subset of the parameters defined for the deformation model.  For example, the spatial function of one element defines only horizontal displacements and horizontal uncertainties, and that of another element may define vertical displacements and uncertainties.  In order to combine all the elements to calculate to total displacement and uncertainty as described in <<formula-elements>>, a spatial function must define values for parameters that are not defined in the grids.
 
-A parameter of horizontal or vertical displacement that are not defined as grid parameters are evaluated as zero for the spatial function. 
+A parameters of horizontal or vertical displacement that is not defined as a grid parameter is evaluated as zero for the spatial function. 
 
 A parameter of horizontal or vertical uncertainty that is not defined as a grid parameter is assigned the first of the following values that is applicable:
 
@@ -165,7 +165,7 @@ where tanh(x) = (e^x^ - e^-x^)/(e^x^ + e^-x^)
 Frequency _f_ (cycles per year) +
 Function reference epoch t~0~
 |
-f~r~(_t_) = sin(2&#120587;__f___(_t_ - t~0~))
+f~r~(_t_) = sin(2&#120587;__f__(_t_ - t~0~))
 
 3+a|
 In these formulas `ln` is the natural log function (base `e`), `exp` is the exponential function, `tanh` is the hyperbolic tangent function, and `sin` is the sine of an angle in radians.

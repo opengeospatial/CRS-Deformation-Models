@@ -66,7 +66,7 @@ A deformation model shall define the following metadata (<<funcmod-model-attribu
 
 |req/model/element/spatialFunction a| 
 [upperalpha]
-. The spatial function shall be defined by parameter values at the nodes of one or more regular grids which defined in terms of the interpolation CRS (<<funcmod-spatial-params>>).
+. The spatial function shall be defined by parameter values at the nodes of one or more regular grids which are defined in terms of the interpolation CRS (<<funcmod-spatial-params>>).
 . An element shall define the spatial interpolation method used to calculated parameter values on its grids (<<funcmod-spatial-interpolation>>).
 . An element shall specify an implicit or explicit preference between any two of its grids that overlap (<<funcmod-spatial-grids>>).
 . A parameter of an element shall be assigned a _no-data_ value at a grid node at which it is not defined (<<funcmod-nodata>>).
@@ -146,7 +146,7 @@ To be conformant with this Abstract Specification a software implementation shal
 |req/implementation/combiningElements a| 
 At locations within the extents of the deformation model:
 [upperalpha]
-. the displacement at a time and location shall calculated as the sum, for all elements, of the displacement calculated from the spatial function at that location multiplied by the scalar value of the 
+. the displacement at a time and location shall be calculated as the sum, for all elements, of the displacement calculated from the spatial function at that location multiplied by the scalar value of the 
  of time function at that time, as defined by the formulas in <<formula-elements>>,
 . the uncertainty at a time and location shall be calculated as the root sum of squares, for all elements, of the uncertainty defined by the spatial function at that location multiplied by the time function at that time, as defined by the formulas in <<formula-elements>>.
 

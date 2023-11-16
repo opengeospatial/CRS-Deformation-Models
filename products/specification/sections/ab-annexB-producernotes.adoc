@@ -76,7 +76,7 @@ The reasons this AS only specifies bilinear interpolation are:
 * it is easier to ensure continuity in a nested grid structure if bilinear interpolation is used, and
 * there are few implementation choices, and hence less ambiguity, in using bilinear interpolation. 
 
-There are fewer implementation choices for bilinear interpolation because calculating the displacement at a point only uses the values from the four nodes of the grid cell in which the point lies.  However, more sophisticated methods, such as biquadratic and bicubic interpolation, use values from the nodes of cells adjacent to the grid cell in which the calculation point lies.  These nodes may not exist for a point within a cell on the edge of the grid.  There is more than one way that implementation can be written handle this situation, and there is no "right way" to do it.  Different choices may give different results.
+There are fewer implementation choices for bilinear interpolation because calculating the displacement at a point only uses the values from the four nodes of the grid cell in which the point lies.  However, more sophisticated methods, such as biquadratic and bicubic interpolation, use values from the nodes of cells adjacent to the grid cell in which the calculation point lies.  These nodes may not exist for a point within a cell on the edge of the grid.  There is more than one way that implementation can be written to handle this situation, and there is no "right way" to do it.  Different choices may give different results.
 
 [[discuss-deformation-near-poles]]
 === Deformation models near poles
