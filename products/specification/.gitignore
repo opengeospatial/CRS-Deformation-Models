@@ -1,6 +1,7 @@
 .DS_Store
 .swp
 .tmp.xml
+Thumbs.db*
 
 # Deploy key
 deploy_key
