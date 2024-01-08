@@ -16,7 +16,7 @@ Each element of the model comprises a spatial function and a time function. The 
 
 --
 [[image_structure]]
-image::structure.png[title="Functional decomposition of a deformation model",width=600,pdfwidth=15cm]
+image::structure.png[title="Functional model of crustal deformation",width=600,pdfwidth=15cm]
 --
 
 [[funcmod-spatial-function]]
@@ -97,8 +97,8 @@ This is not necessarily enforced by the mathematical formulation of a model. It 
 
 The time function of an element is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
 
- * a velocity function
- * an acceleration function
+ * a linear function
+ * a quadratic function
  * a step function
  * a ramp function
  * an exponential decay function

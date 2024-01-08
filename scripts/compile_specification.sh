@@ -12,7 +12,7 @@ scriptdir="$(dirname "$scriptfile")"
 cd "$scriptdir/.."
 if [ "$0" = "/metanorma/scripts/$(basename "$0")" ]; then
     # gem install asciidoctor-mathematical
-    metanorma compile --agree-to-terms -t ogc -x xml,pdf,html,doc products/specification/abstract-specification-deformation-model-functional-model.adoc
+    metanorma compile --agree-to-terms -t ogc -x xml,pdf,html,doc products/specification/abstract-specification-functional-model-for-crustal-deformation.adoc
     exit
 fi
 docker run --rm -v "$(pwd)":/metanorma -v "$(pwd)/.fontist/fonts/":/config/fonts metanorma:local "/metanorma/scripts/$(basename "$0")"

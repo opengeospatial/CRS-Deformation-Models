@@ -1,41 +1,42 @@
 CRS-Deformation-Models
 ======================
 
-This repository holds the artefacts and workings of the "Deformation model functional model" project team established by the CRS DWG at the Montreal virtual meeting on 15 June 2020.
+This repository holds the artefacts and workings of the "Functional Model for Crustal Deformation" (FMCD) project team established by the CRS DWG at the Montreal virtual meeting on 15 June 2020.
 
-This work is conducted by the OGC CRS Standards Working Group (SWG) on Deformation model functional model.  The next meeting of this group is on [10th July 2023 at 14:00 EDT (18:00 UTC)](https://www4.gotomeeting.com/join/141939477).
+Note: This project was previously referred to as the "Deformation Model Functional Model" (DMFM).
 
-<!--
-Mon Jul 10th 2:00 PM EDT      https://www4.gotomeeting.com/join/141939477 
-Mon Jul 24th 2:00 PM EDT      https://www4.gotomeeting.com/join/753747421 
--->
+This work is conducted by the OGC CRS Standards Working Group (SWG) on Deformation model functional model.  
 
 This work is closely aligned with the work of the [GGXF (Geodetic Gridded data exchange format)](https://github.com/opengeospatial/CRS-Gridded-Geodetic-data-eXchange-Format) team.
 
 ## Active discussions
 
-The current version of the draft abstract specification document is available as a [PDF document](https://github.com/opengeospatial/CRS-Deformation-Models/raw/master/products/specification/abstract-specification-deformation-model-functional-model.pdf). To comment on this document please raise  a [github issue](https://github.com/opengeospatial/CRS-Deformation-Models/issues). (Note: this requires you to have or create a github login).
+The current version of the draft abstract specification document is available as a [PDF document](https://github.com/opengeospatial/CRS-Deformation-Models/raw/master/products/specification/abstract-specification-functional-model-for-crustal-deformation.pdf). To comment on this document please raise  a [github issue](https://github.com/opengeospatial/CRS-Deformation-Models/issues). (Note: this requires you to have or create a github login).
 
 The asciidoc source code for the abstract specification is in the [products/specification](https://github.com/opengeospatial/CRS-Deformation-Models/tree/master/products/specification) folder.  The [github issue log](https://github.com/opengeospatial/CRS-Deformation-Models/issues?q=is%3Aissue) also contain a body of discussion.
 
-In the early stages of this project the team undertook a survey of deformation models either planned or in use. Responses can be viewed at in a [Google spreadsheet](https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us).  While the survey is formally closed, the [questionnaire](https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0) is still available.  New information or updates are always welcome.
+In the early stages of this project the team undertook a survey of deformation models either planned or in use. Responses can be viewed at in a [Google spreadsheet](https://docs.google.com/spreadsheets/d/13IdqZDj8x8gVl7OTk7BkkI2HxfW61ng0y0WdVReD0us).  
+
+<!-- 
+While the survey is formally closed, the [questionnaire](https://docs.google.com/forms/d/11PCSVojPPD062P96veEjuqSKjnRMCrU8TyIruWCbWt0) is still available.  New information or updates are always welcome.
+-->
 
 ## Project overview
 
 The purpose of this team is to define the functional model(s), methods and workflows for computing coordinate offsets resulting from seismic and certain geodynamic and anthropogenic processes.  This work will be used to support developing
-a standard for the deformation model functional model and/or format.
+a standard for the functional model for deformation model.
 
 The motivation for this work is to support unambiguous and timely communication of deformation models from producers, typically national geodetic agencies, to the geospatial and positioning communities that require them.  
 This is becoming increasingly critical as our dependence on global positioning systems and our requirements for accurate positioning increase.
 
 The terms of reference for this project team proposes the following steps for this work.
 
-* Defining the term "deformation functional model" (DFM);
-* Establishing the use case(s) of a DFM;
-* Defining the user needs for a DFM;
+* Defining the term "deformation model" (DM);
+* Establishing the use case(s) of a DM;
+* Defining the user needs for a DM;
 * Evaluating existing deformation functional models and methods;
-* Designing a DFM fit for its intended purpose as defined by the project team;
-* Ensure the DFM addresses model uncertainty and model validity;
+* Designing a DM fit for its intended purpose as defined by the project team;
+* Ensure the DM addresses model uncertainty and model validity;
 * Develop a strategy for promulgating the model as a standard for the geodetic community.
 * Develop an encoding structure for the functional model (when grid, refer to GGXF).
 
