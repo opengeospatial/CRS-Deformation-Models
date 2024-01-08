@@ -8,7 +8,7 @@ This OGC Abstract Specification (AS) assumes that the deformation can be partiti
 
 Deformation is caused by a variety of geophysical phenomena, each of which may be represented by one or more elements in a deformation model.  
 
-Typically, there is a velocity element representing the long-term tectonic deformation - this is a single element with a velocity time function.  
+Typically, there is a velocity element representing the long-term tectonic deformation - this is a single element with a linear time function.  
 
 Overlaid on this there may be deformation due to earthquakes.  The coseismic deformation will be represented by an element with a step time function.  Postseismic deformation following the earthquake may be represented by several elements depending on the complexity of the deformation and the quality of information available.  Commonly, these will use exponential and logBaseE time functions.  Several versions of a deformation model may be published after an earthquake as the ongoing postseismic deformation evolves and as measurements and modeling of deformation are refined.
 

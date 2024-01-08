@@ -1,4 +1,4 @@
-= Topic 24 - Deformation Model Functional Model
+= Topic 24 - Functional Model of Crustal Deformation
 :comment: ### Document type; mandatory. Visit: https://www.metanorma.com/author/ogc/authoring/ for permitted types
 :doctype: abstract-specification-topic
 :docsubtype: conceptual-model
@@ -9,11 +9,11 @@
 :comment: ### Relevant committee; mandatory. The permitted types are: technical, planning, and strategic-member-advisory
 :committee: technical
 :comment: ### Version number; optional. Dot-delimited, preferably with this structure <version number>.<minor version number>
-:edition: 1.0.3
+:edition: 1.0.4
 :comment: ### Internal reference number; mandatory
-:docnumber: 22-010r3
+:docnumber: 22-010r4
 :comment: ### Date on which the standard was updated; mandatory
-:received-date: 2023-12-04
+:received-date: 2024-01-08
 :comment: ### Date on which the standard was approved by the issuing authority; mandatory
 :issued-date: yyyy-mm-dd
 :comment: ### Date on which the standard was published; mandatory
@@ -31,7 +31,7 @@
 :comment: ### Semicolon-delimited list of the submitting organizations; mandatory
 :submitting-organizations: Land Information New Zealand; ESRI
 :comment: ### Name of the AsciiDoc file; mandatory
-:docfile: abstract-specification-deformation-model-functional-model.adoc
+:docfile: abstract-specification-functional-model-of-crustal-deformation.adoc
 :comment: ### Metanorma flavor; mandatory
 :mn-document-class: ogc
 :mn-output-extensions: xml,html,doc,pdf,rxl

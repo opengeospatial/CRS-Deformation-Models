@@ -87,7 +87,7 @@ Note that the default values of uncertainty apply to the spatial function of an 
 [[formula-time-function]]
 === Time functions
 
-The time function f(_t_) for an element evaluates a scalar value by which the spatial function displacement is multiplied to determine the displacement at time _t_. For example, in a velocity model the spatial model represents the displacement that happens in one year and the time function evaluates the scale factor f(t) applied to the displacement at time t as the number of years since a function reference epoch  t~0~, i.e. f(t)=(_t_ - t~0~).
+The time function f(_t_) for an element evaluates a scalar value by which the spatial function displacement is multiplied to determine the displacement at time _t_. For example, in a velocity model the spatial model represents the displacement that happens in one year and the linear time function evaluates the scale factor f(t) applied to the displacement at time t as the number of years since a function reference epoch  t~0~, i.e. f(t)=(_t_ - t~0~).
 
 The deformation model metadata defines a temporal extent for the model from T~min~ to T~max~. At times before T~min~ and after T~max~ every time function is considered undefined, and the model cannot be evaluated.
 
@@ -101,8 +101,8 @@ Each base function is one of the types listed in the following <<table-time-func
 [options="header"]
 |===
 | Time function type|Description
-| velocity | Defines a scale factor that is linear with time.  When multiplied by the spatial function, it defines a constant velocity field, typically used to represent secular tectonic velocity.
-| acceleration | Defines a rate of change of the velocity function.  This is sometimes used to model glacial isostatic adjustment.
+| linear | Defines a scale factor that is linear with time.  When multiplied by the spatial function, it defines a constant velocity field, typically used to represent secular tectonic velocity.
+| quadratic | Defines a rate of change of the linear function.  This is sometimes used to model glacial isostatic adjustment.
 | step | Defines an instantaneous displacement, typically used to model coseismic earthquake deformation.
 | ramp | Defines displacement accumulating at a linear rate over a fixed period.  This can be used to represent post-seismic deformation or slow slip events.  Combining several ramp functions creates a piecewise linear time function that can emulate any time behavior to an arbitrary level of accuracy.
 | exponential | Defines a displacement accumulating at an exponentially decaying rate after an event.  This is commonly used to approximate post-seismic deformation.  Often used in conjunction with a logBaseE model.
@@ -122,9 +122,9 @@ The following table lists the reference formulas for each type of time function.
 [options="header"]
 |===
 |Time function type|Function parameters|Formula
-|velocity| Function reference epoch t~0~ | f~r~(_t_) = (_t_ - t~0~)
+|linear| Function reference epoch t~0~ | f~r~(_t_) = (_t_ - t~0~)
 
-|acceleration|Function reference epoch t~0~ |f~r~(_t_)= (_t_ - t~0~)^2^
+|quadratic|Function reference epoch t~0~ |f~r~(_t_)= (_t_ - t~0~)^2^
 
 |step | Event epoch t~v~ | f~r~(_t_) = 0 when t &lt; t~v~, +
 f~r~(_t_) = 1 when t &#8805; t~v~
@@ -174,7 +174,7 @@ The logBaseE and logBase10 time functions only differ by a scale factor.
 
 |===
 
-Each base time function is computed using the reference formula f~r~(_t_) as in <<table-time-functions>>.  The result can be modified by three epoch parameters, start epoch t~s~, end epoch t~e~, and function reference epoch t~0~, and a scale factor s.  (Note that the ramp function explicitly uses the start and end epoch; the velocity, acceleration, and cyclic functions explicitly use the function reference epoch.)
+Each base time function is computed using the reference formula f~r~(_t_) as in <<table-time-functions>>.  The result can be modified by three epoch parameters, start epoch t~s~, end epoch t~e~, and function reference epoch t~0~, and a scale factor s.  (Note that the ramp function explicitly uses the start and end epoch; the linear, quadratic, and cyclic functions explicitly use the function reference epoch.)
 
 The base time function f(_t_) is evaluated from the reference function f~r~(_t_) using these epochs as follows:
 
