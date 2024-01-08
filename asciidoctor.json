@@ -2,8 +2,8 @@
         "0": {
                 "OGC_doc_number": "22-010",
                 "urn": "http://www.opengis.net/doc/AS/Topic-24/1.0",
-                "title": "Deformation Model Functional Model",
-                "path": "products/specification/abstract-specification-functional-model-of-crustal-deformation.adoc",
+                "title": "Functional Model for Crustal Deformation",
+                "path": "products/specification/abstract-specification-functional-model-for-crustal-deformation.adoc",
                 "options": [
                         "--trace"
                 ],

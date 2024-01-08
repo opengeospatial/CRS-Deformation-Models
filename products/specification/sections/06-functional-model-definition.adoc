@@ -98,7 +98,7 @@ This is not necessarily enforced by the mathematical formulation of a model. It 
 The time function of an element is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
 
  * a linear function
- * an quadratic function
+ * a quadratic function
  * a step function
  * a ramp function
  * an exponential decay function

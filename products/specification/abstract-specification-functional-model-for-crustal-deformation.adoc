@@ -1,4 +1,4 @@
-= Topic 24 - Functional Model of Crustal Deformation
+= Topic 24 - Functional Model for Crustal Deformation
 :comment: ### Document type; mandatory. Visit: https://www.metanorma.com/author/ogc/authoring/ for permitted types
 :doctype: abstract-specification-topic
 :docsubtype: conceptual-model
@@ -21,7 +21,7 @@
 :comment: ### External link referencing the document; optional. If not provided, a default value is created following this structure: "http://www.opengis.net/doc/{abbrevation of doctype}/{abbrev}/{version}"
 :external-id: https://github.com/opengeospatial/CRS-Deformation-Models/tree/master/products/specification
 :comment: ### Identifier embedded into a document type-specific external URL
-:referenceURLID: https://github.com/opengeospatial/CRS-Deformation-Models/blob/master/products/specification/abstract-specification-deformation-model-functional-model.pdf
+:referenceURLID: https://github.com/opengeospatial/CRS-Deformation-Models/blob/master/products/specification/abstract-specification-functional-model-for-crustal-deformation.pdf
 :comment: ### Author one
 :fullname: Chris Crook
 :comment: ### Role of the authors; mandatory
