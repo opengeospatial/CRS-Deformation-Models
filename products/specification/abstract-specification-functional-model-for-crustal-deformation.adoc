@@ -9,13 +9,13 @@
 :comment: ### Relevant committee; mandatory. The permitted types are: technical, planning, and strategic-member-advisory
 :committee: technical
 :comment: ### Version number; optional. Dot-delimited, preferably with this structure <version number>.<minor version number>
-:edition: 1.0.4
+:edition: 1.0
 :comment: ### Internal reference number; mandatory
 :docnumber: 22-010r4
 :comment: ### Date on which the standard was updated; mandatory
 :received-date: 2024-01-08
 :comment: ### Date on which the standard was approved by the issuing authority; mandatory
-:issued-date: yyyy-mm-dd
+:issued-date: 2024-04-29
 :comment: ### Date on which the standard was published; mandatory
 :published-date: yyyy-mm-dd
 :comment: ### External link referencing the document; optional. If not provided, a default value is created following this structure: "http://www.opengis.net/doc/{abbrevation of doctype}/{abbrev}/{version}"

@@ -1,7 +1,7 @@
 
 == Conformance
 
-A data set or software that is compliant with this Functional Model for Crustal Deformation Abstract Specification (AS) shall satisfy the conformance requirements in <<annex-conformance-requirements>>.  
+A data set or software that is compliant with this Functional Model for Crustal Deformation Abstract Specification shall satisfy the conformance requirements in <<annex-conformance-requirements>>.  
 
 The normative provisions in this AS are denoted by the URI http://www.opengis.net/spec/deformation-model/1.0.
 

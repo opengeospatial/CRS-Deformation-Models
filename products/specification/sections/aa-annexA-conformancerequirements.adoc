@@ -10,7 +10,7 @@ All requirements that appear in this Abstract Specification are denoted by parti
 === Model requirements
 
 To be conformant with this Abstract Specification a deformation model shall satisfy the requirements in <<table-conformance-requirements-model>>.  
-The attributes of entities specified in the requirements shall be unambiguously identified in an encoding of a deformation model.  A specific
+The attributes of entities specified in the requirements shall be unambiguously identified in an encoding of a deformation model. A specific
 encoding may use different names or structure for the entities provided that the encoding specification defines how the deformation model attributes are identified.
 
 [[table-conformance-requirements-model]]

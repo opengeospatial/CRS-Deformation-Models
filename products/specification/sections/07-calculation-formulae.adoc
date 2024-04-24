@@ -2,7 +2,7 @@
 [[formula-general]]
 == Calculation formulas
 
-The formulas specified below define the expected behavior of software implementations of the deformation model.  A compliant software may use different formulas provided that for every location and time within the extents of a "realistic" deformation model the displacement calculated by the software is "practically identical" to that calculated from these formulas.  The terms "realistic" and "practically identical" are imprecise.  Within the context of deformation model usage, displacement differing by less than 0.1mm can be considered "practically identical".  
+The formulas specified below define the expected behavior of software implementations of the deformation model.  A compliant software may use different formulas provided that for every location and time within the extents of a "realistic" deformation model the displacement calculated by the software is "practically identical" to that calculated from these formulas.  The terms "realistic" and "practically identical" are imprecise.  Within the context of deformation model usage, displacement differing by less than 0.1mm can be considered "practically identical."  
 
 Grids can be defined either in terms of a geographic (latitude/longitude) or projected (easting/northing) interpolation CRS. Horizontal displacements and uncertainties are expressed as linear distances or, if the source and target CRSs are geographic, an angular measure.  Vertical displacements are expressed in linear units.
 
@@ -112,7 +112,6 @@ Each base function is one of the types listed in the following <<table-time-func
 | cyclic | Represents cyclic behavior, such as deformation due to seasonal hydrological loading.
 
 |===
-
 
 The following table lists the reference formulas for each type of time function.
 
@@ -236,7 +235,7 @@ If the source and target CRSs are geographic CRSs and the east and north displac
 
 If the source and target CRSs are geographic and the east and north displacement units are meters, then the displacement components must be converted to degrees before being added to the latitude and longitude coordinates. The conversion from meters to degrees requires the ellipsoid parameters of the geographic CRS.
 
-If a is the ellipsoid semi-major axis (e.g. 6378137.0), f is the flattening (e.g. 1.0/298.25722210), φ is the latitude, and λ is the longitude, then the corrections to latitude dφ and longitude dλ (in radians) are given by:
+If a is the ellipsoid semi-major axis (e.g. 6378137.0), f is the flattening (e.g., 1.0/298.25722210), φ is the latitude, and λ is the longitude, then the corrections to latitude dφ and longitude dλ (in radians) are given by:
 
 
 b = a.(1-f) +
@@ -254,13 +253,13 @@ Transforming a coordinate from the target CRS to the source CRS may require an i
 
 The iterative calculation uses the following steps:
 
-* Use the target CRS coordinate as an initial estimate for the source CRS coordinate
+* Use the target CRS coordinate as an initial estimate for the source CRS coordinate;
 * At each iteration:
-** Use the current estimate of the source CRS coordinate to determine the displacement that applies
-** Apply this displacement to the current estimate of source CRS coordinate to obtain an estimate for the target CRS coordinate
-** Calculate the difference between the estimated and actual target CRS coordinate
-** If this difference is less than the precision required for the inverse operation, then stop iterating and use the last estimate source CRS coordinate iterate again
-** Otherwise subtract this difference from the current estimate of the source CRS coordinate and iterate again
+** Use the current estimate of the source CRS coordinate to determine the displacement that applies;
+** Apply this displacement to the current estimate of source CRS coordinate to obtain an estimate for the target CRS coordinate;
+** Calculate the difference between the estimated and actual target CRS coordinate;
+** If this difference is less than the precision required for the inverse operation, then stop iterating and use the last estimate source CRS coordinate iterate again; and
+** Otherwise subtract this difference from the current estimate of the source CRS coordinate and iterate again.
 
 Note that at the edge of the model it may not be possible to calculate the inverse displacement.  The model is undefined outside its spatial extent in the interpolation CRS.  If the calculation at  a point near the edge of the model moves the estimated source CRS coordinate to a location outside that extent, then the first step of the iterative calculation will fail. 
 

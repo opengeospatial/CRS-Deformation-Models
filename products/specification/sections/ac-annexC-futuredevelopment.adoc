@@ -1,7 +1,7 @@
 [appendix,obligation="informative"]
 == Future development
 
-In the terminology of agile development this OGC Abstract Specification (AS) is a "minimal viable product".  The model defined by the AS is intended to be suitable for the majority of current and proposed deformation models used for coordinate operations. However, during the course of its development a number of potential future enhancements were identified.  Some of these are discussed below.
+In the terminology of agile development this OGC Abstract Specification (AS) is a "minimal viable product."  The model defined by the AS is intended to be suitable for the majority of current and proposed deformation models used for coordinate operations. However, during the course of its development a number of potential future enhancements were identified.  Some of these are discussed below.
 
 === Discontinuities in the displacement field
 
@@ -16,7 +16,7 @@ Even if the deformation model were perfect, it might not be useful for transform
 
 It may be valuable for the users of deformation models to know when a transformed features is likely to be affected by large errors which cannot be represented in the model.  Conceptually, software would generate a warning to users.  For example, this would happen when transforming a feature spanning a fault trace and over a time range that includes the time of the earthquake.
 
-Four mechanisms have been suggested that could either alert users to such a situation when they do conversions, or allow them to investigate when it could affect their work.  These are:
+Four mechanisms have been suggested that could either alert users to such a situation when they do conversions, or allow them to investigate when it could affect their work.  These mechanisms are as follows.
 
 . Add metadata that defines the affected location and time.  This could be an area defined in a standard spatial format, such as well-known text (WKT), associated with a date or epoch attribute.  The spatial definition could be  either included in the deformation model metadata, or as an online resource referenced in the metadata.  This AS does not describe any standard for presenting such metadata.  It would be up to the user to identify and interpret it.
 . Use a large uncertainty to indicate where there is likely to be a large difference between the interpolated and actual displacements.  While this can be used to indicate the approximate area affected by discontinuity, it is spatially imprecise. A large uncertainty value at a node affects all four grid cells surrounding the node.  This differs from the interpolation error, shown in <<image-fault-discontinuity>>, which affects only the grid cells containing the fault trace - adjacent cells are not affected.  Nonetheless this is an option available to producers, provided it is understood that it may overestimate the error in the vicinity of a fault trace.  

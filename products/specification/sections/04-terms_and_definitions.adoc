@@ -11,20 +11,6 @@ Should probably reference OGC Abstract Specification Topic 2: Referencing by coo
 
 ////
 
-////  
-To be added
-
-* coseismic (editor)
-* slow slip event (author)
-* displacement (pr)
-* deformation (editor)
-geographic CRS (editor)
-carrier - plus question on the use of the verb "carry" (public review)
-grid reference coordinates, grid spacing (public review)
-
-* coordinate operation (author) (?specify PMM and transformation)
-//// 
-
 === Terms
 
 ==== carrier

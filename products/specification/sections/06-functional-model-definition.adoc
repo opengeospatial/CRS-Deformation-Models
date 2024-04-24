@@ -71,7 +71,7 @@ Displacement components not defined by a spatial function are assumed to be zero
 
 The set of components used to represent uncertainty are defined as deformation model attributes and all uncertainty components of all spatial functions must be selected from this set.  For example, the attribute could specify that the model uses horizontal circular uncertainty and vertical uncertainty.   Within this model one element might define just horizontal circular uncertainty and another might define vertical uncertainty.  However, it would not be valid for an element of this model to define east and north uncertainty.
 
-The measure of uncertainty is defined as a model attribute, e.g., "1 standard error", "95% confidence".
+The measure of uncertainty is defined as a model attribute, e.g., "1 standard error," "95% confidence."
 
 If the uncertainty of an spatial function is not defined as a parameter of its grids, then it may take a default value.  The default value for uncertainty of a spatial function may be defined as an attribute of the element which defines the spatial function, or, if it is not defined there, as an attribute of the deformation model itself.  
 
@@ -97,15 +97,15 @@ This is not necessarily enforced by the mathematical formulation of a model. It 
 
 The time function of an element is a scalar function of time calculated as the sum of one or more base functions. Each base function is one of:
 
- * a linear function
- * a quadratic function
- * a step function
- * a ramp function
- * an exponential decay function
- * a logBaseE function
- * a logBase10 function
- * a hyperbolicTangent function
- * a cyclic function
+ * a linear function;
+ * a quadratic function;
+ * a step function;
+ * a ramp function;
+ * an exponential decay function;
+ * a logBaseE function;
+ * a logBase10 function;
+ * a hyperbolicTangent function; and
+ * a cyclic function.
 
 These base time functions are defined in <<formula-time-function>>.
 
@@ -116,21 +116,21 @@ These base time functions are defined in <<formula-time-function>>.
 
 The model definition must specify:
 
-* A unique identifier for the model including its version
-* The source CRS
-* The target CRS (if the model is implemented as a point motion model this will be the same as the source CRS)
-* The interpolation CRS used to define the spatial function(s)
-* The valid spatial extent of the model (defined in terms of the interpolation CRS)
-* The valid temporal extent of the model
-* The units of horizontal displacement
-* The units of vertical displacement
+* A unique identifier for the model including its version;
+* The source CRS;
+* The target CRS (if the model is implemented as a point motion model this will be the same as the source CRS);
+* The interpolation CRS used to define the spatial function(s);
+* The valid spatial extent of the model (defined in terms of the interpolation CRS);
+* The valid temporal extent of the model;
+* The units of horizontal displacement;
+* The units of vertical displacement; and
 * The measure used to represent uncertainty, for example, horizontal 95% circular confidence, vertical 95% confidence level.
 
 The model definition may also specify:
 
-* The default horizontal uncertainty for an element which defines a displacement component but does not define a horizontal uncertainty
-* The default vertical uncertainty for an element which defines a vertical component but does not define a vertical uncertainty
-* Other metadata required by the implementation, such as discovery metadata and license information.
+* The default horizontal uncertainty for an element which defines a displacement component but does not define a horizontal uncertainty;
+* The default vertical uncertainty for an element which defines a vertical component but does not define a vertical uncertainty;
+* Other metadata required by the implementation, such as discovery metadata and license information; and
 * Other producer metadata, such as model name and publication date.
 
 
@@ -139,16 +139,16 @@ The model definition may also specify:
 
 Each element definition must specify:
 
-* The spatial interpolation method to be used (currently only bilinear is supported)
+* The spatial interpolation method to be used (currently only bilinear is supported); and
 * Which parameters its spatial function defines at each grid node (displacement components, uncertainty components)
 
 // * The type of spatial function (grid).  This may be specified by implication if the carrier only supports grid format. 
 An element definition may also specify:
 
-* A default horizontal uncertainty that applies if the spatial function grid parameters include a horizontal displacement component but not a horizontal uncertainty component
-* A default vertical uncertainty that applies if the spatial function grid parameters include a vertical displacement component but not a vertical uncertainty component
-* Other metadata required by the implementation
-* Other producer metadata
+* A default horizontal uncertainty that applies if the spatial function grid parameters include a horizontal displacement component but not a horizontal uncertainty component;
+* A default vertical uncertainty that applies if the spatial function grid parameters include a vertical displacement component but not a vertical uncertainty component;
+* Other metadata required by the implementation; and
+* Other producer metadata.
 
 ////
 * definition of areas where quality is impacted, ,for example where there is surface faulting. The areas each include a description, multipolygon defining the extent of the affected area, and a start and end epoch for the event causing the unmodeled deformation. See <<discuss-params-quality>> below.
