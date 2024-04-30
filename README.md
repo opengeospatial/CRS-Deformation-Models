@@ -9,9 +9,13 @@ This work is conducted by the OGC CRS Standards Working Group (SWG) on Deformati
 
 This work is closely aligned with the work of the [GGXF (Geodetic Gridded data exchange format)](https://github.com/opengeospatial/CRS-Gridded-Geodetic-data-eXchange-Format) team.
 
+This work has culminated in the OGC Abstract Specification [Topic 24 – Functional Model for Crustal Deformation](https://docs.ogc.org/as/22-010r4/22-010r4.html) ( the current version is maintained on the [OGC Abstract specification page](https://www.ogc.org/standards/as/))
+
 ## Active discussions
 
-The current version of the draft abstract specification document is available as a [PDF document](https://github.com/opengeospatial/CRS-Deformation-Models/raw/master/products/specification/abstract-specification-functional-model-for-crustal-deformation.pdf). To comment on this document please raise  a [github issue](https://github.com/opengeospatial/CRS-Deformation-Models/issues). (Note: this requires you to have or create a github login).
+If there are any pending updates to the specification they will be available in this github repository as a [PDF document](https://github.com/opengeospatial/CRS-Deformation-Models/raw/master/products/specification/abstract-specification-functional-model-for-crustal-deformation.pdf).
+
+To comment on this document please raise  a [github issue](https://github.com/opengeospatial/CRS-Deformation-Models/issues). (Note: this requires you to have or create a github login).
 
 The asciidoc source code for the abstract specification is in the [products/specification](https://github.com/opengeospatial/CRS-Deformation-Models/tree/master/products/specification) folder.  The [github issue log](https://github.com/opengeospatial/CRS-Deformation-Models/issues?q=is%3Aissue) also contain a body of discussion.
 

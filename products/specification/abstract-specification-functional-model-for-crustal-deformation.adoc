@@ -17,9 +17,9 @@
 :comment: ### Date on which the standard was approved by the issuing authority; mandatory
 :issued-date: 2024-04-29
 :comment: ### Date on which the standard was published; mandatory
-:published-date: yyyy-mm-dd
+:published-date: 2024-04-29
 :comment: ### External link referencing the document; optional. If not provided, a default value is created following this structure: "http://www.opengis.net/doc/{abbrevation of doctype}/{abbrev}/{version}"
-:external-id: https://github.com/opengeospatial/CRS-Deformation-Models/tree/master/products/specification
+:external-id: http://www.opengis.net/doc/AS/Topic-24/1.0
 :comment: ### Identifier embedded into a document type-specific external URL
 :referenceURLID: https://github.com/opengeospatial/CRS-Deformation-Models/blob/master/products/specification/abstract-specification-functional-model-for-crustal-deformation.pdf
 :comment: ### Author one

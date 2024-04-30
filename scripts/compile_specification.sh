@@ -15,5 +15,5 @@ if [ "$0" = "/metanorma/scripts/$(basename "$0")" ]; then
     metanorma compile --agree-to-terms -t ogc -x xml,pdf,html,doc products/specification/abstract-specification-functional-model-for-crustal-deformation.adoc
     exit
 fi
-docker run --rm -v "$(pwd)":/metanorma -v "$(pwd)/.fontist/fonts/":/config/fonts metanorma:local "/metanorma/scripts/$(basename "$0")"
+docker run --rm -v "$(pwd)":/metanorma -v "$(pwd)/.fontist/fonts/":/config/fonts metanorma/metanorma "/metanorma/scripts/$(basename "$0")"
 sudo chown -R "$(id -u):$(id -g)" .
